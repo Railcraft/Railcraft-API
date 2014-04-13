@@ -21,10 +21,7 @@ Ore Dictionary Tags:
 	oreSaltpeter
 	oreSulfur
 
-
-InterModComms:
-	"ballast" "<modid>:<blockName>@<metadata>"
-		Registers a block as a valid ballast for the Tunnel Bore and Undercutter.
-
-	"boiler-fuel-liquid" "<liquidName>@<fuelValuePerBucket>"
-		Specifies a fuel value for a bucket of liquid fuel. The liquid name should be the English display name of the liquid (ie. the tag used to lookup the liquid in the LiquidDictionary).
+| ____Message____ | ______________Syntax______________ | Description |
+|-----------------|------------------------------------|-------------|
+| "ballast"       | "[modid]:[blockName]@[metadata]"   | Registers a block as a valid ballast for the Tunnel Bore and Undercutter.
+| "boiler-fuel-liquid"  | "[liquidName]@[fuelValuePerBucket]" | Specifies a fuel value for a bucket of liquid fuel. The liquid name should be the English display name of the liquid (ie. the tag used to lookup the liquid in the LiquidDictionary).
