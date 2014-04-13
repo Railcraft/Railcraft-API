@@ -11,15 +11,17 @@ The Railcraft API is provided as Open Source with no limitation on use (MIT Lice
 When attempting to use this API, please use ONLY the classes you need, deleting those you don't.
 This helps to reduce conflict if the API changes slighty between versions.
 
-Ore Dictionary Tags:
-	blockSteel
-	dustCharcoal
-	dustObsidian
-	dustSaltpeter
-	dustSulfur
-	ingotSteel
-	oreSaltpeter
-	oreSulfur
+## Ore Dictionary Tags:
+- blockSteel
+- dustCharcoal
+- dustObsidian
+- dustSaltpeter
+- dustSulfur
+- ingotSteel
+- oreSaltpeter
+- oreSulfur
+
+## InterModComms
 
 | ____Message____ | ______________Syntax______________ | Description |
 |-----------------|------------------------------------|-------------|
