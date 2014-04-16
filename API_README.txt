@@ -1,5 +1,5 @@
 The latest version can be dowloanded from:
-https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/Railcraft_API_latest.zip
+https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/Railcraft_latest-api.zip
 
 The Railcraft API is provided as Open Source with no limitation on use.
 
