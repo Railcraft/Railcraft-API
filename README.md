@@ -8,7 +8,7 @@ https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/Railcraft_lates
 
 The Railcraft API is provided as Open Source with no limitation on use (MIT License - http://choosealicense.com/licenses/mit/).
 
-When attempting to use this API, please use ONLY the classes you need, deleting those you don't.
+When packaging this API with your mod, please include ONLY the classes you need, deleting those you don't.
 This helps to reduce conflict if the API changes slighty between versions.
 
 ## Ore Dictionary Tags:
