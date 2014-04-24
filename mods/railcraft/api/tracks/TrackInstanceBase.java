@@ -133,7 +133,6 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             return;
         }
 
-        BlockRailBase blockTrack = (BlockRailBase) getBlock();
         if (blockChanged != null && blockChanged.canProvidePower()
                 && isFlexibleRail() && RailTools.countAdjecentTracks(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == 3)
             switchTrack(false);
@@ -266,7 +265,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public IIcon getIcon() {
-        return getTrackSpec().getIcon();
+        return getTrackSpec().getItemIcon();
     }
 
     @Override

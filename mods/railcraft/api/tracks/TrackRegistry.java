@@ -27,8 +27,10 @@ import org.apache.logging.log4j.Level;
  */
 public class TrackRegistry {
 
-    private static final Map<Short, TrackSpec> trackSpecs = new HashMap<Short, TrackSpec>();
-    private static final Set<Short> invalidSpecs = new HashSet<Short>();
+    private static final Map<Short, TrackSpec> trackSpecsFromID = new HashMap<Short, TrackSpec>();
+    private static final Map<String, TrackSpec> trackSpecsFromTag = new HashMap<String, TrackSpec>();
+    private static final Set<Short> invalidSpecIDs = new HashSet<Short>();
+    private static final Set<String> invalidSpecTags = new HashSet<String>();
     private static final List<ITextureLoader> iconLoaders = new ArrayList<ITextureLoader>();
 
     /**
@@ -50,9 +52,9 @@ public class TrackRegistry {
         return iconLoaders;
     }
 
-    public static class TrackIdConflictException extends RuntimeException {
+    public static class TrackSpecConflictException extends RuntimeException {
 
-        public TrackIdConflictException(String msg) {
+        public TrackSpecConflictException(String msg) {
             super(msg);
         }
 
@@ -65,9 +67,10 @@ public class TrackRegistry {
      * @param trackSpec
      */
     public static void registerTrackSpec(TrackSpec trackSpec) {
-        if (trackSpecs.put(trackSpec.getTrackId(), trackSpec) != null) {
-            throw new TrackIdConflictException("TrackId conflict detected, please adjust your config or contact the author of the " + trackSpec.getTrackTag());
-        }
+        if (trackSpecsFromID.put(trackSpec.getTrackId(), trackSpec) != null)
+            throw new TrackSpecConflictException("TrackId conflict detected, please adjust your config or contact the author of the " + trackSpec.getTrackTag());
+        if (trackSpecsFromTag.put(trackSpec.getTrackTag(), trackSpec) != null)
+            throw new TrackSpecConflictException("TrackTag conflict detected, please adjust your config or contact the author of the " + trackSpec.getTrackTag());
     }
 
     /**
@@ -78,14 +81,33 @@ public class TrackRegistry {
      */
     public static TrackSpec getTrackSpec(int trackId) {
         Short id = (short) trackId;
-        TrackSpec spec = trackSpecs.get(id);
+        TrackSpec spec = trackSpecsFromID.get(id);
         if (spec == null) {
-            if (!invalidSpecs.contains(id)) {
+            if (!invalidSpecIDs.contains(id)) {
                 FMLLog.log("Railcraft", Level.WARN, "Unknown Track Spec ID(%d), reverting to normal track", trackId);
-                invalidSpecs.add(id);
+                invalidSpecIDs.add(id);
             }
             id = -1;
-            spec = trackSpecs.get(id);
+            spec = trackSpecsFromID.get(id);
+        }
+        return spec;
+    }
+
+    /**
+     * Returns a cached copy of a TrackSpec object.
+     *
+     * @param trackTag
+     * @return
+     */
+    public static TrackSpec getTrackSpec(String trackTag) {
+        trackTag = trackTag.toLowerCase(Locale.ENGLISH);
+        TrackSpec spec = trackSpecsFromTag.get(trackTag);
+        if (spec == null) {
+            if (!invalidSpecTags.contains(trackTag)) {
+                FMLLog.log("Railcraft", Level.WARN, "Unknown Track Spec Tag(%s), reverting to normal track", trackTag);
+                invalidSpecTags.add(trackTag);
+            }
+            spec = trackSpecsFromTag.get("railcraft:default");
         }
         return spec;
     }
@@ -95,8 +117,17 @@ public class TrackRegistry {
      *
      * @return list of TrackSpecs
      */
-    public static Map<Short, TrackSpec> getTrackSpecs() {
-        return trackSpecs;
+    public static Map<Short, TrackSpec> getTrackSpecIDs() {
+        return trackSpecsFromID;
+    }
+
+    /**
+     * Returns all Registered TrackSpecs.
+     *
+     * @return list of TrackSpecs
+     */
+    public static Map<String, TrackSpec> getTrackSpecTags() {
+        return trackSpecsFromTag;
     }
 
 }
