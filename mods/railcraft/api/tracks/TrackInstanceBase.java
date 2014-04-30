@@ -140,11 +140,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     protected void switchTrack(boolean flag) {
-        int i = tileEntity.xCoord;
-        int j = tileEntity.yCoord;
-        int k = tileEntity.zCoord;
+        int x = tileEntity.xCoord;
+        int y = tileEntity.yCoord;
+        int z = tileEntity.zCoord;
         BlockRailBase blockTrack = (BlockRailBase) getBlock();
-        blockTrack.new Rail(getWorld(), i, j, k).func_150655_a(getWorld().isBlockIndirectlyGettingPowered(i, j, k), flag);
+        blockTrack.new Rail(getWorld(), x, y, z).func_150655_a(getWorld().isBlockIndirectlyGettingPowered(x, y, z), flag);
     }
 
     protected void testPower() {
