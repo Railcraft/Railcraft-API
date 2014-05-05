@@ -57,7 +57,7 @@ public abstract class LocomotiveModelRenderer {
     }
 
     /**
-     * If you return false to renderItemIn3D(), then you must return up to 3
+     * If you return false to renderItemIn3D(), then you must return 3
      * icons in an array here, one for each render pass.
      *
      * Passes:
