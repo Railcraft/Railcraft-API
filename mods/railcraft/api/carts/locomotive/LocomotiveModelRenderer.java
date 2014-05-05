@@ -39,6 +39,12 @@ public abstract class LocomotiveModelRenderer {
         return rendererTag;
     }
 
+    /**
+     * This is the string that will be displayed on the Item tool tip. It should
+     * be localized.
+     *
+     * @return
+     */
     public abstract String getDisplayName();
 
     public final boolean renderItemIn3D() {
@@ -50,6 +56,7 @@ public abstract class LocomotiveModelRenderer {
      *
      * If you wish to provide an IIcon instead, you must set it to false, and
      * implement getItemIcons().
+     *
      * @param renderIn3D
      */
     public final void setRenderItemIn3D(boolean renderIn3D) {
@@ -57,14 +64,14 @@ public abstract class LocomotiveModelRenderer {
     }
 
     /**
-     * If you return false to renderItemIn3D(), then you must return up to 3
+     * If you return false to renderItemIn3D(), then you must return up to three
      * icons in an array here, one for each render pass.
      *
      * Passes:
      * <ul>
-     * <li>1 = primary color
-     * <li>2 = secondary color
-     * <li>3 = white
+     * <li>0 = primary color
+     * <li>1 = secondary color
+     * <li>2 = white
      * </ul>
      *
      * @return icons
@@ -73,9 +80,33 @@ public abstract class LocomotiveModelRenderer {
         return null;
     }
 
+    /**
+     * Register any item textures you require here.
+     *
+     * @param iconRegister
+     */
     public void registerItemIcons(IIconRegister iconRegister) {
     }
 
+    /**
+     * This is the core of the renderer. Here is where you do the actual
+     * rendering. You can implement any kind of renderer you like, model based,
+     * obj based, whatever.
+     *
+     * Your renderer should do a three pass render: primary color, secondary
+     * color, and white. Use GL11.glColor4f() to change the color for each pass.
+     *
+     * It is also responsible for rendering the emblem texture onto the
+     * Locomotive.
+     *
+     * @param renderer
+     * @param cart
+     * @param primaryColor the primary color
+     * @param secondaryColor the secondary color
+     * @param emblemTexture the emblem texture to render
+     * @param light
+     * @param time
+     */
     public abstract void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time);
 
 }
