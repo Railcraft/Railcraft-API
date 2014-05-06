@@ -99,6 +99,9 @@ public abstract class LocomotiveModelRenderer {
      * It is also responsible for rendering the emblem texture onto the
      * Locomotive.
      *
+     * You do not need to worry about rotation or anything like that, that is
+     * taken care of already by Railcraft.
+     *
      * @param renderer
      * @param cart
      * @param primaryColor the primary color
