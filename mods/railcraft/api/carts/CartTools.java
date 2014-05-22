@@ -97,25 +97,25 @@ public abstract class CartTools {
      * @param cart An ItemStack containing a cart item, will not be changed by
      * the function
      * @param world The World object
-     * @param i x-Coord
-     * @param j y-Coord
-     * @param k z-Coord
+     * @param x x-Coord
+     * @param y y-Coord
+     * @param z z-Coord
      * @return the cart placed or null if failed
      * @see IMinecartItem, ItemMinecart
      */
-    public static EntityMinecart placeCart(String owner, ItemStack cart, World world, int i, int j, int k) {
+    public static EntityMinecart placeCart(String owner, ItemStack cart, World world, int x, int y, int z) {
         if (cart == null) {
             return null;
         }
         cart = cart.copy();
         if (cart.getItem() instanceof IMinecartItem) {
             IMinecartItem mi = (IMinecartItem) cart.getItem();
-            return mi.placeCart(owner, cart, world, i, j, k);
+            return mi.placeCart(owner, cart, world, x, y, z);
         } else if (cart.getItem() instanceof ItemMinecart) {
             try {
-                boolean placed = cart.getItem().onItemUse(cart, null, world, i, j, k, 0, 0, 0, 0);
+                boolean placed = cart.getItem().onItemUse(cart, null, world, x, y, z, 0, 0, 0, 0);
                 if (placed) {
-                    List<EntityMinecart> carts = getMinecartsAt(world, i, j, k, 0.3f);
+                    List<EntityMinecart> carts = getMinecartsAt(world, x, y, z, 0.3f);
                     if (carts.size() > 0) {
                         setCartOwner(carts.get(0), owner);
                         return carts.get(0);
