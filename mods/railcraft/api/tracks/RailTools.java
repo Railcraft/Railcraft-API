@@ -1,5 +1,7 @@
 package mods.railcraft.api.tracks;
 
+import java.util.HashSet;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
@@ -109,6 +111,41 @@ public abstract class RailTools {
 
     public static boolean isTrackFuzzyAt(World world, int x, int y, int z) {
         return BlockRailBase.func_150049_b_(world, x, y, z) ? true : (BlockRailBase.func_150049_b_(world, x, y + 1, z) ? true : BlockRailBase.func_150049_b_(world, x, y - 1, z));
+    }
+
+    public static Set<ITrackTile> getAdjecentTrackTiles(World world, int x, int y, int z) {
+        Set<ITrackTile> tracks = new HashSet<ITrackTile>();
+
+        ITrackTile tile = getTrackFuzzyAt(world, x, y, z - 1);
+        if (tile != null)
+            tracks.add(tile);
+
+        tile = getTrackFuzzyAt(world, x, y, z + 1);
+        if (tile != null)
+            tracks.add(tile);
+
+        tile = getTrackFuzzyAt(world, x - 1, y, z);
+        if (tile != null)
+            tracks.add(tile);
+
+        tile = getTrackFuzzyAt(world, x + 1, y, z);
+        if (tile != null)
+            tracks.add(tile);
+
+        return tracks;
+    }
+
+    public static ITrackTile getTrackFuzzyAt(World world, int x, int y, int z) {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile instanceof ITrackTile)
+            return (ITrackTile) tile;
+        tile = world.getTileEntity(x, y + 1, z);
+        if (tile instanceof ITrackTile)
+            return (ITrackTile) tile;
+        tile = world.getTileEntity(x, y - 1, z);
+        if (tile instanceof ITrackTile)
+            return (ITrackTile) tile;
+        return null;
     }
 
 }
