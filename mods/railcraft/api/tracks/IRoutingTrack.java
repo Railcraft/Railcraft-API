@@ -8,6 +8,8 @@
  */
 package mods.railcraft.api.tracks;
 
+import com.mojang.authlib.GameProfile;
+
 /**
  * This interface provides a means for addons to hook into Routing Tracks and
  * change the ticket on the fly. Be warned, security is the responsibility of
@@ -28,7 +30,7 @@ public interface IRoutingTrack {
      * set the ticket.
      * @return true if the setting succeeded
      */
-    boolean setTicket(String dest, String title, String owner);
+    boolean setTicket(String dest, String title, GameProfile owner);
 
     /**
      * Wipes the existing ticket.

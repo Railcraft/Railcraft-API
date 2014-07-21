@@ -1,5 +1,6 @@
 package mods.railcraft.api.core.items;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -18,6 +19,7 @@ public interface IMinecartItem
      *
      * Generally, you can ignore the placeCart() function if this returns false.
      *
+     * @param cart
      * @return true if it can be placed, false otherwise
      */
     public boolean canBePlacedByNonPlayer(ItemStack cart);
@@ -35,5 +37,5 @@ public interface IMinecartItem
      * @param k z-Coord
      * @return the cart placed or null if failed
      */
-    public EntityMinecart placeCart(String owner, ItemStack cart, World world, int i, int j, int k);
+    public EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, int i, int j, int k);
 }

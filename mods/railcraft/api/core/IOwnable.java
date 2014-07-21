@@ -8,12 +8,14 @@
  */
 package mods.railcraft.api.core;
 
+import com.mojang.authlib.GameProfile;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IOwnable {
 
-    String getOwner();
+    GameProfile getOwner();
 
 }

@@ -10,6 +10,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler;
 import net.minecraft.block.BlockRailBase;
 
 /**
@@ -145,6 +146,55 @@ public abstract class RailTools {
         tile = world.getTileEntity(x, y - 1, z);
         if (tile instanceof ITrackTile)
             return (ITrackTile) tile;
+        return null;
+    }
+
+    public static <T> Set<T> getAdjecentTrackObjects(World world, int x, int y, int z, Class<T> type) {
+        Set<T> tracks = new HashSet<T>();
+
+        T object = getTrackObjectFuzzyAt(world, x, y, z - 1, type);
+        if (object != null)
+            tracks.add(object);
+
+        object = getTrackObjectFuzzyAt(world, x, y, z + 1, type);
+        if (object != null)
+            tracks.add(object);
+
+        object = getTrackObjectFuzzyAt(world, x - 1, y, z, type);
+        if (object != null)
+            tracks.add(object);
+
+        object = getTrackObjectFuzzyAt(world, x + 1, y, z, type);
+        if (object != null)
+            tracks.add(object);
+
+        return tracks;
+    }
+
+    public static <T> T getTrackObjectFuzzyAt(World world, int x, int y, int z, Class<T> type) {
+        T object = getTrackObjectAt(world, x, y, z, type);
+        if (object != null)
+            return object;
+        object = getTrackObjectAt(world, x, y + 1, z, type);
+        if (object != null)
+            return object;
+        object = getTrackObjectAt(world, x, y - 1, z, type);
+        if (object != null)
+            return object;
+        return null;
+    }
+
+    public static <T> T getTrackObjectAt(World world, int x, int y, int z, Class<T> type) {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if(tile == null)
+            return null;        
+        if (tile.getClass().isInstance(type))
+            return (T) tile;
+        if (tile instanceof ITrackTile) {
+            ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
+            if (track.getClass().isInstance(type))
+                return (T) track;
+        }
         return null;
     }
 

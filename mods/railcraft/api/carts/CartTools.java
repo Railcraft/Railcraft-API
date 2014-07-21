@@ -1,7 +1,9 @@
 package mods.railcraft.api.carts;
 
+import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
@@ -38,7 +40,7 @@ public abstract class CartTools {
      * @param owner
      */
     public static void setCartOwner(EntityMinecart cart, EntityPlayer owner) {
-        setCartOwner(cart, owner.getDisplayName());
+        setCartOwner(cart, owner.getGameProfile());
     }
 
     /**
@@ -49,9 +51,13 @@ public abstract class CartTools {
      * @param cart
      * @param owner
      */
-    public static void setCartOwner(EntityMinecart cart, String owner) {
+    public static void setCartOwner(EntityMinecart cart, GameProfile owner) {
         if (!cart.worldObj.isRemote) {
-            cart.getEntityData().setString("owner", owner);
+            NBTTagCompound data = cart.getEntityData();
+            if (owner.getName() != null)
+                data.setString("owner", owner.getName());
+            if (owner.getId() != null)
+                data.setString("ownerId", owner.getId().toString());
         }
     }
 
@@ -61,14 +67,18 @@ public abstract class CartTools {
      * The is really only needed by the bukkit ports.
      *
      * @param cart
-     * @return 
+     * @return
      */
-    public static String getCartOwner(EntityMinecart cart) {
+    public static GameProfile getCartOwner(EntityMinecart cart) {
         NBTTagCompound data = cart.getEntityData();
-        if (data.hasKey("owner")) {
-            return data.getString("owner");
-        }
-        return "[Unknown]";
+        String ownerName = "[Unknown]";
+        if (data.hasKey("owner"))
+            ownerName = data.getString("owner");
+
+        UUID ownerId = null;
+        if (data.hasKey("ownerId"))
+            ownerId = UUID.fromString(data.getString("ownerId"));
+        return new GameProfile(ownerId, ownerName);
     }
 
     /**
@@ -77,7 +87,7 @@ public abstract class CartTools {
      * The is really only needed by the bukkit ports.
      *
      * @param cart
-     * @return 
+     * @return
      */
     public static boolean doesCartHaveOwner(EntityMinecart cart) {
         NBTTagCompound data = cart.getEntityData();
@@ -87,8 +97,7 @@ public abstract class CartTools {
     /**
      * Spawns a new cart entity using the provided item.
      *
-     * The backing item must implement
-     * <code>IMinecartItem</code> and/or extend
+     * The backing item must implement <code>IMinecartItem</code> and/or extend
      * <code>ItemMinecart</code>.
      *
      * Generally Forge requires all cart items to extend ItemMinecart.
@@ -103,15 +112,14 @@ public abstract class CartTools {
      * @return the cart placed or null if failed
      * @see IMinecartItem, ItemMinecart
      */
-    public static EntityMinecart placeCart(String owner, ItemStack cart, World world, int x, int y, int z) {
-        if (cart == null) {
+    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, int x, int y, int z) {
+        if (cart == null)
             return null;
-        }
         cart = cart.copy();
         if (cart.getItem() instanceof IMinecartItem) {
             IMinecartItem mi = (IMinecartItem) cart.getItem();
             return mi.placeCart(owner, cart, world, x, y, z);
-        } else if (cart.getItem() instanceof ItemMinecart) {
+        } else if (cart.getItem() instanceof ItemMinecart)
             try {
                 boolean placed = cart.getItem().onItemUse(cart, null, world, x, y, z, 0, 0, 0, 0);
                 if (placed) {
@@ -124,7 +132,6 @@ public abstract class CartTools {
             } catch (Exception e) {
                 return null;
             }
-        }
 
         return null;
     }
@@ -139,16 +146,13 @@ public abstract class CartTools {
         EntityMinecart link_A = getLinkageManager(cart.worldObj).getLinkedCartA(cart);
         EntityMinecart link_B = getLinkageManager(cart.worldObj).getLinkedCartB(cart);
 
-        if (stack != null && stack.stackSize > 0 && link_A instanceof IItemTransfer) {
+        if (stack != null && stack.stackSize > 0 && link_A instanceof IItemTransfer)
             stack = ((IItemTransfer) link_A).offerItem(cart, stack);
-        }
-        if (stack != null && stack.stackSize > 0 && link_B instanceof IItemTransfer) {
+        if (stack != null && stack.stackSize > 0 && link_B instanceof IItemTransfer)
             stack = ((IItemTransfer) link_B).offerItem(cart, stack);
-        }
 
-        if (stack != null && stack.stackSize > 0) {
+        if (stack != null && stack.stackSize > 0)
             cart.entityDropItem(stack, 1);
-        }
     }
 
     public static boolean isMinecartOnRailAt(World world, int i, int j, int k, float sensitivity) {
@@ -156,9 +160,8 @@ public abstract class CartTools {
     }
 
     public static boolean isMinecartOnRailAt(World world, int i, int j, int k, float sensitivity, Class<? extends EntityMinecart> type, boolean subclass) {
-        if (BlockRailBase.func_150049_b_(world, i, j, k)) {
+        if (BlockRailBase.func_150049_b_(world, i, j, k))
             return isMinecartAt(world, i, j, k, sensitivity, type, subclass);
-        }
         return false;
     }
 
@@ -172,15 +175,13 @@ public abstract class CartTools {
             list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, ForgeDirection.getOrientation(side)));
         }
 
-        if (type == null) {
+        if (type == null)
             return !list.isEmpty();
-        } else {
+        else
             for (EntityMinecart cart : list) {
-                if ((subclass && type.isInstance(cart)) || cart.getClass() == type) {
+                if ((subclass && type.isInstance(cart)) || cart.getClass() == type)
                     return true;
-                }
             }
-        }
         return false;
     }
 
@@ -191,15 +192,13 @@ public abstract class CartTools {
     public static boolean isMinecartAt(World world, int i, int j, int k, float sensitivity, Class<? extends EntityMinecart> type, boolean subclass) {
         List<EntityMinecart> list = getMinecartsAt(world, i, j, k, sensitivity);
 
-        if (type == null) {
+        if (type == null)
             return !list.isEmpty();
-        } else {
+        else
             for (EntityMinecart cart : list) {
-                if ((subclass && type.isInstance(cart)) || cart.getClass() == type) {
+                if ((subclass && type.isInstance(cart)) || cart.getClass() == type)
                     return true;
-                }
             }
-        }
         return false;
     }
 
@@ -220,9 +219,8 @@ public abstract class CartTools {
         }
 
         for (EntityMinecart cart : list) {
-            if ((subclass && type.isInstance(cart)) || cart.getClass() == type) {
+            if ((subclass && type.isInstance(cart)) || cart.getClass() == type)
                 carts.add(cart);
-            }
         }
         return carts;
     }
@@ -281,9 +279,8 @@ public abstract class CartTools {
 
     public static <T extends EntityMinecart> T getMinecartOnSide(World world, int i, int j, int k, float sensitivity, ForgeDirection side, Class<T> type, boolean subclass) {
         for (EntityMinecart cart : getMinecartsOnSide(world, i, j, k, sensitivity, side)) {
-            if (type == null || (subclass && type.isInstance(cart)) || cart.getClass() == type) {
+            if (type == null || (subclass && type.isInstance(cart)) || cart.getClass() == type)
                 return (T) cart;
-            }
         }
         return null;
     }
@@ -300,7 +297,7 @@ public abstract class CartTools {
      */
     public static List<EntityMinecart> getMinecartsAt(World world, int i, int j, int k, float sensitivity) {
         sensitivity = Math.min(sensitivity, 0.49f);
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getAABBPool().getAABB(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
+        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(i + sensitivity, j + sensitivity, k + sensitivity, i + 1 - sensitivity, j + 1 - sensitivity, k + 1 - sensitivity));
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
         for (Object o : entities) {
             EntityMinecart cart = (EntityMinecart) o;
@@ -311,7 +308,7 @@ public abstract class CartTools {
     }
 
     public static List<EntityMinecart> getMinecartsIn(World world, int i1, int j1, int k1, int i2, int j2, int k2) {
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getAABBPool().getAABB(i1, j1, k1, i2, j2, k2));
+        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(i1, j1, k1, i2, j2, k2));
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
         for (Object o : entities) {
             EntityMinecart cart = (EntityMinecart) o;
