@@ -14,9 +14,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 
 public abstract class CartTools {
 
+    private static final GameProfile railcraftProfile = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
     public static ILinkageManager linkageManager;
 
     /**
@@ -112,7 +115,7 @@ public abstract class CartTools {
      * @return the cart placed or null if failed
      * @see IMinecartItem, ItemMinecart
      */
-    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, int x, int y, int z) {
+    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, int x, int y, int z) {
         if (cart == null)
             return null;
         cart = cart.copy();
@@ -121,7 +124,8 @@ public abstract class CartTools {
             return mi.placeCart(owner, cart, world, x, y, z);
         } else if (cart.getItem() instanceof ItemMinecart)
             try {
-                boolean placed = cart.getItem().onItemUse(cart, null, world, x, y, z, 0, 0, 0, 0);
+                boolean placed = cart.getItem().onItemUse(cart, FakePlayerFactory.get(world, railcraftProfile),world, x, y, z
+                , 0, 0, 0, 0);
                 if (placed) {
                     List<EntityMinecart> carts = getMinecartsAt(world, x, y, z, 0.3f);
                     if (carts.size() > 0) {
