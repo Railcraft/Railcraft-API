@@ -85,6 +85,10 @@ public class TrackRegistry {
         if (spec == null) {
             if (!invalidSpecIDs.contains(id)) {
                 FMLLog.log("Railcraft", Level.WARN, "Unknown Track Spec ID(%d), reverting to normal track", trackId);
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                for (int i = 1; i < stackTrace.length && i < 9; i++) {
+                    FMLLog.log(Level.DEBUG, stackTrace[i].toString());
+                }
                 invalidSpecIDs.add(id);
             }
             id = -1;
@@ -105,6 +109,10 @@ public class TrackRegistry {
         if (spec == null) {
             if (!invalidSpecTags.contains(trackTag)) {
                 FMLLog.log("Railcraft", Level.WARN, "Unknown Track Spec Tag(%s), reverting to normal track", trackTag);
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                for (int i = 1; i < stackTrace.length && i < 9; i++) {
+                    FMLLog.log(Level.DEBUG, stackTrace[i].toString());
+                }
                 invalidSpecTags.add(trackTag);
             }
             spec = trackSpecsFromTag.get("railcraft:default");
