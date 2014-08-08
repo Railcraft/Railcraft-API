@@ -12,35 +12,37 @@ public enum SignalAspect {
     /**
      * The All Clear.
      */
-    GREEN(0),
+    GREEN(0, "railcraft.gui.aspect.green.name"),
     /**
      * Typically means pairing in progress.
      */
-    BLINK_YELLOW(1),
+    BLINK_YELLOW(1, "railcraft.gui.aspect.blink.yellow.name"),
     /**
      * Caution, cart heading away.
      */
-    YELLOW(1),
+    YELLOW(1, "railcraft.gui.aspect.yellow.name"),
     /**
      * Maintenance warning, the signal is malfunctioning.
      */
-    BLINK_RED(2),
+    BLINK_RED(2, "railcraft.gui.aspect.blink.red.name"),
     /**
      * Stop!
      */
-    RED(2),
+    RED(2, "railcraft.gui.aspect.red.name"),
     /**
      * Can't happen, really it can't (or shouldn't). Only used when rendering
      * blink states (for the texture offset).
      */
-    OFF(3);
+    OFF(3, "railcraft.gui.aspect.off.name");
     private final int textureIndex;
+    private final String localizationTag;
     private static boolean blinkState;
     private static final int SIGNAL_BRIGHTNESS = 210;
     public static final SignalAspect[] VALUES = values();
 
-    private SignalAspect(int textureIndex) {
+    private SignalAspect(int textureIndex, String localizationTag) {
         this.textureIndex = textureIndex;
+        this.localizationTag = localizationTag;
     }
 
     /**
@@ -136,6 +138,10 @@ public enum SignalAspect {
         if (first.ordinal() > second.ordinal())
             return first;
         return second;
+    }
+
+    public String getLocalizationTag() {
+        return localizationTag;
     }
 
     @Override
