@@ -8,6 +8,7 @@
  */
 package mods.railcraft.api.carts;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -19,5 +20,7 @@ public interface IRoutableCart {
     String getDestination();
 
     boolean setDestination(ItemStack ticket);
+    
+    GameProfile getOwner();
 
 }
