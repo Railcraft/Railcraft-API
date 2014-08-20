@@ -186,13 +186,13 @@ public abstract class RailTools {
 
     public static <T> T getTrackObjectAt(World world, int x, int y, int z, Class<T> type) {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if(tile == null)
-            return null;        
-        if (tile.getClass().isInstance(type))
+        if (tile == null)
+            return null;
+        if (type.isInstance(tile))
             return (T) tile;
         if (tile instanceof ITrackTile) {
             ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
-            if (track.getClass().isInstance(type))
+            if (type.isInstance(track))
                 return (T) track;
         }
         return null;

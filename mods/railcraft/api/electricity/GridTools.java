@@ -10,6 +10,7 @@ package mods.railcraft.api.electricity;
 
 import java.util.HashSet;
 import java.util.Set;
+import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackTile;
 import net.minecraft.tileentity.TileEntity;
@@ -21,39 +22,20 @@ import net.minecraft.world.World;
  */
 public class GridTools {
 
-    public static Set<IElectricGrid> getConnectedGridObjects(World world, int x, int y, int z) {
-        Set<IElectricGrid> grid = new HashSet<IElectricGrid>();
+    public static Set<IElectricGrid> getMutuallyConnectedObjects(IElectricGrid gridObject) {
+        Set<IElectricGrid> connectedObjects = new HashSet<IElectricGrid>();
 
-        IElectricGrid object = getGridObjectFuzzyAt(world, x, y, z - 1);
-        if (object != null)
-            grid.add(object);
-
-        object = getGridObjectFuzzyAt(world, x, y, z + 1);
-        if (object != null)
-            grid.add(object);
-
-        object = getGridObjectFuzzyAt(world, x - 1, y, z);
-        if (object != null)
-            grid.add(object);
-
-        object = getGridObjectFuzzyAt(world, x + 1, y, z);
-        if (object != null)
-            grid.add(object);
-
-        return grid;
+        WorldCoordinate myPos = new WorldCoordinate(gridObject.getTile());
+        for (WorldCoordinate position : gridObject.getChargeHandler().getPossibleConnectionLocations()) {
+            IElectricGrid g = getGridObjectAt(gridObject.getTile().getWorldObj(), position);
+            if (g != null && g.getChargeHandler().getPossibleConnectionLocations().contains(myPos))
+                connectedObjects.add(g);
+        }
+        return connectedObjects;
     }
 
-    public static IElectricGrid getGridObjectFuzzyAt(World world, int x, int y, int z) {
-        IElectricGrid object = getGridObjectAt(world, x, y, z);
-        if (object != null)
-            return object;
-        object = getGridObjectAt(world, x, y + 1, z);
-        if (object != null)
-            return object;
-        object = getGridObjectAt(world, x, y - 1, z);
-        if (object != null)
-            return object;
-        return null;
+    public static IElectricGrid getGridObjectAt(World world, WorldCoordinate pos) {
+        return getGridObjectAt(world, pos.x, pos.y, pos.z);
     }
 
     public static IElectricGrid getGridObjectAt(World world, int x, int y, int z) {
