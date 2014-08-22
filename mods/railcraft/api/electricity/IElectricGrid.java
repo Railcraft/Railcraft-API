@@ -20,12 +20,15 @@ import net.minecraft.tileentity.TileEntity;
  * Any Electric Track needs to implement this interface on either the track
  * TileEntity or ITrackInstance object.
  *
+ * Other blocks can also implement this on their tile entity to gain access to
+ * the grid.
+ *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IElectricGrid {
 
     public static final double MAX_CHARGE = 10000.0;
-    public static final double LOSS = 0.05;
+    public static final double TRACK_LOSS_PER_TICK = 0.05;
     public static final int SEARCH_INTERVAL = 64;
     public static final Random rand = new Random();
 
@@ -114,11 +117,17 @@ public interface IElectricGrid {
         private final ConnectType type;
         private final Set<ChargeHandler> neighbors = new HashSet<ChargeHandler>();
         private double charge = 0;
+        private final double lossPerTick;
         private int clock = rand.nextInt();
 
         public ChargeHandler(IElectricGrid gridObject, ConnectType type) {
+            this(gridObject, type, type == ConnectType.TRACK ? TRACK_LOSS_PER_TICK : 0.0);
+        }
+
+        public ChargeHandler(IElectricGrid gridObject, ConnectType type, double lossPerTick) {
             this.gridObject = gridObject;
             this.type = type;
+            this.lossPerTick = lossPerTick;
         }
 
         public Set<WorldCoordinate> getPossibleConnectionLocations() {
@@ -171,7 +180,8 @@ public interface IElectricGrid {
          */
         public void tick() {
             clock++;
-            removeCharge(LOSS);
+            if (lossPerTick > 0.0)
+                removeCharge(lossPerTick);
 
             if (charge <= 0.0)
                 return;
