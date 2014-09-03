@@ -8,10 +8,7 @@
  */
 package mods.railcraft.api.electricity;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -43,73 +40,85 @@ public interface IElectricGrid {
             TRACK {
 
                         @Override
-                        public Set<WorldCoordinate> getPossibleConnectionLocations(IElectricGrid gridObject) {
+                        public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
                             int dim = gridObject.getTile().getWorldObj().provider.dimensionId;
                             int x = gridObject.getTile().xCoord;
                             int y = gridObject.getTile().yCoord;
                             int z = gridObject.getTile().zCoord;
-                            Set<WorldCoordinate> positions = new HashSet<WorldCoordinate>();
-                            positions.add(new WorldCoordinate(dim, x + 1, y, z));
-                            positions.add(new WorldCoordinate(dim, x - 1, y, z));
+                            Map<WorldCoordinate, EnumSet<ConnectType>> positions = new HashMap<WorldCoordinate, EnumSet<ConnectType>>();
 
-                            positions.add(new WorldCoordinate(dim, x + 1, y + 1, z));
-                            positions.add(new WorldCoordinate(dim, x + 1, y - 1, z));
+                            EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
+                            EnumSet<ConnectType> notWire = EnumSet.complementOf(EnumSet.of(ConnectType.WIRE));
+                            EnumSet<ConnectType> track = EnumSet.of(ConnectType.TRACK);
 
-                            positions.add(new WorldCoordinate(dim, x - 1, y + 1, z));
-                            positions.add(new WorldCoordinate(dim, x - 1, y - 1, z));
+                            positions.put(new WorldCoordinate(dim, x + 1, y, z), notWire);
+                            positions.put(new WorldCoordinate(dim, x - 1, y, z), notWire);
 
-                            positions.add(new WorldCoordinate(dim, x, y - 1, z));
+                            positions.put(new WorldCoordinate(dim, x + 1, y + 1, z), track);
+                            positions.put(new WorldCoordinate(dim, x + 1, y - 1, z), track);
 
-                            positions.add(new WorldCoordinate(dim, x, y, z + 1));
-                            positions.add(new WorldCoordinate(dim, x, y, z - 1));
+                            positions.put(new WorldCoordinate(dim, x - 1, y + 1, z), track);
+                            positions.put(new WorldCoordinate(dim, x - 1, y - 1, z), track);
 
-                            positions.add(new WorldCoordinate(dim, x, y + 1, z + 1));
-                            positions.add(new WorldCoordinate(dim, x, y - 1, z + 1));
+                            positions.put(new WorldCoordinate(dim, x, y - 1, z), all);
 
-                            positions.add(new WorldCoordinate(dim, x, y + 1, z - 1));
-                            positions.add(new WorldCoordinate(dim, x, y - 1, z - 1));
+                            positions.put(new WorldCoordinate(dim, x, y, z + 1), notWire);
+                            positions.put(new WorldCoordinate(dim, x, y, z - 1), notWire);
+
+                            positions.put(new WorldCoordinate(dim, x, y + 1, z + 1), track);
+                            positions.put(new WorldCoordinate(dim, x, y - 1, z + 1), track);
+
+                            positions.put(new WorldCoordinate(dim, x, y + 1, z - 1), track);
+                            positions.put(new WorldCoordinate(dim, x, y - 1, z - 1), track);
                             return positions;
                         }
 
                     },
             WIRE {
                         @Override
-                        public Set<WorldCoordinate> getPossibleConnectionLocations(IElectricGrid gridObject) {
+                        public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
                             int dim = gridObject.getTile().getWorldObj().provider.dimensionId;
                             int x = gridObject.getTile().xCoord;
                             int y = gridObject.getTile().yCoord;
                             int z = gridObject.getTile().zCoord;
-                            Set<WorldCoordinate> positions = new HashSet<WorldCoordinate>();
-                            positions.add(new WorldCoordinate(dim, x + 1, y, z));
-                            positions.add(new WorldCoordinate(dim, x - 1, y, z));
-                            positions.add(new WorldCoordinate(dim, x, y + 1, z));
-                            positions.add(new WorldCoordinate(dim, x, y - 1, z));
-                            positions.add(new WorldCoordinate(dim, x, y, z + 1));
-                            positions.add(new WorldCoordinate(dim, x, y, z - 1));
+                            Map<WorldCoordinate, EnumSet<ConnectType>> positions = new HashMap<WorldCoordinate, EnumSet<ConnectType>>();
+
+                            EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
+                            EnumSet<ConnectType> notTrack = EnumSet.complementOf(EnumSet.of(ConnectType.TRACK));
+
+                            positions.put(new WorldCoordinate(dim, x + 1, y, z), notTrack);
+                            positions.put(new WorldCoordinate(dim, x - 1, y, z), notTrack);
+                            positions.put(new WorldCoordinate(dim, x, y + 1, z), all);
+                            positions.put(new WorldCoordinate(dim, x, y - 1, z), notTrack);
+                            positions.put(new WorldCoordinate(dim, x, y, z + 1), notTrack);
+                            positions.put(new WorldCoordinate(dim, x, y, z - 1), notTrack);
                             return positions;
                         }
 
                     },
             BLOCK {
                         @Override
-                        public Set<WorldCoordinate> getPossibleConnectionLocations(IElectricGrid gridObject) {
+                        public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
                             int dim = gridObject.getTile().getWorldObj().provider.dimensionId;
                             int x = gridObject.getTile().xCoord;
                             int y = gridObject.getTile().yCoord;
                             int z = gridObject.getTile().zCoord;
-                            Set<WorldCoordinate> positions = new HashSet<WorldCoordinate>();
-                            positions.add(new WorldCoordinate(dim, x + 1, y, z));
-                            positions.add(new WorldCoordinate(dim, x - 1, y, z));
-                            positions.add(new WorldCoordinate(dim, x, y + 1, z));
-                            positions.add(new WorldCoordinate(dim, x, y - 1, z));
-                            positions.add(new WorldCoordinate(dim, x, y, z + 1));
-                            positions.add(new WorldCoordinate(dim, x, y, z - 1));
+                            Map<WorldCoordinate, EnumSet<ConnectType>> positions = new HashMap<WorldCoordinate, EnumSet<ConnectType>>();
+
+                            EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
+                            
+                            positions.put(new WorldCoordinate(dim, x + 1, y, z), all);
+                            positions.put(new WorldCoordinate(dim, x - 1, y, z), all);
+                            positions.put(new WorldCoordinate(dim, x, y + 1, z), all);
+                            positions.put(new WorldCoordinate(dim, x, y - 1, z), all);
+                            positions.put(new WorldCoordinate(dim, x, y, z + 1), all);
+                            positions.put(new WorldCoordinate(dim, x, y, z - 1), all);
                             return positions;
                         }
 
                     };
 
-            public abstract Set<WorldCoordinate> getPossibleConnectionLocations(IElectricGrid gridObject);
+            public abstract Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject);
 
         };
 
@@ -130,7 +139,7 @@ public interface IElectricGrid {
             this.lossPerTick = lossPerTick;
         }
 
-        public Set<WorldCoordinate> getPossibleConnectionLocations() {
+        public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations() {
             return type.getPossibleConnectionLocations(gridObject);
         }
 
@@ -140,6 +149,14 @@ public interface IElectricGrid {
 
         public double getCapacity() {
             return MAX_CHARGE;
+        }
+        
+        public double getLosses(){
+            return lossPerTick;
+        }
+
+        public ConnectType getType() {
+            return type;
         }
 
         /**
