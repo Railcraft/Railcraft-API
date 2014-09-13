@@ -1,16 +1,22 @@
 package mods.railcraft.api.carts;
 
+import mods.railcraft.api.electricity.IElectricMinecart;
+
 /**
  * This interface is implemented by the Energy Cart
  * and is used by the Energy Loaders to charge/discharge carts.
  * It is roughly equivalent to the IItemTransfer interface
  * and based on ElectricItem and IElectricItem.
  *
+ * This interface has been superceded by the IElectricMinecart
+ * interface for general use. It remains in use solely for the
+ * IC2 based Energy Loaders.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  * @see IItemTransfer
+ * @see IElectricMinecart
  */
-public interface IEnergyTransfer
-{
+public interface IEnergyTransfer {
 
     /**
      * Injects the specified amount of EU into the device.
@@ -18,11 +24,11 @@ public interface IEnergyTransfer
      * The function returns the remainder of the EU after
      * any EU used is subtracted.
      *
-     * @param source Object initiating the transfer, should be an Entity or Tile Entity
-     * @param amount amount of energy to transfer in EU
-     * @param tier tier of the source device, has to be at least as high as the target device
+     * @param source              Object initiating the transfer, should be an Entity or Tile Entity
+     * @param amount              amount of energy to transfer in EU
+     * @param tier                tier of the source device, has to be at least as high as the target device
      * @param ignoreTransferLimit ignore the transfer limit specified by getTransferLimit()
-     * @param simulate don't actually change the item, just determine the return value
+     * @param simulate            don't actually change the item, just determine the return value
      * @return The amount of EU not used
      */
     public double injectEnergy(Object source, double amount, int tier, boolean ignoreTransferLimit, boolean simulate, boolean passAlong);
@@ -33,12 +39,12 @@ public interface IEnergyTransfer
      * The is function will subtract EU from the device's store of power
      * and return a portion up to, but not exceeding, the amount of EU requested.
      *
-     * @param source Object initiating the transfer, should be an Entity or Tile Entity
-     * @param amount amount of energy to transfer in EU
-     * @param tier tier of the source device, has to be at least as high as the target device
+     * @param source              Object initiating the transfer, should be an Entity or Tile Entity
+     * @param amount              amount of energy to transfer in EU
+     * @param tier                tier of the source device, has to be at least as high as the target device
      * @param ignoreTransferLimit ignore the transfer limit specified by getTransferLimit()
-     * @param simulate don't actually change the item, just determine the return value
-     * @param passAlong whether neighboring carts should be asked to provide any missing power.
+     * @param simulate            don't actually change the item, just determine the return value
+     * @param passAlong           whether neighboring carts should be asked to provide any missing power.
      * @return The amount of EU transferred
      */
     public double extractEnergy(Object source, double amount, int tier, boolean ignoreTransferLimit, boolean simulate, boolean passAlong);
@@ -79,4 +85,5 @@ public interface IEnergyTransfer
      * @return the transfer rate
      */
     public int getTransferLimit();
+
 }

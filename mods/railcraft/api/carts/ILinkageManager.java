@@ -1,5 +1,6 @@
 package mods.railcraft.api.carts;
 
+import java.util.Set;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
@@ -8,14 +9,13 @@ import net.minecraft.entity.item.EntityMinecart;
  *
  * To obtain an instance of this interface, call CartTools.getLinkageManager().
  *
- * Each cart can up to two links. They are called Link A and Link B.
- * Some carts will have only Link A, for example the Tunnel Bore.
+ * Each cart can up to two links. They are called Link A and Link B. Some carts
+ * will have only Link A, for example the Tunnel Bore.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  * @see CartTools, ILinkableCart
  */
-public interface ILinkageManager
-{
+public interface ILinkageManager {
 
     /**
      * The default max distance at which carts can be linked, divided by 2.
@@ -27,14 +27,14 @@ public interface ILinkageManager
     public static final float OPTIMAL_DISTANCE = 0.78f;
 
     /**
-     * Creates a link between two carts,
-     * but only if there is nothing preventing such a link.
+     * Creates a link between two carts, but only if there is nothing preventing
+     * such a link.
      *
      * @param cart1
      * @param cart2
      * @return True if the link succeeded.
      */
-    public boolean createLink(EntityMinecart cart1, EntityMinecart cart2);
+    boolean createLink(EntityMinecart cart1, EntityMinecart cart2);
 
     /**
      * Returns the cart linked to Link A or null if nothing is currently
@@ -43,7 +43,7 @@ public interface ILinkageManager
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    public EntityMinecart getLinkedCartA(EntityMinecart cart);
+    EntityMinecart getLinkedCartA(EntityMinecart cart);
 
     /**
      * Returns the cart linked to Link B or null if nothing is currently
@@ -52,7 +52,7 @@ public interface ILinkageManager
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    public EntityMinecart getLinkedCartB(EntityMinecart cart);
+    EntityMinecart getLinkedCartB(EntityMinecart cart);
 
     /**
      * Returns true if the two carts are linked to each other.
@@ -61,7 +61,7 @@ public interface ILinkageManager
      * @param cart2
      * @return True if linked
      */
-    public boolean areLinked(EntityMinecart cart1, EntityMinecart cart2);
+    boolean areLinked(EntityMinecart cart1, EntityMinecart cart2);
 
     /**
      * Breaks a link between two carts, if any link exists.
@@ -69,28 +69,28 @@ public interface ILinkageManager
      * @param cart1
      * @param cart2
      */
-    public void breakLink(EntityMinecart cart1, EntityMinecart cart2);
+    void breakLink(EntityMinecart cart1, EntityMinecart cart2);
 
     /**
      * Breaks all links the cart has.
      *
      * @param cart
      */
-    public void breakLinks(EntityMinecart cart);
+    void breakLinks(EntityMinecart cart);
 
     /**
      * Break only link A.
      *
      * @param cart
      */
-    public void breakLinkA(EntityMinecart cart);
+    void breakLinkA(EntityMinecart cart);
 
     /**
      * Break only link B.
      *
      * @param cart
      */
-    public void breakLinkB(EntityMinecart cart);
+    void breakLinkB(EntityMinecart cart);
 
     /**
      * Counts how many carts are in the train.
@@ -98,5 +98,8 @@ public interface ILinkageManager
      * @param cart Any cart in the train
      * @return The number of carts in the train
      */
-    public int countCartsInTrain(EntityMinecart cart);
+    int countCartsInTrain(EntityMinecart cart);
+
+    Iterable<EntityMinecart> getCartsInTrain(EntityMinecart cart);
+
 }
