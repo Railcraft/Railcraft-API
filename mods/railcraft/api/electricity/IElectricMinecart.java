@@ -198,8 +198,10 @@ public interface IElectricMinecart {
             if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
                 IElectricGrid track = RailTools.getTrackObjectAt(minecart.worldObj, trackX, trackY, trackZ, IElectricGrid.class);
                 if (track != null) {
-                    charge += track.getChargeHandler().removeCharge(capacity - charge);
-                    drewFromTrack = DRAW_INTERVAL * 4;
+                    double draw = track.getChargeHandler().removeCharge(capacity - charge);
+                    if (draw > 0.0)
+                        drewFromTrack = DRAW_INTERVAL * 4;
+                    charge += draw;
                 }
             }
         }

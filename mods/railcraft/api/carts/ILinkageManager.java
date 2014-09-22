@@ -1,6 +1,6 @@
 package mods.railcraft.api.carts;
 
-import java.util.Set;
+import java.util.UUID;
 import net.minecraft.entity.item.EntityMinecart;
 
 /**
@@ -101,5 +101,20 @@ public interface ILinkageManager {
     int countCartsInTrain(EntityMinecart cart);
 
     Iterable<EntityMinecart> getCartsInTrain(EntityMinecart cart);
+
+    /**
+     * Given a persistent Entity UUID, it will return a matching minecart,
+     * assuming one is loaded in the world.
+     * 
+     * The Mapping is stored in a Map<UUID, EntityMinecart> so its fairly fast.
+     *
+     * This would probably be better in CartTools, but
+     * Railcraft really only uses it for linking and this was the
+     * easiest way to expose it.
+     *
+     * @param id Persistent Entity UUID
+     * @return A Minecart
+     */
+    EntityMinecart getCartFromUUID(UUID id);
 
 }
