@@ -171,6 +171,10 @@ public interface IElectricGrid {
             other.charge = half;
         }
 
+        public void setCharge(double charge) {
+            this.charge = charge;
+        }
+
         public void addCharge(double charge) {
             this.charge += charge;
         }
