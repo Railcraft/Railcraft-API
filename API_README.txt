@@ -1,11 +1,9 @@
 The latest version can be dowloanded from:
 https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/Railcraft_latest-api.zip
 
-The Railcraft API is provided as Open Source with no limitation on use.
+The Railcraft API is provided as Open Source under the MIT License.
 
-However it requested that you give credit if you use the code for anything other than simply interfacing with Railcraft.
-
-When attempting to use this API, please use ONLY the classes you need, deleting those you don't.
+When attempting to use this API, please include ONLY the classes you need in the jar, excluding those you don't.
 This helps to reduce conflict if the API changes slighty between versions.
 
 Ore Dictionary Tags:
