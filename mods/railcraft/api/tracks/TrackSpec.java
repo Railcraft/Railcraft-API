@@ -98,7 +98,7 @@ public final class TrackSpec {
      */
     public ItemStack getItem(int qty) {
         if (blockTrack != null) {
-            ItemStack stack = new ItemStack(blockTrack, qty);
+            ItemStack stack = new ItemStack(blockTrack, qty, getTrackTag().hashCode() % (Short.MAX_VALUE - 1));
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setString("track", tag);
             stack.setTagCompound(nbt);
