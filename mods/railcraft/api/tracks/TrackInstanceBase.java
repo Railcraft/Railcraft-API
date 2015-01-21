@@ -3,6 +3,8 @@ package mods.railcraft.api.tracks;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -50,6 +52,13 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         return tileEntity;
     }
 
+    @Override
+    public List<ItemStack> getDrops(int fortune) {
+        List<ItemStack> drops = new ArrayList<ItemStack>();
+        drops.add(getTrackSpec().getItem());
+        return drops;
+    }
+    
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         return tileEntity.getBlockMetadata();
