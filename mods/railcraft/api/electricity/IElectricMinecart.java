@@ -9,11 +9,13 @@
 package mods.railcraft.api.electricity;
 
 import java.util.Random;
+
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * This interface provides a simple means of using or producing Electricity
@@ -34,7 +36,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public interface IElectricMinecart {
 
     public ChargeHandler getChargeHandler();
-
+    
     public static final class ChargeHandler {
 
         public static final int DRAW_INTERVAL = 8;
@@ -68,7 +70,7 @@ public interface IElectricMinecart {
         private double capacity, charge, draw, lastTickDraw;
         private final double lossPerTick;
         private int clock = rand.nextInt();
-        private int drewFromTrack;
+        private int drewFromTrack, drewFromCatenary;
 
         public ChargeHandler(EntityMinecart minecart, Type type, double capactiy) {
             this(minecart, type, capactiy, 0.0);
@@ -178,6 +180,8 @@ public interface IElectricMinecart {
 
             if (drewFromTrack > 0)
                 drewFromTrack--;
+            else if(drewFromCatenary > 0)
+            	drewFromCatenary--;
             else if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
                 ILinkageManager lm = CartTools.getLinkageManager(minecart.worldObj);
                 for (EntityMinecart cart : lm.getCartsInTrain(minecart)) {
@@ -221,6 +225,48 @@ public interface IElectricMinecart {
                         drewFromTrack = DRAW_INTERVAL * 4;
                     charge += drawnFromTrack;
                 }
+            }
+        }
+        
+        /**
+         * If you want to be able to draw power from the catenary, this function
+         * needs to be called once per tick. Server side only. Generally this
+         * means overriding the EnityMinecart.func_145821_a() function. You
+         * don't have to call this function if you don't care about drawing from
+         * tracks.
+         * <p>
+         * <blockquote><pre>
+         * {@code
+         * protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustement, Block trackBlock, int trackMeta)
+         *  {
+         *     super.func_145821_a(trackX, trackY, trackZ, maxSpeed, slopeAdjustement, trackBlock, trackMeta);
+         *     chargeHandler.tickOnCatenary(trackX, trackY, trackZ, clearance);
+         *  }
+         * }
+         * </pre></blockquote>
+         * @param trackX
+         * @param trackY
+         * @param trackZ
+         * @param clearance How high the catenary needs to be
+         */
+        public void tickOnCatenary(int trackX, int trackY, int trackZ) {
+            if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0 && minecart instanceof IPantographProvider &&
+            		((IPantographProvider)minecart).canAcceptPower()) {
+            	int clearance = ((IPantographProvider)minecart).getClearance();
+            	for(int y = 1; y <= clearance + 1; y++) {	//We add an extra block for clearance in case the train is on a slope
+	                TileEntity te = minecart.worldObj.getTileEntity(trackX, trackY + y, trackZ);
+	                if (y >= clearance && te instanceof IElectricDistributor) {
+	                    double drawnFromCatenary = ((IElectricDistributor)te).getChargeHandler().removeCharge(capacity - charge);
+	                    if (drawnFromCatenary > 0.0)
+	                        drewFromCatenary = DRAW_INTERVAL * 4;
+	                    charge += drawnFromCatenary;
+	                    ((IPantographProvider)minecart).drewPower();
+	                    break;
+	                } else if(!(minecart.worldObj.isAirBlock(trackX, trackY + y, trackZ)) && y <= clearance) {
+	                	((IPantographProvider)minecart).hitBlock();
+	                	break;
+	                }
+            	}
             }
         }
 
