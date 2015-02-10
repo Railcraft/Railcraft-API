@@ -2,7 +2,7 @@ package mods.railcraft.api.tracks;
 
 import net.minecraft.entity.item.EntityMinecart;
 
-public interface ISwitch {
+public interface ISwitchDevice {
 
     /**
      * This method is used by the <code>switchTrack</code> to ask the switch

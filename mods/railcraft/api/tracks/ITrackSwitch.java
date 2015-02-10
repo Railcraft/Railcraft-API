@@ -17,5 +17,5 @@ public interface ITrackSwitch extends ITrackInstance
 
     public ArrowDirection getWhiteSignDirection();
 
-    public void registerSwitch(ISwitch switchDevice);
+    public void registerSwitch(ISwitchDevice switchDevice);
 }
