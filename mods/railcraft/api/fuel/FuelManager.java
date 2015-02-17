@@ -31,7 +31,7 @@ public class FuelManager {
             return;
         }
         boilerFuel.put(fluid, heatValuePerBucket);
-        FMLLog.log("Railcraft", Level.INFO, String.format("%s registered \"%s\" as a valid Boiler fuel source with %d heat.", modName, fluid.getName(), heatValuePerBucket));
+        FMLLog.log("Railcraft", Level.DEBUG, String.format("%s registered \"%s\" as a valid Boiler fuel source with %d heat.", modName, fluid.getName(), heatValuePerBucket));
     }
 
     public static int getBoilerFuelValue(Fluid fluid) {
