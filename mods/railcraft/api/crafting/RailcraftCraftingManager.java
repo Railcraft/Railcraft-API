@@ -13,4 +13,5 @@ public abstract class RailcraftCraftingManager
     public static IBlastFurnaceCraftingManager blastFurnace;
     public static IRockCrusherCraftingManager rockCrusher;
     public static IRollingMachineCraftingManager rollingMachine;
+    public static IChemLabCraftingManager chemLab;
 }
