@@ -1,19 +1,8 @@
 package mods.railcraft.api.tracks;
 
-
-import net.minecraft.util.AxisAlignedBB;
-
 public interface ITrackSwitch extends ITrackInstance {
 
     public boolean isSwitched();
-
-    /**
-     * @see #getSwitchDevice()
-     * @see mods.railcraft.api.tracks.ISwitchDevice
-     * @deprecated replaced by getSwitchDevice()
-     */
-    @Deprecated
-    public void setSwitched(boolean switched);
 
     public boolean isMirrored();
 
