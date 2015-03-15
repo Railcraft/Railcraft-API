@@ -17,4 +17,6 @@ public interface ISwitchDevice {
      */
     public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
 
+    public boolean isInvalid();
+
 }
