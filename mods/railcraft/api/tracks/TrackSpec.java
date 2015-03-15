@@ -46,7 +46,7 @@ public final class TrackSpec {
      * @param iconProvider The provider for Track item icons
      * @param instanceClass The ITrackInstance class that corresponds to this
      * TrackSpec
-     * @see ITextureProvider
+     * @see ITrackItemIconProvider
      */
     public TrackSpec(short trackId, String tag, ITrackItemIconProvider iconProvider, Class<? extends ITrackInstance> instanceClass) {
         this(trackId, tag, iconProvider, instanceClass, null);
@@ -63,7 +63,7 @@ public final class TrackSpec {
      * @param instanceClass The ITrackInstance class that corresponds to this
      * TrackSpec
      * @param tooltip The tool tip for the Track Item
-     * @see ITextureProvider
+     * @see ITrackItemIconProvider
      */
     public TrackSpec(short trackId, String tag, ITrackItemIconProvider iconProvider, Class<? extends ITrackInstance> instanceClass, List<String> tooltip) {
         this.trackId = trackId;
