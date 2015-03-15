@@ -8,9 +8,9 @@ public interface ITrackSwitch extends ITrackInstance {
     public boolean isSwitched();
 
     /**
-     * @see #registerSwitch(ISwitchDevice)
+     * @see #getSwitchDevice()
      * @see mods.railcraft.api.tracks.ISwitchDevice
-     * @deprecated replaced by registerSwitch() and ISwitchDevice
+     * @deprecated replaced by getSwitchDevice()
      */
     @Deprecated
     public void setSwitched(boolean switched);
@@ -26,4 +26,8 @@ public interface ITrackSwitch extends ITrackInstance {
      * @return the ISwitchDevice that can interact with this switch track
      */
     public ISwitchDevice getSwitchDevice();
+
+    enum ArrowDirection {
+        NORTH, SOUTH, EAST, WEST, NORTH_SOUTH, EAST_WEST
+    }
 }
