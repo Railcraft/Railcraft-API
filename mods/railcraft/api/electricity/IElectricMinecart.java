@@ -178,7 +178,7 @@ public interface IElectricMinecart {
 
             if (drewFromTrack > 0)
                 drewFromTrack--;
-            else if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
+            else if (type == Type.USER && charge < (capacity / 2.0) && clock % DRAW_INTERVAL == 0) {
                 ILinkageManager lm = CartTools.getLinkageManager(minecart.worldObj);
                 for (EntityMinecart cart : lm.getCartsInTrain(minecart)) {
                     if (cart instanceof IElectricMinecart) {
