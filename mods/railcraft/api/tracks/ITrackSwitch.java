@@ -3,39 +3,20 @@ package mods.railcraft.api.tracks;
 import net.minecraft.util.AxisAlignedBB;
 
 public interface ITrackSwitch extends ITrackInstance {
-    public boolean isSwitched();
-
     /**
-     * @see #getSwitchDevice()
-     * @see mods.railcraft.api.tracks.ISwitchDevice
-     * @deprecated replaced by registerSwitch() and ISwitchDevice
-     */
-    @Deprecated
-    public void setSwitched(boolean switched);
-
-    public boolean isMirrored();
-
-    public ArrowDirection getRedSignDirection();
-
-    public ArrowDirection getWhiteSignDirection();
-
-    /**
-     * @return null
-     * @see #getSwitchDevice()
-     * @see mods.railcraft.api.tracks.ISwitchDevice
-     * @deprecated replaced by registerSwitch() and ISwitchDevice
-     */
-    @Deprecated
-    public AxisAlignedBB getRoutingSearchBox();
-
-    /**
-     * This method should only return a valid (isInvalid() == false) ISwitchDevice or null
+     * Returns whether the switch track should "appear" switched.
+     * Has no influence on where a cart actually ends up.
+     * This is mostly due to issues with the visual state updating slower than carts can approach the track.
      *
-     * @return the ISwitchDevice that can interact with this switch track
+     * @return true if the track appears switched
      */
-    public ISwitchDevice getSwitchDevice();
+    public boolean isVisuallySwitched();
 
-    enum ArrowDirection {
-        NORTH, SOUTH, EAST, WEST, NORTH_SOUTH, EAST_WEST
-    }
+    /**
+     * Switch Tracks have an additional orientation state beyond normal tracks.
+     * This function returns that value.
+     *
+     * @return true if the track is mirrored
+     */
+    public boolean isMirrored();
 }
