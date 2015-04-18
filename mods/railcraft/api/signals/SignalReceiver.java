@@ -6,15 +6,13 @@
  */
 package mods.railcraft.api.signals;
 
-import net.minecraft.tileentity.TileEntity;
 import mods.railcraft.api.core.WorldCoordinate;
+import net.minecraft.tileentity.TileEntity;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class SignalReceiver extends AbstractPair {
-
     protected boolean needsInit = true;
 
     public SignalReceiver(String name, TileEntity tile, int maxPairings) {
@@ -35,9 +33,14 @@ public abstract class SignalReceiver extends AbstractPair {
     }
 
     @Override
-    public boolean isValidPair(TileEntity tile) {
-        if (tile instanceof IControllerTile) {
-            SignalController controller = ((IControllerTile) tile).getController();
+    public boolean isValidPair(TileEntity otherTile) {
+        return isValidPair(null, otherTile);
+    }
+
+    @Override
+    public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
+        if (otherTile instanceof IControllerTile) {
+            SignalController controller = ((IControllerTile) otherTile).getController();
             return controller.isPairedWith(getCoords());
         }
         return false;
