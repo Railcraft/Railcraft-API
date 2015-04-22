@@ -40,6 +40,8 @@ public abstract class AbstractPair {
     }
 
     protected void addPairing(WorldCoordinate other) {
+        if (pairings.contains(other))
+            pairings.remove(other);
         pairings.add(other);
         while (pairings.size() > getMaxPairings()) {
             pairings.remove();
