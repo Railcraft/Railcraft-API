@@ -24,7 +24,7 @@ public abstract class AbstractPair {
     private static final int SAFE_TIME = 32;
     private static final int PAIR_CHECK_INTERVAL = 128;
     public final TileEntity tile;
-    public final String name;
+    public final String locTag;
     public final int maxPairings;
     protected Deque<WorldCoordinate> pairings = new LinkedList<WorldCoordinate>();
     protected Set<WorldCoordinate> invalidPairings = new HashSet<WorldCoordinate>();
@@ -34,10 +34,10 @@ public abstract class AbstractPair {
     private int ticksExisted;
     private boolean needsInit = true;
 
-    public AbstractPair(String name, TileEntity tile, int maxPairings) {
+    public AbstractPair(String locTag, TileEntity tile, int maxPairings) {
         this.tile = tile;
         this.maxPairings = maxPairings;
-        this.name = name;
+        this.locTag = locTag;
     }
 
     protected void addPairing(WorldCoordinate other) {
@@ -124,8 +124,13 @@ public abstract class AbstractPair {
         return coords;
     }
 
+    @Deprecated
     public String getName() {
-        return name;
+        return getLocalizationTag();
+    }
+
+    public String getLocalizationTag() {
+        return locTag;
     }
 
     public int getMaxPairings() {

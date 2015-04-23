@@ -7,24 +7,23 @@
  */
 package mods.railcraft.api.signals;
 
+import mods.railcraft.api.core.WorldCoordinate;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import mods.railcraft.api.core.WorldCoordinate;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class DualSignalReceiver extends SignalReceiver {
-
     private SignalAspect topAspect = SignalAspect.BLINK_RED;
     private SignalAspect bottomAspect = SignalAspect.BLINK_RED;
 
-    public DualSignalReceiver(String desc, TileEntity tile) {
-        super(desc, tile, 2);
+    public DualSignalReceiver(String locTag, TileEntity tile) {
+        super(locTag, tile, 2);
     }
 
     @Override

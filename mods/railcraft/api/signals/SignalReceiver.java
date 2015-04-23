@@ -16,8 +16,8 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class SignalReceiver extends AbstractPair {
     protected boolean needsInit = true;
 
-    public SignalReceiver(String name, TileEntity tile, int maxPairings) {
-        super(name, tile, maxPairings);
+    public SignalReceiver(String locTag, TileEntity tile, int maxPairings) {
+        super(locTag, tile, maxPairings);
     }
 
     public SignalController getControllerAt(WorldCoordinate coord) {

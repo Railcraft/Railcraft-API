@@ -7,22 +7,21 @@
  */
 package mods.railcraft.api.signals;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SimpleSignalReceiver extends SignalReceiver {
-
     private SignalAspect aspect = SignalAspect.BLINK_RED;
 
-    public SimpleSignalReceiver(String desc, TileEntity tile) {
-        super(desc, tile, 1);
+    public SimpleSignalReceiver(String locTag, TileEntity tile) {
+        super(locTag, tile, 1);
     }
 
     public SignalAspect getAspect() {
@@ -65,5 +64,4 @@ public class SimpleSignalReceiver extends SignalReceiver {
     public String toString() {
         return "Receiver: " + aspect.toString();
     }
-
 }
