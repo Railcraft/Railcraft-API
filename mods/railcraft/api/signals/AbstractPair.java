@@ -26,8 +26,9 @@ public abstract class AbstractPair {
     public final TileEntity tile;
     public final String locTag;
     public final int maxPairings;
-    protected Deque<WorldCoordinate> pairings = new LinkedList<WorldCoordinate>();
-    protected Set<WorldCoordinate> invalidPairings = new HashSet<WorldCoordinate>();
+    protected final Deque<WorldCoordinate> pairings = new LinkedList<WorldCoordinate>();
+    private final Collection<WorldCoordinate> safePairings =  Collections.unmodifiableCollection(pairings);
+    protected final Set<WorldCoordinate> invalidPairings = new HashSet<WorldCoordinate>();
     private WorldCoordinate coords;
     private boolean isBeingPaired;
     private int update = rand.nextInt();
@@ -41,8 +42,7 @@ public abstract class AbstractPair {
     }
 
     protected void addPairing(WorldCoordinate other) {
-        if (pairings.contains(other))
-            pairings.remove(other);
+        pairings.remove(other);
         pairings.add(other);
         while (pairings.size() > getMaxPairings()) {
             pairings.remove();
@@ -146,7 +146,7 @@ public abstract class AbstractPair {
     }
 
     public Collection<WorldCoordinate> getPairs() {
-        return Collections.unmodifiableCollection(pairings);
+        return safePairings;
     }
 
     public TileEntity getTile() {

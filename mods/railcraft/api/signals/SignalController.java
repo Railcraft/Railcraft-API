@@ -72,7 +72,7 @@ public abstract class SignalController extends AbstractPair {
     public void tickClient() {
         super.tickClient();
         if (SignalTools.effectManager != null && SignalTools.effectManager.isTuningAuraActive()) {
-            for (WorldCoordinate coord : pairings) {
+            for (WorldCoordinate coord : getPairs()) {
                 SignalReceiver receiver = getReceiverAt(coord);
                 if (receiver != null) {
                     SignalTools.effectManager.tuningEffect(getTile(), receiver.getTile());

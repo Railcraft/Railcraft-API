@@ -60,7 +60,7 @@ public abstract class SignalReceiver extends AbstractPair {
         super.tickServer();
         if (needsInit) {
             needsInit = false;
-            for (WorldCoordinate pair : pairings) {
+            for (WorldCoordinate pair : getPairs()) {
                 SignalController controller = getControllerAt(pair);
                 if (controller != null) {
                     SignalAspect aspect = controller.getAspectFor(getCoords());

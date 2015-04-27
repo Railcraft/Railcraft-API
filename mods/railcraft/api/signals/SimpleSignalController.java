@@ -38,14 +38,14 @@ public class SimpleSignalController extends SignalController {
 
     @Override
     public SignalAspect getAspectFor(WorldCoordinate receiver) {
-        if (!pairings.contains(receiver)) {
+        if (!getPairs().contains(receiver)) {
             return null;
         }
         return aspect;
     }
 
     private void updateReceiver() {
-        for (WorldCoordinate recv : pairings) {
+        for (WorldCoordinate recv : getPairs()) {
             SignalReceiver receiver = getReceiverAt(recv);
             if (receiver != null) {
                 receiver.onControllerAspectChange(this, aspect);
