@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class SimpleSignalController extends SignalController {
     private SignalAspect aspect = SignalAspect.BLINK_RED;
+    private boolean needsInit = true;
 
     public SimpleSignalController(String locTag, TileEntity tile) {
         super(locTag, tile, 1);
@@ -44,6 +45,13 @@ public class SimpleSignalController extends SignalController {
         return aspect;
     }
 
+    @Override
+    public void tickServer() {
+        super.tickServer();
+        if (needsInit)
+            updateReceiver();
+    }
+
     private void updateReceiver() {
         for (WorldCoordinate recv : getPairs()) {
             SignalReceiver receiver = getReceiverAt(recv);
@@ -51,7 +59,6 @@ public class SimpleSignalController extends SignalController {
                 receiver.onControllerAspectChange(this, aspect);
             }
         }
-        cleanPairings();
     }
 
     @Override
