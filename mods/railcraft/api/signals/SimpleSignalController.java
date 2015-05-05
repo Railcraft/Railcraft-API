@@ -48,8 +48,10 @@ public class SimpleSignalController extends SignalController {
     @Override
     public void tickServer() {
         super.tickServer();
-        if (needsInit)
+        if (needsInit) {
+            needsInit = false;
             updateReceiver();
+        }
     }
 
     private void updateReceiver() {
