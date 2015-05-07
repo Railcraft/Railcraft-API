@@ -39,9 +39,6 @@ public class SimpleSignalController extends SignalController {
 
     @Override
     public SignalAspect getAspectFor(WorldCoordinate receiver) {
-        if (!getPairs().contains(receiver)) {
-            return null;
-        }
         return aspect;
     }
 
@@ -85,6 +82,6 @@ public class SimpleSignalController extends SignalController {
 
     @Override
     public String toString() {
-        return "Controller: " + aspect.toString();
+        return String.format("Controller:%s (%s)", aspect,  super.toString());
     }
 }

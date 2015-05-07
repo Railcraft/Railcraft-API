@@ -24,6 +24,17 @@ import java.util.*;
  */
 public abstract class AbstractPair {
     protected static final Random rand = new Random();
+    private static final boolean IS_BUKKIT;
+
+    static {
+        boolean foundBukkit = false;
+        try {
+            foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
+        } catch (ClassNotFoundException er) {
+        }
+        IS_BUKKIT = foundBukkit;
+    }
+
     private static final int SAFE_TIME = 32;
     private static final int PAIR_CHECK_INTERVAL = 16;
     public final TileEntity tile;
@@ -128,12 +139,14 @@ public abstract class AbstractPair {
         int y = coord.y;
         int z = coord.z;
 
-        TileEntity cacheTarget = tileCache.get(coord);
-        if (cacheTarget != null) {
-            if (cacheTarget.isInvalid() || cacheTarget.xCoord != x || cacheTarget.yCoord != y || cacheTarget.zCoord != z) {
-                tileCache.remove(coord);
-            } else if (isValidPair(coord, cacheTarget))
-                return cacheTarget;
+        if (!IS_BUKKIT) {
+            TileEntity cacheTarget = tileCache.get(coord);
+            if (cacheTarget != null) {
+                if (cacheTarget.isInvalid() || cacheTarget.xCoord != x || cacheTarget.yCoord != y || cacheTarget.zCoord != z)
+                    tileCache.remove(coord);
+                else if (isValidPair(coord, cacheTarget))
+                    return cacheTarget;
+            }
         }
 
         if (y < 0) {
@@ -158,7 +171,7 @@ public abstract class AbstractPair {
             return null;
         }
 
-        if (target != null) {
+        if (!IS_BUKKIT && target != null) {
             tileCache.put(coord, target);
         }
 

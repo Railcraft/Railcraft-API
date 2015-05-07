@@ -62,6 +62,6 @@ public class SimpleSignalReceiver extends SignalReceiver {
 
     @Override
     public String toString() {
-        return "Receiver: " + aspect.toString();
+        return String.format("Receiver:%s (%s)", aspect,  super.toString());
     }
 }
