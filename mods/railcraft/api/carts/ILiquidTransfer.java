@@ -26,8 +26,7 @@ public interface ILiquidTransfer {
      *
      * @param source The Object offering the liquid, used to prevent request
      * loops in trains
-     * @param quantity The quantity offered
-     * @param id The liquid id offered
+     * @param offer The FluidStack offered
      * @return the liquid used
      */
     public int offerLiquid(Object source, FluidStack offer);
@@ -40,8 +39,7 @@ public interface ILiquidTransfer {
      *
      * @param source The Object requesting the liquid, used to prevent request
      * loops in trains
-     * @param quantity The quantity requested
-     * @param id The liquid type requested
+     * @param request The FluidStack requested
      * @return the liquid provided
      */
     public int requestLiquid(Object source, FluidStack request);
