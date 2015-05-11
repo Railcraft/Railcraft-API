@@ -53,11 +53,6 @@ public interface IFluidCart {
     boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid);
 
     /**
-     * @return true if being filled
-     */
-    boolean isFilling();
-
-    /**
      * Set by the Liquid Loader while filling, primarily used for rendering a
      * visible change while being filled.
      *
