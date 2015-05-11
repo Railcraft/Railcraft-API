@@ -21,7 +21,6 @@ import mods.railcraft.api.electricity.IElectricMinecart;
  * IC2 based Energy Loaders.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see IItemTransfer
  * @see IElectricMinecart
  */
 public interface IEnergyTransfer {

@@ -15,6 +15,8 @@ import net.minecraftforge.fluids.Fluid;
  * Replaces ILiquidTransfer with a simpler interface for moving Fluids between Minecarts.
  * <p/>
  * Created by CovertJaguar on 5/9/2015.
+ *
+ * @see mods.railcraft.api.carts.ITrainTransferHelper
  */
 public interface IFluidCart {
     /**

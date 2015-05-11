@@ -16,6 +16,8 @@ import net.minecraft.item.ItemStack;
  * It is entirely optional to implement this class, default values will be determined based on several factors.
  * <p/>
  * Created by CovertJaguar on 5/9/2015.
+ *
+ * @see mods.railcraft.api.carts.ITrainTransferHelper
  */
 public interface IItemCart {
     /**
