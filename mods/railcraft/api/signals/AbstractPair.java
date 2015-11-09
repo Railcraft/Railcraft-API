@@ -58,6 +58,10 @@ public abstract class AbstractPair {
         this.locTag = locTag;
     }
 
+    protected boolean isLoaded() {
+        return ticksExisted >= SAFE_TIME;
+    }
+
     protected void addPairing(WorldCoordinate other) {
         pairings.remove(other);
         pairings.add(other);
@@ -83,9 +87,10 @@ public abstract class AbstractPair {
     }
 
     public void tickServer() {
-        ticksExisted++;
         update++;
-        if (ticksExisted >= SAFE_TIME && update % PAIR_CHECK_INTERVAL == 0)
+        if (!isLoaded())
+            ticksExisted++;
+        else if (update % PAIR_CHECK_INTERVAL == 0)
             validatePairings();
     }
 
