@@ -7,4 +7,4 @@
  */
 @API(apiVersion="1.6.0", owner="RailcraftAPI|core", provides="RailcraftAPI|electricity")
 package mods.railcraft.api.electricity;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;
