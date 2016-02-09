@@ -8,20 +8,21 @@
 
 package mods.railcraft.api.core;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * If you want your block to connect (or not connect) to posts, implement this
  * interface.
- *
+ * <p/>
  * The result takes priority over any other rules.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IPostConnection {
 
-    public enum ConnectStyle {
+    enum ConnectStyle {
 
         NONE,
         SINGLE_THICK,
@@ -33,12 +34,10 @@ public interface IPostConnection {
      * connects to a post.
      *
      * @param world The World
-     * @param x x-Coord
-     * @param y y-Coord
-     * @param z z-Coord
-     * @param side Side to connect to
+     * @param pos Block Position
+     * @param side  Side to connect to
      * @return true if connect
      */
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side);
 
 }
