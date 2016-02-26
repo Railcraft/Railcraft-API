@@ -17,6 +17,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -51,11 +54,20 @@ public abstract class AbstractPair {
     private int update = rand.nextInt();
     private int ticksExisted;
     private boolean needsInit = true;
+    private String name;
 
     public AbstractPair(String locTag, TileEntity tile, int maxPairings) {
         this.tile = tile;
         this.maxPairings = maxPairings;
         this.locTag = locTag;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     protected boolean isLoaded() {
@@ -198,11 +210,6 @@ public abstract class AbstractPair {
         return coords;
     }
 
-    @Deprecated
-    public String getName() {
-        return getLocalizationTag();
-    }
-
     public String getLocalizationTag() {
         return locTag;
     }
@@ -255,6 +262,9 @@ public abstract class AbstractPair {
             list.appendTag(tag);
         }
         data.setTag("pairings", list);
+        if(this.name != null){
+            data.setString("name", this.name);
+        }
     }
 
     public final void readFromNBT(NBTTagCompound data) {
@@ -269,6 +279,21 @@ public abstract class AbstractPair {
             int[] c = tag.getIntArray("coords");
             pairings.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
         }
+        this.name = data.getString("name");
+        if(this.name.isEmpty()) {
+            this.name = null;
+        }
+    }
+
+    public void writePacketData(DataOutputStream data) throws IOException {
+        data.writeUTF(this.name != null ? this.name : "");
+    }
+
+    public void readPacketData(DataInputStream data) throws IOException {
+       this.name = data.readUTF();
+       if(this.name.isEmpty()) {
+           this.name = null;
+       }
     }
 
     @SideOnly(Side.CLIENT)

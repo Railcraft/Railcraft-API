@@ -52,11 +52,15 @@ public class SimpleSignalReceiver extends SignalReceiver {
         aspect = SignalAspect.values()[data.getByte("aspect")];
     }
 
+    @Override
     public void writePacketData(DataOutputStream data) throws IOException {
+        super.writePacketData(data);
         data.writeByte(aspect.ordinal());
     }
 
+    @Override
     public void readPacketData(DataInputStream data) throws IOException {
+        super.readPacketData(data);
         aspect = SignalAspect.values()[data.readByte()];
     }
 

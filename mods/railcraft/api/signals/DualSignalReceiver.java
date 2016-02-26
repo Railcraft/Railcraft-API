@@ -59,12 +59,16 @@ public class DualSignalReceiver extends SignalReceiver {
         bottomAspect = SignalAspect.values()[data.getByte("bottomAspect")];
     }
 
+    @Override
     public void writePacketData(DataOutputStream data) throws IOException {
+        super.writePacketData(data);
         data.writeByte(topAspect.ordinal());
         data.writeByte(bottomAspect.ordinal());
     }
 
+    @Override
     public void readPacketData(DataInputStream data) throws IOException {
+        super.readPacketData(data);
         topAspect = SignalAspect.values()[data.readByte()];
         bottomAspect = SignalAspect.values()[data.readByte()];
     }
