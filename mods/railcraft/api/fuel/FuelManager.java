@@ -13,7 +13,6 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import net.minecraftforge.fluids.Fluid;
 import org.apache.logging.log4j.Level;
 
@@ -43,11 +42,9 @@ public class FuelManager {
     }
 
     public static int getBoilerFuelValue(Fluid fluid) {
-        for (Entry<Fluid, Integer> entry : boilerFuel.entrySet()) {
-            if (entry.getKey() == fluid)
-                return entry.getValue();
-        }
-        return 0;
+        Integer value = boilerFuel.get(fluid);
+        if(value != null) return value.intValue();
+        else return 0;
     }
 
 }
