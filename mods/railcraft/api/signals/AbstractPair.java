@@ -67,7 +67,18 @@ public abstract class AbstractPair {
     }
 
     public void setName(String name){
-        this.name = name;
+        if(name == null|| this.name == null || !this.name.equals(name)) {
+            this.name = name;
+            this.informPairsOfNameChange();
+        }
+    }
+
+    public void informPairsOfNameChange() {
+
+    }
+
+    public void onPairNameChange(WorldCoordinate coords, String name) {
+
     }
 
     protected boolean isLoaded() {

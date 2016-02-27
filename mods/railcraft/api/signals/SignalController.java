@@ -38,6 +38,16 @@ public abstract class SignalController extends AbstractPair {
     }
 
     @Override
+    public void informPairsOfNameChange() {
+        for(WorldCoordinate coord : getPairs()) {
+            SignalReceiver recv = getReceiverAt(coord);
+            if(recv != null){
+                recv.onPairNameChange(getCoords(), getName());
+            }
+        }
+    }
+
+    @Override
     protected String getTagName() {
         return "controller";
     }
