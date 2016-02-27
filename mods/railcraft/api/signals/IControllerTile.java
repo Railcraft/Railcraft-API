@@ -13,5 +13,5 @@ package mods.railcraft.api.signals;
  */
 public interface IControllerTile {
 
-    public SignalController getController();
+    SignalController getController();
 }

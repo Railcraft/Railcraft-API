@@ -10,6 +10,7 @@ package mods.railcraft.api.signals;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,7 +28,7 @@ public class DualSignalReceiver extends SignalReceiver {
     }
 
     @Override
-    public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
+    public void onControllerAspectChange(SignalController con, @NotNull SignalAspect aspect) {
         WorldCoordinate coord = pairings.peekFirst();
         if (coord == null) {
             return;

@@ -10,11 +10,13 @@ package mods.railcraft.api.signals;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class SignalReceiver extends AbstractPair {
-    protected boolean needsInit = true;
+    private boolean needsInit = true;
 
     public SignalReceiver(String locTag, TileEntity tile, int maxPairings) {
         super(locTag, tile, maxPairings);
@@ -34,11 +36,6 @@ public abstract class SignalReceiver extends AbstractPair {
     }
 
     @Override
-    public boolean isValidPair(TileEntity otherTile) {
-        return isValidPair(null, otherTile);
-    }
-
-    @Override
     public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
         if (otherTile instanceof IControllerTile) {
             SignalController controller = ((IControllerTile) otherTile).getController();
@@ -47,7 +44,7 @@ public abstract class SignalReceiver extends AbstractPair {
         return false;
     }
 
-    public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
+    public void onControllerAspectChange(SignalController con, @Nonnull SignalAspect aspect) {
         ((IReceiverTile) tile).onControllerAspectChange(con, aspect);
     }
 
@@ -63,10 +60,7 @@ public abstract class SignalReceiver extends AbstractPair {
             for (WorldCoordinate pair : getPairs()) {
                 SignalController controller = getControllerAt(pair);
                 if (controller != null) {
-                    SignalAspect aspect = controller.getAspectFor(getCoords());
-                    if (aspect != null) {
-                        onControllerAspectChange(controller, aspect);
-                    }
+                    onControllerAspectChange(controller, controller.getAspectFor(getCoords()));
                 }
             }
         }
