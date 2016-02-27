@@ -11,6 +11,7 @@ import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,7 +20,9 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class DualSignalReceiver extends SignalReceiver {
+    @Nonnull
     private SignalAspect topAspect = SignalAspect.BLINK_RED;
+    @Nonnull
     private SignalAspect bottomAspect = SignalAspect.BLINK_RED;
 
     public DualSignalReceiver(String locTag, TileEntity tile) {
@@ -27,7 +30,7 @@ public class DualSignalReceiver extends SignalReceiver {
     }
 
     @Override
-    public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
+    public void onControllerAspectChange(SignalController con, @Nonnull SignalAspect aspect) {
         WorldCoordinate coord = pairings.peekFirst();
         if (coord == null) {
             return;
@@ -59,25 +62,31 @@ public class DualSignalReceiver extends SignalReceiver {
         bottomAspect = SignalAspect.values()[data.getByte("bottomAspect")];
     }
 
+    @Override
     public void writePacketData(DataOutputStream data) throws IOException {
+        super.writePacketData(data);
         data.writeByte(topAspect.ordinal());
         data.writeByte(bottomAspect.ordinal());
     }
 
+    @Override
     public void readPacketData(DataInputStream data) throws IOException {
+        super.readPacketData(data);
         topAspect = SignalAspect.values()[data.readByte()];
         bottomAspect = SignalAspect.values()[data.readByte()];
     }
 
+    @Nonnull
     public SignalAspect getTopAspect() {
         return topAspect;
     }
 
+    @Nonnull
     public SignalAspect getBottomAspect() {
         return bottomAspect;
     }
 
-    public boolean setTopAspect(SignalAspect aspect) {
+    public boolean setTopAspect(@Nonnull SignalAspect aspect) {
         if (topAspect != aspect) {
             topAspect = aspect;
             return true;
@@ -85,7 +94,7 @@ public class DualSignalReceiver extends SignalReceiver {
         return false;
     }
 
-    public boolean setBottomAspect(SignalAspect aspect) {
+    public boolean setBottomAspect(@Nonnull SignalAspect aspect) {
         if (bottomAspect != aspect) {
             bottomAspect = aspect;
             return true;

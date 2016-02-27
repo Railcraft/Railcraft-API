@@ -48,7 +48,7 @@ public enum SignalAspect {
     private static final int SIGNAL_BRIGHTNESS = 210;
     public static final SignalAspect[] VALUES = values();
 
-    private SignalAspect(int textureIndex, String localizationTag) {
+    SignalAspect(int textureIndex, String localizationTag) {
         this.textureIndex = textureIndex;
         this.localizationTag = localizationTag;
     }
@@ -78,9 +78,7 @@ public enum SignalAspect {
      * @return true if blinks
      */
     public boolean isBlinkAspect() {
-        if (this == BLINK_YELLOW || this == BLINK_RED)
-            return true;
-        return false;
+        return this == BLINK_YELLOW || this == BLINK_RED;
     }
 
     /**
@@ -90,11 +88,7 @@ public enum SignalAspect {
      * @return true if emitting light.
      */
     public boolean isLit() {
-        if (this == OFF)
-            return false;
-        if (isBlinkAspect())
-            return isBlinkOn();
-        return true;
+        return this != OFF && (!isBlinkAspect() || isBlinkOn());
     }
 
     /**
@@ -116,7 +110,7 @@ public enum SignalAspect {
     /**
      * Takes an Ordinal and returns the corresponding SignalAspect.
      *
-     * @param ordinal
+     * @param ordinal the ordinal
      * @return the Signal Aspect with the specified Ordinal
      */
     public static SignalAspect fromOrdinal(int ordinal) {
@@ -132,8 +126,8 @@ public enum SignalAspect {
      *
      * In Railcraft the primary use is in Signal Box logic.
      *
-     * @param first
-     * @param second
+     * @param first aspect one
+     * @param second aspect two
      * @return The most restrictive Aspect
      */
     public static SignalAspect mostRestrictive(SignalAspect first, SignalAspect second) {

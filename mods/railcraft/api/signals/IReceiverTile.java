@@ -15,10 +15,10 @@ import net.minecraft.world.World;
  */
 public interface IReceiverTile {
 
-    public World getWorld();
+    World getWorld();
 
-    public SignalReceiver getReceiver();
+    SignalReceiver getReceiver();
 
-    public void onControllerAspectChange(SignalController con, SignalAspect aspect);
+    void onControllerAspectChange(SignalController con, SignalAspect aspect);
 
 }

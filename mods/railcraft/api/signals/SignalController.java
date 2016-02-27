@@ -10,6 +10,8 @@ package mods.railcraft.api.signals;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -26,25 +28,22 @@ public abstract class SignalController extends AbstractPair {
         return null;
     }
 
+    @Nonnull
     public abstract SignalAspect getAspectFor(WorldCoordinate receiver);
 
-    public boolean sendAspectTo(WorldCoordinate receiver, SignalAspect aspect) {
-        SignalReceiver recv = getReceiverAt(receiver);
-        if (recv != null) {
-            recv.onControllerAspectChange(this, aspect);
-            return true;
+    @Override
+    public void informPairsOfNameChange() {
+        for(WorldCoordinate coord : getPairs()) {
+            SignalReceiver recv = getReceiverAt(coord);
+            if(recv != null){
+                recv.onPairNameChange(getCoords(), getName());
+            }
         }
-        return false;
     }
 
     @Override
     protected String getTagName() {
         return "controller";
-    }
-
-    @Override
-    public boolean isValidPair(TileEntity otherTile) {
-        return isValidPair(null, otherTile);
     }
 
     @Override

@@ -12,6 +12,6 @@ package mods.railcraft.api.signals;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ISignalPacketBuilder {
-    public void sendPairPacketUpdate(AbstractPair pairing);
-    public void sendPairPacketRequest(AbstractPair pairing);
+    void sendPairPacketUpdate(AbstractPair pairing);
+    void sendPairPacketRequest(AbstractPair pairing);
 }
