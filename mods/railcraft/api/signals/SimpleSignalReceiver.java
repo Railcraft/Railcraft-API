@@ -9,7 +9,6 @@ package mods.railcraft.api.signals;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.DataInputStream;
@@ -20,6 +19,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SimpleSignalReceiver extends SignalReceiver {
+
     @Nonnull
     private SignalAspect aspect = SignalAspect.BLINK_RED;
 
@@ -37,7 +37,7 @@ public class SimpleSignalReceiver extends SignalReceiver {
     }
 
     @Override
-    public void onControllerAspectChange(SignalController con, @NotNull SignalAspect aspect) {
+    public void onControllerAspectChange(SignalController con, @Nonnull SignalAspect aspect) {
         if (this.aspect != aspect) {
             this.aspect = aspect;
             super.onControllerAspectChange(con, aspect);
