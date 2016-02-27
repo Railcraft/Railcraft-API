@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public interface IPairEffectRenderer {
 
-    public boolean isTuningAuraActive();
+    boolean isTuningAuraActive();
 
-    public void tuningEffect(TileEntity start, TileEntity dest);
+    void tuningEffect(TileEntity start, TileEntity dest);
 }
