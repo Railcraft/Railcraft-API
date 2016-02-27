@@ -30,11 +30,10 @@ public abstract class AbstractPair {
     private static final boolean IS_BUKKIT;
 
     static {
-        boolean foundBukkit;
+        boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
         } catch (ClassNotFoundException er) {
-            foundBukkit = false;
         }
         IS_BUKKIT = foundBukkit;
     }
@@ -67,8 +66,19 @@ public abstract class AbstractPair {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name){
+        if(name == null|| this.name == null || !this.name.equals(name)) {
+            this.name = name;
+            this.informPairsOfNameChange();
+        }
+    }
+
+    public void informPairsOfNameChange() {
+
+    }
+
+    public void onPairNameChange(WorldCoordinate coords, String name) {
+
     }
 
     protected boolean isLoaded() {
@@ -196,8 +206,13 @@ public abstract class AbstractPair {
         return target;
     }
 
-    public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
+    @Deprecated
+    public boolean isValidPair(TileEntity otherTile) {
         return false;
+    }
+
+    public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
+        return isValidPair(otherTile);
     }
 
     public WorldCoordinate getCoords() {
@@ -258,7 +273,7 @@ public abstract class AbstractPair {
             list.appendTag(tag);
         }
         data.setTag("pairings", list);
-        if (this.name != null) {
+        if(this.name != null){
             data.setString("name", this.name);
         }
     }
@@ -276,7 +291,7 @@ public abstract class AbstractPair {
             pairings.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
         }
         this.name = data.getString("name");
-        if (this.name.isEmpty()) {
+        if(this.name.isEmpty()) {
             this.name = null;
         }
     }
@@ -286,10 +301,10 @@ public abstract class AbstractPair {
     }
 
     public void readPacketData(DataInputStream data) throws IOException {
-        this.name = data.readUTF();
-        if (this.name.isEmpty()) {
-            this.name = null;
-        }
+       this.name = data.readUTF();
+       if(this.name.isEmpty()) {
+           this.name = null;
+       }
     }
 
     @SideOnly(Side.CLIENT)
