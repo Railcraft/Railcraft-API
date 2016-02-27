@@ -14,6 +14,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.block.Block;
@@ -38,9 +39,9 @@ import net.minecraft.item.ItemStack;
  */
 public interface ITrackInstance extends INetworkedObject {
 
-    public TrackSpec getTrackSpec();
+    TrackSpec getTrackSpec();
     
-    public List<ItemStack> getDrops(int fortune);
+    List<ItemStack> getDrops(int fortune);
 
     /**
      * Return the rail's metadata (without the power bit if the rail uses one).
@@ -59,7 +60,7 @@ public interface ITrackInstance extends INetworkedObject {
      * EntityMinecart.
      * @return The metadata.
      */
-    public int getBasicRailMetadata(EntityMinecart cart);
+    int getBasicRailMetadata(EntityMinecart cart);
 
     /**
      * This function is called by any minecart that passes over this rail. It is
@@ -67,37 +68,37 @@ public interface ITrackInstance extends INetworkedObject {
      *
      * @param cart The cart on the rail.
      */
-    public void onMinecartPass(EntityMinecart cart);
+    void onMinecartPass(EntityMinecart cart);
 
     /**
      * Return the block texture to be used.
      *
      * @return
      */
-    public IIcon getIcon();
+    IIcon getIcon();
 
-    public void writeToNBT(NBTTagCompound data);
+    void writeToNBT(NBTTagCompound data);
 
-    public void readFromNBT(NBTTagCompound data);
+    void readFromNBT(NBTTagCompound data);
 
     /**
      * Return true if this track requires update ticks.
      *
      * @return
      */
-    public boolean canUpdate();
+    boolean canUpdate();
 
-    public void updateEntity();
+    void updateEntity();
 
-    public boolean blockActivated(EntityPlayer player);
+    boolean blockActivated(EntityPlayer player);
 
-    public void onBlockPlaced();
+    void onBlockPlaced();
 
-    public void onBlockRemoved();
+    void onBlockRemoved();
 
-    public void onBlockPlacedBy(EntityLivingBase entity);
+    void onBlockPlacedBy(EntityLivingBase entity);
 
-    public void onNeighborBlockChange(Block blockChanged);
+    void onNeighborBlockChange(Block blockChanged);
 
     /**
      * Internal function that sets the Track's TileEntity so it can be
@@ -105,26 +106,22 @@ public interface ITrackInstance extends INetworkedObject {
      *
      * @param tile
      */
-    public void setTile(TileEntity tile);
+    void setTile(TileEntity tile);
 
-    public TileEntity getTile();
+    TileEntity getTile();
 
-    public int getX();
+    BlockPos getPos();
 
-    public int getY();
+    float getHardness();
 
-    public int getZ();
-
-    public float getHardness();
-
-    public float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder);
+    float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder);
 
     /**
      * Return true if the rail can make corners. Used by placement logic.
      *
      * @return true if the rail can make corners.
      */
-    public boolean isFlexibleRail();
+    boolean isFlexibleRail();
 
     /**
      * Returns true if the rail can make up and down slopes. Used by placement
@@ -132,7 +129,7 @@ public interface ITrackInstance extends INetworkedObject {
      *
      * @return true if the rail can make slopes.
      */
-    public boolean canMakeSlopes();
+    boolean canMakeSlopes();
 
     /**
      * Returns the max speed of the rail.
@@ -140,6 +137,6 @@ public interface ITrackInstance extends INetworkedObject {
      * @param cart The cart on the rail, may be null.
      * @return The max speed of the current rail.
      */
-    public float getRailMaxSpeed(EntityMinecart cart);
+    float getRailMaxSpeed(EntityMinecart cart);
 
 }
