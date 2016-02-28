@@ -8,24 +8,31 @@
 
 package mods.railcraft.api.core.items;
 
+import com.google.common.base.Predicate;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.item.ItemStack;
 
 /**
  * This interface is used with several of the functions in IItemTransfer
  * to provide a convenient means of dealing with entire classes of items without
  * having to specify each item individually.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IStackFilter
-{
+public interface IStackFilter extends Predicate<ItemStack> {
     /**
      * Railcraft adds the following IItemTypes during preInit: ALL, FUEL, TRACK, MINECART, BALLAST, FEED
-     *
+     * <p/>
      * Feel free to grab them from here or define your own.
      */
-    public static final Map<String, IStackFilter> filters = new HashMap<String, IStackFilter>();
+    Map<String, IStackFilter> standardFilters = new HashMap<String, IStackFilter>();
 
-    public boolean matches(ItemStack stack);
+    StackFilter and(@Nonnull Predicate<? super ItemStack>... other);
+
+    StackFilter or(@Nonnull Predicate<? super ItemStack>... other);
+
+    StackFilter negate();
 }
