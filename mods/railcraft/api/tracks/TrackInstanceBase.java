@@ -84,11 +84,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             ItemStack current = player.getCurrentEquippedItem();
             if (current != null && current.getItem() instanceof IToolCrowbar) {
                 IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-                if (crowbar.canWhack(player, current, getX(), getY(), getZ())) {
+                if (crowbar.canWhack(player, current, getPos())) {
                     ITrackReversable track = (ITrackReversable) this;
                     track.setReversed(!track.isReversed());
                     markBlockNeedsUpdate();
-                    crowbar.onWhack(player, current, getX(), getY(), getZ());
+                    crowbar.onWhack(player, current, getPos());
                     return true;
                 }
             }
@@ -169,29 +169,26 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     protected void testPower() {
         if (!(this instanceof ITrackPowered))
             return;
-        int i = tileEntity.xCoord;
-        int j = tileEntity.yCoord;
-        int k = tileEntity.zCoord;
         ITrackPowered r = (ITrackPowered) this;
         int meta = tileEntity.getBlockMetadata();
-        boolean powered = getWorld().isBlockIndirectlyGettingPowered(i, j, k) || testPowerPropagation(getWorld(), i, j, k, getTrackSpec(), meta, r.getPowerPropagation());
+        boolean powered = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(getWorld(), getPos(), getTrackSpec(), meta, r.getPowerPropagation());
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
-            getWorld().notifyBlocksOfNeighborChange(i, j, k, blockTrack);
-            getWorld().notifyBlocksOfNeighborChange(i, j - 1, k, blockTrack);
+            getWorld().notifyNeighborsOfStateChange(getPos(), blockTrack);
+            getWorld().notifyNeighborsOfStateChange(getPos().down(), blockTrack);
             if (meta == 2 || meta == 3 || meta == 4 || meta == 5)
-                getWorld().notifyBlocksOfNeighborChange(i, j + 1, k, blockTrack);
+                getWorld().notifyNeighborsOfStateChange(getPos().up(), blockTrack);
             sendUpdateToClient();
             // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
         }
     }
 
-    protected boolean testPowerPropagation(World world, int i, int j, int k, TrackSpec spec, int meta, int maxDist) {
-        return isConnectedRailPowered(world, i, j, k, spec, meta, true, 0, maxDist) || isConnectedRailPowered(world, i, j, k, spec, meta, false, 0, maxDist);
+    protected boolean testPowerPropagation(World world, BlockPos pos, TrackSpec spec, int meta, int maxDist) {
+        return isConnectedRailPowered(world, pos, spec, meta, true, 0, maxDist) || isConnectedRailPowered(world, pos, spec, meta, false, 0, maxDist);
     }
 
-    protected boolean isConnectedRailPowered(World world, int i, int j, int k, TrackSpec spec, int meta, boolean dir, int dist, int maxDist) {
+    protected boolean isConnectedRailPowered(World world, BlockPos pos, TrackSpec spec, int meta, boolean dir, int dist, int maxDist) {
         if (dist >= maxDist)
             return false;
         boolean powered = true;
