@@ -8,26 +8,28 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.api.core.items.IToolCrowbar;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.BlockRailBase.Rail;
-import net.minecraft.entity.EntityLivingBase;
 
 /**
  * All ITrackInstances should extend this class. It contains a number of default
@@ -46,7 +48,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     private Block getBlock() {
         if (block == null)
-            block = getWorld().getBlock(getX(), getY(), getZ());
+            block = getWorld().getBlock(getPos());
         return block;
     }
 
@@ -66,7 +68,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         drops.add(getTrackSpec().getItem());
         return drops;
     }
-    
+
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         return tileEntity.getBlockMetadata();
@@ -121,20 +123,20 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     public void markBlockNeedsUpdate() {
-        getWorld().markBlockForUpdate(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+        getWorld().markBlockForUpdate(tileEntity.getPos());
     }
 
-    protected boolean isRailValid(World world, int x, int y, int z, int meta) {
+    protected boolean isRailValid(World world, BlockPos pos, int meta) {
         boolean valid = true;
-        if (!world.isSideSolid(x, y - 1, z, ForgeDirection.UP))
+        if (!world.isSideSolid(pos.down(), EnumFacing.UP))
             valid = false;
-        if (meta == 2 && !world.isSideSolid(x + 1, y, z, ForgeDirection.UP))
+        if (EnumTrackMeta.EAST_SLOPE.isEqual(meta) && !world.isSideSolid(pos.east(), EnumFacing.UP))
             valid = false;
-        else if (meta == 3 && !world.isSideSolid(x - 1, y, z, ForgeDirection.UP))
+        else if (EnumTrackMeta.WEST_SLOPE.isEqual(meta) && !world.isSideSolid(pos.west(), EnumFacing.UP))
             valid = false;
-        else if (meta == 4 && !world.isSideSolid(x, y, z - 1, ForgeDirection.UP))
+        else if (EnumTrackMeta.NORTH_SLOPE.isEqual(meta) && !world.isSideSolid(pos.north(), EnumFacing.UP))
             valid = false;
-        else if (meta == 5 && !world.isSideSolid(x, y, z + 1, ForgeDirection.UP))
+        else if (EnumTrackMeta.SOUTH_SLOPE.isEqual(meta) && !world.isSideSolid(pos.south(), EnumFacing.UP))
             valid = false;
         return valid;
     }
@@ -142,16 +144,16 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     @Override
     public void onNeighborBlockChange(Block blockChanged) {
         int meta = tileEntity.getBlockMetadata();
-        boolean valid = isRailValid(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, meta);
+        boolean valid = isRailValid(getWorld(), getPos(), meta);
         if (!valid) {
             Block blockTrack = getBlock();
-            blockTrack.dropBlockAsItem(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0, 0);
-            getWorld().setBlockToAir(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+            blockTrack.dropBlockAsItem(getWorld(), getPos(), 0, 0);
+            getWorld().setBlockToAir(getPos());
             return;
         }
 
         if (blockChanged != null && blockChanged.canProvidePower()
-                && isFlexibleRail() && RailTools.countAdjecentTracks(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == 3)
+                && isFlexibleRail() && RailTools.countAdjecentTracks(getWorld(), getPos()) == 3)
             switchTrack(false);
         testPower();
     }
@@ -322,22 +324,12 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public World getWorld() {
-        return tileEntity.getWorldObj();
+        return tileEntity.getWorld();
     }
 
     @Override
-    public int getX() {
-        return tileEntity.xCoord;
-    }
-
-    @Override
-    public int getY() {
-        return tileEntity.yCoord;
-    }
-
-    @Override
-    public int getZ() {
-        return tileEntity.zCoord;
+    public BlockPos getPos() {
+        return tileEntity.getPos();
     }
 
     /**
