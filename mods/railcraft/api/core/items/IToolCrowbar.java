@@ -10,75 +10,71 @@ package mods.railcraft.api.core.items;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IToolCrowbar {
 
     /**
      * Controls non-rotational interactions with blocks. Crowbar specific stuff.
-     *
+     * <p/>
      * Rotational interaction is handled by the Block.rotateBlock() function,
      * which should be called from the Item.onUseFirst() function of your tool.
      *
-     * @param player
-     * @param crowbar
-     * @param x
-     * @param y
-     * @param z
-     * @return
+     * @param player  the player
+     * @param crowbar the crowbar
+     * @param pos     the block
+     * @return true if can whack a block
      */
-    public boolean canWhack(EntityPlayer player, ItemStack crowbar, int x, int y, int z);
+    boolean canWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos);
 
     /**
      * Callback to do damage to the item.
      *
-     * @param player
-     * @param crowbar
-     * @param x
-     * @param y
-     * @param z
+     * @param player  the player
+     * @param crowbar the crowbar
+     * @param pos     the block
      */
-    public void onWhack(EntityPlayer player, ItemStack crowbar, int x, int y, int z);
+    void onWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos);
 
     /**
      * Controls whether you can link a cart.
      *
-     * @param player
-     * @param crowbar
-     * @param cart
-     * @return
+     * @param player  the player
+     * @param crowbar the crowbar
+     * @param cart    the cart
+     * @return true if can link a cart
      */
-    public boolean canLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    boolean canLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Callback to do damage.
      *
-     * @param player
-     * @param crowbar
-     * @param cart
+     * @param player  the player
+     * @param crowbar the crowbar
+     * @param cart    the cart
      */
-    public void onLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    void onLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Controls whether you can boost a cart.
      *
-     * @param player
-     * @param crowbar
-     * @param cart
-     * @return
+     * @param player  the player
+     * @param crowbar the crowbar
+     * @param cart    the cart
+     * @return true if can boost a cart
      */
-    public boolean canBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    boolean canBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Callback to do damage, boosting a cart usually does more damage than
      * normal usage.
      *
-     * @param player
-     * @param crowbar
-     * @param cart
+     * @param player  the player
+     * @param crowbar the crowbar
+     * @param cart    the cart
      */
-    public void onBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    void onBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 }
