@@ -9,7 +9,7 @@ package mods.railcraft.api.signals;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.core.WorldCoordinate;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -129,9 +129,8 @@ public abstract class AbstractPair {
                 if (!world.isBlockLoaded(pos))
                     continue;
 
-                Block block = world.getBlock(pos);
-                int meta = world.getBlockMetadata(pos);
-                if (!block.hasTileEntity(meta)) {
+                IBlockState blockState = world.getBlockState(pos);
+                if (!blockState.getBlock().hasTileEntity(blockState)) {
                     clearPairing(coord);
                     continue;
                 }
@@ -184,9 +183,8 @@ public abstract class AbstractPair {
         if (!world.isBlockLoaded(pos))
             return null;
 
-        Block block = world.getBlock(pos);
-        int meta = world.getBlockMetadata(pos);
-        if (!block.hasTileEntity(meta)) {
+        IBlockState blockState = world.getBlockState(pos);
+        if (!blockState.getBlock().hasTileEntity(blockState)) {
             pairingsToTest.add(coord);
             return null;
         }
