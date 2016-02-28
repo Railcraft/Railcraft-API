@@ -10,6 +10,7 @@ package mods.railcraft.api.core;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3i;
 
 import javax.annotation.Nonnull;
 
@@ -19,15 +20,11 @@ import javax.annotation.Nonnull;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class WorldCoordinate implements Comparable<WorldCoordinate> {
+public class WorldCoordinate extends BlockPos {
     /**
      * The dimension
      */
     private final int dimension;
-    /**
-     * x-Coord
-     */
-    private final BlockPos pos;
 
     /**
      * Creates a new WorldCoordinate
@@ -38,8 +35,8 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
      * @param z         World Coordinate
      */
     public WorldCoordinate(int dimension, int x, int y, int z) {
+        super(x, y, z);
         this.dimension = dimension;
-        pos = new BlockPos(x, y, z);
     }
 
     /**
@@ -48,14 +45,14 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
      * @param dimension Dimension ID
      * @param pos       World Coordinates
      */
-    public WorldCoordinate(int dimension, BlockPos pos) {
+    public WorldCoordinate(int dimension, Vec3i pos) {
+        super(pos);
         this.dimension = dimension;
-        this.pos = pos;
     }
 
     public WorldCoordinate(TileEntity tile) {
+        super(tile.getPos());
         this.dimension = tile.getWorld().provider.getDimensionId();
-        this.pos = tile.getPos();
     }
 
     public static WorldCoordinate readFromNBT(NBTTagCompound data, String key) {
@@ -74,7 +71,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
     }
 
     public void writeToNBT(NBTTagCompound data, String tag) {
-        data.setIntArray(tag, new int[]{dimension, pos.getX(), pos.getY(), pos.getZ()});
+        data.setIntArray(tag, new int[]{dimension, getX(), getY(), getZ()});
     }
 
     public boolean isEqual(int dim, int x, int y, int z) {
@@ -82,7 +79,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
     }
 
     public boolean isEqual(int dim, BlockPos p) {
-        return this.pos.equals(p) && this.dimension == dim;
+        return getX() == p.getX() && getY() == p.getY() && getZ() == p.getZ() && this.dimension == dim;
     }
 
     @Override
@@ -105,13 +102,13 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
         if (getClass() != obj.getClass())
             return false;
         final WorldCoordinate other = (WorldCoordinate) obj;
-        return this.dimension == other.dimension && this.pos.equals(other.pos);
+        return isEqual(other.dimension, other);
     }
 
     @Override
     public int hashCode() {
         int result = dimension;
-        result = 31 * result + pos.hashCode();
+        result = 31 * result + super.hashCode();
         return result;
     }
 
@@ -124,23 +121,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
         return dimension;
     }
 
-    public int getX() {
-        return pos.getX();
-    }
-
-    public int getY() {
-        return pos.getY();
-    }
-
-    public int getZ() {
-        return pos.getZ();
-    }
-
-    public BlockPos getPos() {
-        return pos;
-    }
-
     public boolean isBelowWorld() {
-        return pos.getY() < 0;
+        return getY() < 0;
     }
 }
