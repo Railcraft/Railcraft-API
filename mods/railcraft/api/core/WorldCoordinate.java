@@ -11,6 +11,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 
+import javax.annotation.Nonnull;
+
 /**
  * This immutable class represents a point in the Minecraft world, while taking
  * into account the possibility of coordinates in different dimensions.
@@ -21,11 +23,11 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
     /**
      * The dimension
      */
-    public final int dimension;
+    private final int dimension;
     /**
      * x-Coord
      */
-    public final BlockPos pos;
+    private final BlockPos pos;
 
     /**
      * Creates a new WorldCoordinate
@@ -84,7 +86,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
     }
 
     @Override
-    public int compareTo(WorldCoordinate o) {
+    public int compareTo(@Nonnull WorldCoordinate o) {
         if (dimension != o.dimension)
             return dimension - o.dimension;
         if (getX() != o.getX())
@@ -103,9 +105,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
         if (getClass() != obj.getClass())
             return false;
         final WorldCoordinate other = (WorldCoordinate) obj;
-        if (this.dimension != other.dimension)
-            return false;
-        return this.pos.equals(other.pos);
+        return this.dimension == other.dimension && this.pos.equals(other.pos);
     }
 
     @Override
