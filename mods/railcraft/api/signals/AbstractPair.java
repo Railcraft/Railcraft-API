@@ -8,14 +8,15 @@
 package mods.railcraft.api.signals;
 
 import com.google.common.collect.MapMaker;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -122,22 +123,20 @@ public abstract class AbstractPair {
         if (!pairingsToTestNext.isEmpty()) {
             pairingsToTestNext.retainAll(pairings);
             for (WorldCoordinate coord : pairingsToTestNext) {
-                int x = coord.x;
-                int y = coord.y;
-                int z = coord.z;
+                final BlockPos pos = coord.getPos();
 
-                World world = tile.getWorldObj();
-                if (!world.blockExists(x, y, z))
+                World world = tile.getWorld();
+                if (!world.isBlockLoaded(pos))
                     continue;
 
-                Block block = world.getBlock(x, y, z);
-                int meta = world.getBlockMetadata(x, y, z);
+                Block block = world.getBlock(pos);
+                int meta = world.getBlockMetadata(pos);
                 if (!block.hasTileEntity(meta)) {
                     clearPairing(coord);
                     continue;
                 }
 
-                TileEntity target = world.getTileEntity(x, y, z);
+                TileEntity target = world.getTileEntity(pos);
                 if (target != null && !isValidPair(coord, target))
                     clearPairing(coord);
             }
@@ -164,37 +163,35 @@ public abstract class AbstractPair {
         if (!pairings.contains(coord))
             return null;
 
-        int x = coord.x;
-        int y = coord.y;
-        int z = coord.z;
+        final BlockPos pos = coord.getPos();
 
         if (!IS_BUKKIT) {
             TileEntity cacheTarget = tileCache.get(coord);
             if (cacheTarget != null) {
-                if (cacheTarget.isInvalid() || cacheTarget.xCoord != x || cacheTarget.yCoord != y || cacheTarget.zCoord != z)
+                if (cacheTarget.isInvalid() || !cacheTarget.getPos().equals(pos))
                     tileCache.remove(coord);
                 else if (isValidPair(coord, cacheTarget))
                     return cacheTarget;
             }
         }
 
-        if (y < 0) {
+        if (coord.isBelowWorld()) {
             clearPairing(coord);
             return null;
         }
 
-        World world = tile.getWorldObj();
-        if (!world.blockExists(x, y, z))
+        World world = tile.getWorld();
+        if (!world.isBlockLoaded(pos))
             return null;
 
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
+        Block block = world.getBlock(pos);
+        int meta = world.getBlockMetadata(pos);
         if (!block.hasTileEntity(meta)) {
             pairingsToTest.add(coord);
             return null;
         }
 
-        TileEntity target = world.getTileEntity(x, y, z);
+        TileEntity target = world.getTileEntity(pos);
         if (target != null && !isValidPair(coord, target)) {
             pairingsToTest.add(coord);
             return null;
@@ -213,7 +210,7 @@ public abstract class AbstractPair {
 
     public WorldCoordinate getCoords() {
         if (coords == null)
-            coords = new WorldCoordinate(tile.getWorldObj().provider.dimensionId, tile.xCoord, tile.yCoord, tile.zCoord);
+            coords = new WorldCoordinate(tile.getWorld().provider.getDimensionId(), tile.getPos());
         return coords;
     }
 
@@ -265,7 +262,7 @@ public abstract class AbstractPair {
         NBTTagList list = new NBTTagList();
         for (WorldCoordinate c : pairings) {
             NBTTagCompound tag = new NBTTagCompound();
-            tag.setIntArray("coords", new int[]{c.dimension, c.x, c.y, c.z});
+            c.writeToNBT(tag, "coords");
             list.appendTag(tag);
         }
         data.setTag("pairings", list);
@@ -305,17 +302,17 @@ public abstract class AbstractPair {
 
     @SideOnly(Side.CLIENT)
     public void addPair(int x, int y, int z) {
-        pairings.add(new WorldCoordinate(tile.getWorldObj().provider.dimensionId, x, y, z));
+        pairings.add(new WorldCoordinate(tile.getWorld().provider.getDimensionId(), x, y, z));
     }
 
     @SideOnly(Side.CLIENT)
     public void removePair(int x, int y, int z) {
-        pairings.remove(new WorldCoordinate(tile.getWorldObj().provider.dimensionId, x, y, z));
+        pairings.remove(new WorldCoordinate(tile.getWorld().provider.getDimensionId(), x, y, z));
     }
 
     public void clearPairings() {
         pairings.clear();
-        if (!tile.getWorldObj().isRemote)
+        if (!tile.getWorld().isRemote)
             SignalTools.packetBuilder.sendPairPacketUpdate(this);
     }
 }
