@@ -9,6 +9,7 @@ package mods.railcraft.api.core;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 /**
  * This immutable class represents a point in the Minecraft world, while taking
@@ -24,15 +25,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
     /**
      * x-Coord
      */
-    public final int x;
-    /**
-     * y-Coord
-     */
-    public final int y;
-    /**
-     * z-Coord
-     */
-    public final int z;
+    public final BlockPos pos;
 
     /**
      * Creates a new WorldCoordinate
@@ -44,53 +37,62 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
      */
     public WorldCoordinate(int dimension, int x, int y, int z) {
         this.dimension = dimension;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        pos = new BlockPos(x, y, z);
+    }
+
+    /**
+     * Creates a new WorldCoordinate
+     *
+     * @param dimension Dimension ID
+     * @param pos       World Coordinates
+     */
+    public WorldCoordinate(int dimension, BlockPos pos) {
+        this.dimension = dimension;
+        this.pos = pos;
     }
 
     public WorldCoordinate(TileEntity tile) {
-        this.dimension = tile.getWorldObj().provider.dimensionId;
-        this.x = tile.xCoord;
-        this.y = tile.yCoord;
-        this.z = tile.zCoord;
+        this.dimension = tile.getWorld().provider.getDimensionId();
+        this.pos = tile.getPos();
     }
 
-    public static WorldCoordinate readFromNBT(NBTTagCompound data, String tag) {
-        if (data.hasKey(tag)) {
-            NBTTagCompound nbt = data.getCompoundTag(tag);
+    public static WorldCoordinate readFromNBT(NBTTagCompound data, String key) {
+        if (data.hasKey(key, 10)) {
+            NBTTagCompound nbt = data.getCompoundTag(key);
             int dim = nbt.getInteger("dim");
             int x = nbt.getInteger("x");
             int y = nbt.getInteger("y");
             int z = nbt.getInteger("z");
             return new WorldCoordinate(dim, x, y, z);
+        } else if (data.hasKey(key, 11)) {
+            int[] c = data.getIntArray(key);
+            return new WorldCoordinate(c[0], c[1], c[2], c[3]);
         }
         return null;
     }
 
     public void writeToNBT(NBTTagCompound data, String tag) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("dim", dimension);
-        nbt.setInteger("x", x);
-        nbt.setInteger("y", y);
-        nbt.setInteger("z", z);
-        data.setTag(tag, nbt);
+        data.setIntArray(tag, new int[]{dimension, pos.getX(), pos.getY(), pos.getZ()});
     }
 
     public boolean isEqual(int dim, int x, int y, int z) {
-        return this.x == x && this.y == y && this.z == z && this.dimension == dim;
+        return getX() == x && getY() == y && getZ() == z && this.dimension == dim;
+    }
+
+    public boolean isEqual(int dim, BlockPos p) {
+        return this.pos.equals(p) && this.dimension == dim;
     }
 
     @Override
     public int compareTo(WorldCoordinate o) {
         if (dimension != o.dimension)
             return dimension - o.dimension;
-        if (x != o.x)
-            return x - o.x;
-        if (y != o.y)
-            return y - o.y;
-        if (z != o.z)
-            return z - o.z;
+        if (getX() != o.getX())
+            return getX() - o.getX();
+        if (getY() != o.getY())
+            return getY() - o.getY();
+        if (getZ() != o.getZ())
+            return getZ() - o.getZ();
         return 0;
     }
 
@@ -103,24 +105,42 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
         final WorldCoordinate other = (WorldCoordinate) obj;
         if (this.dimension != other.dimension)
             return false;
-        if (this.x != other.x)
-            return false;
-        if (this.y != other.y)
-            return false;
-        return this.z == other.z;
+        return this.pos.equals(other.pos);
     }
 
     @Override
     public int hashCode() {
         int result = dimension;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        result = 31 * result + pos.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return "WorldCoordinate{" + "dimension=" + dimension + ", x=" + x + ", y=" + y + ", z=" + z + '}';
+        return "WorldCoordinate{" + "dimension=" + dimension + ", x=" + getX() + ", y=" + getY() + ", z=" + getZ() + '}';
+    }
+
+    public int getDim() {
+        return dimension;
+    }
+
+    public int getX() {
+        return pos.getX();
+    }
+
+    public int getY() {
+        return pos.getY();
+    }
+
+    public int getZ() {
+        return pos.getZ();
+    }
+
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    public boolean isBelowWorld() {
+        return pos.getY() < 0;
     }
 }
