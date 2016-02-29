@@ -5,6 +5,6 @@
  *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
  * ***************************************************************************
  */
-@API(apiVersion="1.0.0", owner="RailcraftAPI|core", provides="RailcraftAPI|items")
+@API(apiVersion="2.0.0", owner="RailcraftAPI|core", provides="RailcraftAPI|items")
 package mods.railcraft.api.core.items;
 import net.minecraftforge.fml.common.API;
