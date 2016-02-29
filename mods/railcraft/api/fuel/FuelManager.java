@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Level;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("WeakerAccess")
 public class FuelManager {
 
     public static final Map<Fluid, Integer> boilerFuel = new HashMap<Fluid, Integer>();
@@ -27,14 +28,14 @@ public class FuelManager {
     /**
      * Register the amount of heat in a bucket of liquid fuel.
      *
-     * @param fluid
-     * @param heatValuePerBucket
+     * @param fluid the fluid
+     * @param heatValuePerBucket the amount of "heat" per bucket of fuel
      */
     public static void addBoilerFuel(Fluid fluid, int heatValuePerBucket) {
         ModContainer mod = Loader.instance().activeModContainer();
         String modName = mod != null ? mod.getName() : "An Unknown Mod";
         if (fluid == null) {
-            FMLLog.log("Railcraft", Level.WARN, String.format("An error occured while %s was registering a Boiler fuel source", modName));
+            FMLLog.log("Railcraft", Level.WARN, String.format("An error occurred while %s was registering a Boiler fuel source", modName));
             return;
         }
         boilerFuel.put(fluid, heatValuePerBucket);
@@ -43,7 +44,7 @@ public class FuelManager {
 
     public static int getBoilerFuelValue(Fluid fluid) {
         Integer value = boilerFuel.get(fluid);
-        if(value != null) return value.intValue();
+        if(value != null) return value;
         else return 0;
     }
 
