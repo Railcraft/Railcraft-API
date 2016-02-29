@@ -8,17 +8,19 @@
 
 package mods.railcraft.api.electricity;
 
-import java.util.Random;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+
+import java.util.Random;
 
 /**
  * This interface provides a simple means of using or producing Electricity
  * within a train.
- * <p>
+ * <p/>
  * The original Ic2 Battery Carts implement IEnergyTransfer. IEnergyTransfer was
  * a naive implementation of a Energy storage system for carts. I'll leave it in
  * place because of its Ic2 specific functions, but for all intents and purposes
@@ -28,14 +30,15 @@ import net.minecraft.nbt.NBTTagCompound;
  * exclusively with IEnergyTransfer for the moment due to the high Ic2 coupling
  * of their design. An alternative loader block utilizing the IElectricMinecart
  * interface may be provided in the future, but no guarantee.
- * <p>
+ * <p/>
+ *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IElectricMinecart {
 
-    public ChargeHandler getChargeHandler();
+    ChargeHandler getChargeHandler();
 
-    public static final class ChargeHandler {
+    final class ChargeHandler {
 
         public static final int DRAW_INTERVAL = 8;
         private static final Random rand = new Random();
@@ -103,8 +106,7 @@ public interface IElectricMinecart {
 
         /**
          * Averages the charge between two ChargeHandlers.
-         * <p>
-         * @param other
+         * <p/>
          */
         public void balance(ChargeHandler other) {
             double total = charge + other.charge;
@@ -124,8 +126,8 @@ public interface IElectricMinecart {
         /**
          * Remove up to the requested amount of charge and returns the amount
          * removed.
-         * <p>
-         * @param request
+         * <p/>
+         *
          * @return charge removed
          */
         public double removeCharge(double request) {
@@ -157,7 +159,7 @@ public interface IElectricMinecart {
         /**
          * Must be called once per tick while on tracks by the owning object.
          * Server side only.
-         * <p>
+         * <p/>
          * <blockquote><pre>
          * {@code
          * public void onEntityUpdate()
@@ -198,7 +200,7 @@ public interface IElectricMinecart {
          * means overriding the EnityMinecart.func_145821_a() function. You
          * don't have to call this function if you don't care about drawing from
          * tracks.
-         * <p>
+         * <p/>
          * <blockquote><pre>
          * {@code
          * protected void func_145821_a(int trackX, int trackY, int trackZ, double maxSpeed, double slopeAdjustement, Block trackBlock, int trackMeta)
@@ -208,13 +210,10 @@ public interface IElectricMinecart {
          *  }
          * }
          * </pre></blockquote>
-         * @param trackX
-         * @param trackY
-         * @param trackZ
          */
-        public void tickOnTrack(int trackX, int trackY, int trackZ) {
+        public void tickOnTrack(BlockPos pos) {
             if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
-                IElectricGrid track = RailTools.getTrackObjectAt(minecart.worldObj, trackX, trackY, trackZ, IElectricGrid.class);
+                IElectricGrid track = RailTools.getTrackObjectAt(minecart.worldObj, pos, IElectricGrid.class);
                 if (track != null) {
                     double drawnFromTrack = track.getChargeHandler().removeCharge(capacity - charge);
                     if (drawnFromTrack > 0.0)
@@ -226,7 +225,7 @@ public interface IElectricMinecart {
 
         /**
          * Must be called by the owning object's save function.
-         * <p>
+         * <p/>
          * <blockquote><pre>
          * {@code
          * public void writeEntityToNBT(NBTTagCompound data)
@@ -236,8 +235,7 @@ public interface IElectricMinecart {
          *  }
          * }
          * </pre></blockquote>
-         * <p>
-         * @param nbt
+         * <p/>
          */
         public void writeToNBT(NBTTagCompound nbt) {
             NBTTagCompound tag = new NBTTagCompound();
@@ -247,7 +245,7 @@ public interface IElectricMinecart {
 
         /**
          * Must be called by the owning object's load function.
-         * <p>
+         * <p/>
          * <blockquote><pre>
          * {@code
          * public void readFromNBT(NBTTagCompound data)
@@ -257,8 +255,7 @@ public interface IElectricMinecart {
          *  }
          * }
          * </pre></blockquote>
-         * <p>
-         * @param nbt
+         * <p/>
          */
         public void readFromNBT(NBTTagCompound nbt) {
             NBTTagCompound tag = nbt.getCompoundTag("chargeHandler");
