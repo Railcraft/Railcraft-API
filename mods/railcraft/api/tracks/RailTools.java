@@ -8,55 +8,57 @@
 
 package mods.railcraft.api.tracks;
 
-import java.util.HashSet;
-import java.util.Set;
+import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import mods.railcraft.api.core.items.ITrackItem;
-import net.minecraft.block.BlockRailBase;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A number of utility functions related to rails.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class RailTools {
 
     /**
      * Attempts to place a rail of the type provided. There is no need to verify
      * that the ItemStack contains a valid rail prior to calling this function.
-     *
+     * <p/>
      * The function takes care of that and will return false if the ItemStack is
      * not a valid ITrackItem or an ItemBlock who's id will return true when
      * passed to BlockRailBase.isRailBlock(itemID).
-     *
+     * <p/>
      * That means this function can place any Railcraft or vanilla rail and has
      * at least a decent chance of being able to place most third party rails.
      *
      * @param stack The ItemStack containing the rail
      * @param world The World object
-     * @param i x-Coord
-     * @param j y-Coord
-     * @param k z-Coord
      * @return true if successful
      * @see ITrackItem
      */
-    public static boolean placeRailAt(ItemStack stack, World world, int i, int j, int k) {
+    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos) {
         if (stack == null)
             return false;
         if (stack.getItem() instanceof ITrackItem)
-            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, i, j, k);
+            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, pos);
         if (stack.getItem() instanceof ItemBlock) {
-            Block block = ((ItemBlock) stack.getItem()).field_150939_a;
-            if (BlockRailBase.func_150051_a(block)) {
-                boolean success = world.setBlock(i, j, k, block);
+            Block block = ((ItemBlock) stack.getItem()).getBlock();
+            IBlockState blockState = block.getDefaultState();
+            if (BlockRailBase.isRailBlock(blockState)) {
+                boolean success = world.setBlockState(pos, blockState);
                 if (success)
-                    world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+                    world.playSoundEffect((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
                 return success;
             }
         }
@@ -65,7 +67,7 @@ public abstract class RailTools {
 
     /**
      * Returns true if the ItemStack contains a valid Railcraft Track item.
-     *
+     * <p/>
      * Will return false is passed a vanilla rail.
      *
      * @param stack The ItemStack to test
@@ -83,14 +85,12 @@ public abstract class RailTools {
      * @return True if being held
      */
     public static boolean isCartLockedDown(EntityMinecart cart) {
-        int x = MathHelper.floor_double(cart.posX);
-        int y = MathHelper.floor_double(cart.posY);
-        int z = MathHelper.floor_double(cart.posZ);
+        BlockPos pos = cart.getPosition();
 
-        if (BlockRailBase.func_150049_b_(cart.worldObj, x, y - 1, z))
-            y--;
+        if (BlockRailBase.isRailBlock(cart.worldObj, pos.down()))
+            pos = pos.down();
 
-        TileEntity tile = cart.worldObj.getTileEntity(x, y, z);
+        TileEntity tile = cart.worldObj.getTileEntity(pos);
         if (tile instanceof ITrackTile) {
             ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
             return track instanceof ITrackLockdown && ((ITrackLockdown) track).isCartLockedDown(cart);
@@ -99,100 +99,74 @@ public abstract class RailTools {
         return false;
     }
 
-    public static int countAdjecentTracks(World world, int x, int y, int z) {
+    public static int countAdjacentTracks(World world, BlockPos pos) {
         int i = 0;
 
-        if (isTrackFuzzyAt(world, x, y, z - 1))
-            ++i;
-
-        if (isTrackFuzzyAt(world, x, y, z + 1))
-            ++i;
-
-        if (isTrackFuzzyAt(world, x - 1, y, z))
-            ++i;
-
-        if (isTrackFuzzyAt(world, x + 1, y, z))
-            ++i;
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            if (isTrackFuzzyAt(world, pos.offset(side)))
+                ++i;
+        }
 
         return i;
     }
 
-    public static boolean isTrackFuzzyAt(World world, int x, int y, int z) {
-        return BlockRailBase.func_150049_b_(world, x, y, z) ? true : (BlockRailBase.func_150049_b_(world, x, y + 1, z) ? true : BlockRailBase.func_150049_b_(world, x, y - 1, z));
+    public static boolean isTrackFuzzyAt(World world, BlockPos pos) {
+        return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
 
-    public static Set<ITrackTile> getAdjecentTrackTiles(World world, int x, int y, int z) {
+    public static Set<ITrackTile> getAdjacentTrackTiles(World world, BlockPos pos) {
         Set<ITrackTile> tracks = new HashSet<ITrackTile>();
 
-        ITrackTile tile = getTrackFuzzyAt(world, x, y, z - 1);
-        if (tile != null)
-            tracks.add(tile);
-
-        tile = getTrackFuzzyAt(world, x, y, z + 1);
-        if (tile != null)
-            tracks.add(tile);
-
-        tile = getTrackFuzzyAt(world, x - 1, y, z);
-        if (tile != null)
-            tracks.add(tile);
-
-        tile = getTrackFuzzyAt(world, x + 1, y, z);
-        if (tile != null)
-            tracks.add(tile);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            ITrackTile tile = getTrackFuzzyAt(world, pos.offset(side));
+            if (tile != null)
+                tracks.add(tile);
+        }
 
         return tracks;
     }
 
-    public static ITrackTile getTrackFuzzyAt(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public static ITrackTile getTrackFuzzyAt(World world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof ITrackTile)
             return (ITrackTile) tile;
-        tile = world.getTileEntity(x, y + 1, z);
+        tile = world.getTileEntity(pos.up());
         if (tile instanceof ITrackTile)
             return (ITrackTile) tile;
-        tile = world.getTileEntity(x, y - 1, z);
+        tile = world.getTileEntity(pos.down());
         if (tile instanceof ITrackTile)
             return (ITrackTile) tile;
         return null;
     }
 
-    public static <T> Set<T> getAdjecentTrackObjects(World world, int x, int y, int z, Class<T> type) {
+    public static <T> Set<T> getAdjacentTrackObjects(World world, BlockPos pos, Class<T> type) {
         Set<T> tracks = new HashSet<T>();
 
-        T object = getTrackObjectFuzzyAt(world, x, y, z - 1, type);
-        if (object != null)
-            tracks.add(object);
-
-        object = getTrackObjectFuzzyAt(world, x, y, z + 1, type);
-        if (object != null)
-            tracks.add(object);
-
-        object = getTrackObjectFuzzyAt(world, x - 1, y, z, type);
-        if (object != null)
-            tracks.add(object);
-
-        object = getTrackObjectFuzzyAt(world, x + 1, y, z, type);
-        if (object != null)
-            tracks.add(object);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            T object = getTrackObjectFuzzyAt(world, pos.offset(side), type);
+            if (object != null)
+                tracks.add(object);
+        }
 
         return tracks;
     }
 
-    public static <T> T getTrackObjectFuzzyAt(World world, int x, int y, int z, Class<T> type) {
-        T object = getTrackObjectAt(world, x, y, z, type);
+    public static <T> T getTrackObjectFuzzyAt(World world, BlockPos pos, Class<T> type) {
+        T object = getTrackObjectAt(world, pos, type);
         if (object != null)
             return object;
-        object = getTrackObjectAt(world, x, y + 1, z, type);
+        object = getTrackObjectAt(world, pos.up(), type);
         if (object != null)
             return object;
-        object = getTrackObjectAt(world, x, y - 1, z, type);
+        object = getTrackObjectAt(world, pos.down(), type);
         if (object != null)
             return object;
         return null;
     }
 
-    public static <T> T getTrackObjectAt(World world, int x, int y, int z, Class<T> type) {
-        TileEntity tile = world.getTileEntity(x, y, z);
+    @SuppressWarnings("unchecked")
+    public static <T> T getTrackObjectAt(World world, BlockPos pos, Class<T> type) {
+        TileEntity tile = world.getTileEntity(pos);
         if (tile == null)
             return null;
         if (type.isInstance(tile))
