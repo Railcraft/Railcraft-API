@@ -22,7 +22,7 @@ public interface IBoreHead
      * Return the texture file used for this bore head.
      * @return The texture file path
      */
-    public ResourceLocation getBoreTexture();
+    ResourceLocation getBoreTexture();
 
     /**
      * Return the harvest level of this bore head.
@@ -33,7 +33,7 @@ public interface IBoreHead
      *
      * @return The harvest level
      */
-    public int getHarvestLevel();
+    int getHarvestLevel();
 
     /**
      * Return the dig speed modifier of this bore head.
@@ -43,5 +43,5 @@ public interface IBoreHead
      *
      * @return The dig speed modifier
      */
-    public float getDigModifier();
+    float getDigModifier();
 }

@@ -40,5 +40,5 @@ public interface IMineable
      * @return true if mineable
      * @see IBoreHead
      */
-    public boolean canMineBlock(World world, int x, int y, int z, EntityMinecart bore, ItemStack head);
+    boolean canMineBlock(World world, int x, int y, int z, EntityMinecart bore, ItemStack head);
 }
