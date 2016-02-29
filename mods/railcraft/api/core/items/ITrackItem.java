@@ -27,7 +27,7 @@ public interface ITrackItem {
     /**
      * Attempts to place a track.
      *
-     * @param stack
+     * @param stack the track to place
      * @param world The World object
      * @param pos   the position
      * @return true if successful
@@ -46,9 +46,6 @@ public interface ITrackItem {
      * <p/>
      * If the track has no tile entity, return true on null.
      *
-     * @param stack
-     * @param tile
-     * @return
      */
     boolean isPlacedTileEntity(ItemStack stack, TileEntity tile);
 }

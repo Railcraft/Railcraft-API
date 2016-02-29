@@ -13,11 +13,10 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Some helper functions to make interacting with carts simpler.
- *
+ * <p/>
  * This interface is implemented by CartBase.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see CartBase
  */
 public interface IMinecart {
 
@@ -27,8 +26,8 @@ public interface IMinecart {
      * control (the Tank Cart for example).
      *
      * @param stack the Filter
-     * @param cart the Cart
+     * @param cart  the Cart
      * @return true if the item matches the cart
      */
-    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart);
+    boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart);
 }

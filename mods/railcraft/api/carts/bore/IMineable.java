@@ -10,6 +10,7 @@ package mods.railcraft.api.carts.bore;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -32,13 +33,10 @@ public interface IMineable
      * the Bore will halt operation.
      *
      * @param world The World
-     * @param x x-Coord
-     * @param y y-Coord
-     * @param z z-Coord
      * @param bore The Bore entity
      * @param head The BoreHead, item implements IBoreHead.
      * @return true if mineable
      * @see IBoreHead
      */
-    boolean canMineBlock(World world, int x, int y, int z, EntityMinecart bore, ItemStack head);
+    boolean canMineBlock(World world, BlockPos pos, EntityMinecart bore, ItemStack head);
 }

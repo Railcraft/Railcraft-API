@@ -20,14 +20,12 @@ public interface IOwnable {
     /**
      * Returns the GameProfile of the owner of the object.
      *
-     * @return
      */
     GameProfile getOwner();
 
     /**
      * Returns a localization tag (object-tag.name) that can be used in chat messages and such.
      *
-     * @return
      */
     String getLocalizationTag();
 }

@@ -8,21 +8,22 @@
 
 package mods.railcraft.api.crafting;
 
-import java.util.List;
-import java.util.Map;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("unused")
 public interface IRockCrusherRecipe {
 
-    public ItemStack getInput();
+    ItemStack getInput();
 
     /**
      * Adds a new entry to the output list.
-     * 
+     *
      * @param output the stack to output
      * @param chance the change to output this stack
      */
@@ -31,23 +32,17 @@ public interface IRockCrusherRecipe {
     /**
      * Returns a list containing each output entry and its chance of being
      * included.
-     *
-     * @return
      */
-    public List<Map.Entry<ItemStack, Float>> getOutputs();
+    List<Map.Entry<ItemStack, Float>> getOutputs();
 
     /**
      * Returns a list of all possible outputs. This is basically a condensed
      * version of getOutputs() without the chances.
-     *
-     * @return
      */
-    public List<ItemStack> getPossibleOuputs();
+    List<ItemStack> getPossibleOutputs();
 
     /**
      * Returns a list of outputs after it has passed through the randomizer.
-     *
-     * @return
      */
-    public List<ItemStack> getRandomizedOuputs();
+    List<ItemStack> getRandomizedOutputs();
 }

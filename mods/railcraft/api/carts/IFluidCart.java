@@ -38,7 +38,7 @@ public interface IFluidCart {
      *
      * @param requester the EntityMinecart that initiated the action
      * @param fluid     the Fluid
-     * @return
+     * @return true if cart will accept the fluid
      */
     boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid);
 
@@ -50,7 +50,7 @@ public interface IFluidCart {
      *
      * @param requester the EntityMinecart that initiated the action
      * @param fluid     the Fluid
-     * @return
+     * @return true if the cart can provide the fluid
      */
     boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid);
 
@@ -58,7 +58,7 @@ public interface IFluidCart {
      * Set by the Liquid Loader while filling, primarily used for rendering a
      * visible change while being filled.
      *
-     * @param filling
+     * @param filling true if the cart is being filled from above
      */
     void setFilling(boolean filling);
 }

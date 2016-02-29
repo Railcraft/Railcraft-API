@@ -18,11 +18,11 @@ import net.minecraftforge.fluids.FluidStack;
 public interface ICokeOvenRecipe
 {
 
-    public int getCookTime();
+    int getCookTime();
 
-    public ItemStack getInput();
+    ItemStack getInput();
 
-    public FluidStack getFluidOutput();
+    FluidStack getFluidOutput();
 
-    public ItemStack getOutput();
+    ItemStack getOutput();
 }

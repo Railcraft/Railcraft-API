@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016                                      *
+ *                                                                            *
+ * This work (the API) is licensed under the "MIT" License,                   *
+ * see LICENSE.md for details.                                                *
+ ******************************************************************************/
 
 package mods.railcraft.api.carts;
 
@@ -24,21 +23,21 @@ public interface ILinkableCart
      * To disable linking altogether, return false here.
      * @return True if this cart is linkable.
      */
-    public boolean isLinkable();
+    boolean isLinkable();
 
     /**
      * Check called when attempting to link carts.
      * @param cart The cart that we are attempting to link with.
      * @return True if we can link with this cart.
      */
-    public boolean canLinkWithCart(EntityMinecart cart);
+    boolean canLinkWithCart(EntityMinecart cart);
 
     /**
      * Returns true if this cart has two links
      * or false if it can only link with one cart.
      * @return True if two links
      */
-    public boolean hasTwoLinks();
+    boolean hasTwoLinks();
 
     /**
      * Gets the distance at which this cart can be linked.
@@ -48,7 +47,7 @@ public interface ILinkableCart
      * @param cart The cart that you are attempting to link with.
      * @return The linkage distance
      */
-    public float getLinkageDistance(EntityMinecart cart);
+    float getLinkageDistance(EntityMinecart cart);
 
     /**
      * Gets the optimal distance between linked carts.
@@ -60,7 +59,7 @@ public interface ILinkableCart
      * @param cart The cart that you are linked with.
      * @return The optimal rest distance
      */
-    public float getOptimalDistance(EntityMinecart cart);
+    float getOptimalDistance(EntityMinecart cart);
 
     /**
      * Return false if linked carts have no effect on the velocity of this cart.
@@ -69,17 +68,17 @@ public interface ILinkableCart
      * @param cart The cart doing the adjusting.
      * @return Whether the cart can have its velocity adjusted.
      */
-    public boolean canBeAdjusted(EntityMinecart cart);
+    boolean canBeAdjusted(EntityMinecart cart);
 
     /**
      * Called upon successful link creation.
      * @param cart The cart we linked with.
      */
-    public void onLinkCreated(EntityMinecart cart);
+    void onLinkCreated(EntityMinecart cart);
 
     /**
      * Called when a link is broken (usually).
      * @param cart The cart we were linked with.
      */
-    public void onLinkBroken(EntityMinecart cart);
+    void onLinkBroken(EntityMinecart cart);
 }

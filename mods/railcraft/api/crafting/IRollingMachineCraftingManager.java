@@ -23,7 +23,7 @@ public interface IRollingMachineCraftingManager
 
     void addRecipe(ItemStack output, Object... components);
 
-    void addShapelessRecipe(ItemStack output, Object... compenents);
+    void addShapelessRecipe(ItemStack output, Object... components);
 
     ItemStack findMatchingRecipe(InventoryCrafting inventorycrafting, World world);
 

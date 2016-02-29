@@ -22,6 +22,7 @@ import java.util.Objects;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SuppressWarnings("unused")
 public class StackFilter implements IStackFilter {
     /**
      * Railcraft adds the following IItemTypes during preInit: ALL, FUEL, TRACK, MINECART, BALLAST, FEED

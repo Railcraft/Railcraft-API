@@ -38,6 +38,6 @@ public interface IPostConnection {
      * @param side  Side to connect to
      * @return true if connect
      */
-    public ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side);
+    ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side);
 
 }

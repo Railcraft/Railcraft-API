@@ -16,9 +16,9 @@ import net.minecraft.world.World;
 public interface INetworkedObject
 {
 
-    public World getWorld();
+    World getWorld();
 
-    public void writePacketData(DataOutputStream data) throws IOException;
+    void writePacketData(DataOutputStream data) throws IOException;
 
-    public void readPacketData(DataInputStream data) throws IOException;
+    void readPacketData(DataInputStream data) throws IOException;
 }

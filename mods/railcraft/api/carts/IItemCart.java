@@ -1,11 +1,8 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
+/*******************************************************************************
+ * Copyright 2011-2016 CovertJaguar
  *
- *  This work (the API) is licensed under the "MIT" License,
- *  see LICENSE.md for details.
- * ******************************************************************************
- */
+ * This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
+ ******************************************************************************/
 package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
@@ -39,7 +36,7 @@ public interface IItemCart {
      *
      * @param requester the EntityMinecart that initiated the action
      * @param stack     the ItemStack
-     * @return
+     * @return true if the cart can accept the item
      */
     boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack);
 
@@ -51,7 +48,7 @@ public interface IItemCart {
      *
      * @param requester the EntityMinecart that initiated the action
      * @param stack     the ItemStack
-     * @return
+     * @return true if the cart can provide the item
      */
     boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack);
 }

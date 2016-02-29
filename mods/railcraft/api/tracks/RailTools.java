@@ -18,7 +18,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler;
 import net.minecraft.block.BlockRailBase;
 
 /**

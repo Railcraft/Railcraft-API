@@ -17,11 +17,11 @@ import net.minecraft.item.ItemStack;
 public interface IBlastFurnaceRecipe
 {
 
-    public int getCookTime();
+    int getCookTime();
 
-    public ItemStack getInput();
+    ItemStack getInput();
 
-    public ItemStack getOutput();
+    ItemStack getOutput();
 
     int getOutputStackSize();
 

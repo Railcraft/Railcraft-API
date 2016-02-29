@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @see mods.railcraft.api.carts.IItemCart
  * @see mods.railcraft.api.carts.IFluidCart
  */
+@SuppressWarnings("unused")
 public interface ITrainTransferHelper {
     // ***************************************************************************************************************************
     // Items

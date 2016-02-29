@@ -8,13 +8,11 @@
 
 package mods.railcraft.api.core;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@Deprecated
 public interface ITextureLoader {
 
-    void registerIcons(IIconRegister iconRegister);
+//    void registerIcons(IIconRegister iconRegister);
 }

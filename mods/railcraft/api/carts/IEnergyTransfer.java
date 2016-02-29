@@ -38,7 +38,7 @@ public interface IEnergyTransfer {
      * @param simulate            don't actually change the item, just determine the return value
      * @return The amount of EU not used
      */
-    public double injectEnergy(Object source, double amount, int tier, boolean ignoreTransferLimit, boolean simulate, boolean passAlong);
+    double injectEnergy(Object source, double amount, int tier, boolean ignoreTransferLimit, boolean simulate, boolean passAlong);
 
     /**
      * Requests a certain amount of EU from the device.
@@ -54,43 +54,43 @@ public interface IEnergyTransfer {
      * @param passAlong           whether neighboring carts should be asked to provide any missing power.
      * @return The amount of EU transferred
      */
-    public double extractEnergy(Object source, double amount, int tier, boolean ignoreTransferLimit, boolean simulate, boolean passAlong);
+    double extractEnergy(Object source, double amount, int tier, boolean ignoreTransferLimit, boolean simulate, boolean passAlong);
 
     /**
      * Return true if energy can be injected into this device.
      *
      * @return true if can inject energy
      */
-    public boolean canInjectEnergy();
+    boolean canInjectEnergy();
 
     /**
      * Return true if energy can be extracted from this device.
      *
      * @return true if can extract energy
      */
-    public boolean canExtractEnergy();
+    boolean canExtractEnergy();
 
     /**
      * The max capacity of the device.
      *
      * @return max capacity
      */
-    public int getCapacity();
+    int getCapacity();
 
     /**
      * Returns the current energy contained in the device.
      *
      * @return current energy
      */
-    public double getEnergy();
+    double getEnergy();
 
-    public int getTier();
+    int getTier();
 
     /**
      * The device's transfer rate in EU/t.
      *
      * @return the transfer rate
      */
-    public int getTransferLimit();
+    int getTransferLimit();
 
 }

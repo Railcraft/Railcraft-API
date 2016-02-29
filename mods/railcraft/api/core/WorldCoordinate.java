@@ -82,18 +82,17 @@ public class WorldCoordinate extends BlockPos {
         return getX() == p.getX() && getY() == p.getY() && getZ() == p.getZ() && this.dimension == dim;
     }
 
-    @Override
-    public int compareTo(@Nonnull WorldCoordinate o) {
-        if (dimension != o.dimension)
-            return dimension - o.dimension;
-        if (getX() != o.getX())
-            return getX() - o.getX();
-        if (getY() != o.getY())
-            return getY() - o.getY();
-        if (getZ() != o.getZ())
-            return getZ() - o.getZ();
-        return 0;
-    }
+//    public int compareTo(@Nonnull WorldCoordinate o) {
+//        if (dimension != o.dimension)
+//            return dimension - o.dimension;
+//        if (getX() != o.getX())
+//            return getX() - o.getX();
+//        if (getY() != o.getY())
+//            return getY() - o.getY();
+//        if (getZ() != o.getZ())
+//            return getZ() - o.getZ();
+//        return 0;
+//    }
 
     @Override
     public boolean equals(Object obj) {
