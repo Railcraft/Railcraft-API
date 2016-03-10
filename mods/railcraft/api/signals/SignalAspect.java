@@ -20,36 +20,38 @@ public enum SignalAspect {
     /**
      * The All Clear.
      */
-    GREEN(0, "railcraft.gui.aspect.green.name"),
+    GREEN(0, 5, "railcraft.gui.aspect.green.name"),
     /**
      * Typically means pairing in progress.
      */
-    BLINK_YELLOW(1, "railcraft.gui.aspect.blink.yellow.name"),
+    BLINK_YELLOW(1, 3, "railcraft.gui.aspect.blink.yellow.name"),
     /**
      * Caution, cart heading away.
      */
-    YELLOW(1, "railcraft.gui.aspect.yellow.name"),
+    YELLOW(1, 5, "railcraft.gui.aspect.yellow.name"),
     /**
      * Maintenance warning, the signal is malfunctioning.
      */
-    BLINK_RED(2, "railcraft.gui.aspect.blink.red.name"),
+    BLINK_RED(2, 3, "railcraft.gui.aspect.blink.red.name"),
     /**
      * Stop!
      */
-    RED(2, "railcraft.gui.aspect.red.name"),
+    RED(2, 5, "railcraft.gui.aspect.red.name"),
     /**
      * Can't happen, really it can't (or shouldn't). Only used when rendering
      * blink states (for the texture offset).
      */
-    OFF(3, "railcraft.gui.aspect.off.name");
+    OFF(3, 0, "railcraft.gui.aspect.off.name");
     private final int textureIndex;
+    private final int lightValue;
     private final String localizationTag;
     private static boolean blinkState;
     private static final int SIGNAL_BRIGHTNESS = 210;
     public static final SignalAspect[] VALUES = values();
 
-    SignalAspect(int textureIndex, String localizationTag) {
+    SignalAspect(int textureIndex, int lightValue, String localizationTag) {
         this.textureIndex = textureIndex;
+        this.lightValue = lightValue;
         this.localizationTag = localizationTag;
     }
 
@@ -82,13 +84,10 @@ public enum SignalAspect {
     }
 
     /**
-     * Returns true if the aspect should emit light. The return value varies for
-     * Blink states.
-     *
-     * @return true if emitting light.
+     * Returns the level at which the Aspect emits light.
      */
-    public boolean isLit() {
-        return this != OFF && (!isBlinkAspect() || isBlinkOn());
+    public int getLightValue() {
+        return lightValue;
     }
 
     /**
@@ -123,10 +122,10 @@ public enum SignalAspect {
      * Tests two Aspects and determines which is more restrictive. The concept
      * of "most restrictive" refers to which aspect enforces the most
      * limitations of movement to a train.
-     *
+     * <p/>
      * In Railcraft the primary use is in Signal Box logic.
      *
-     * @param first aspect one
+     * @param first  aspect one
      * @param second aspect two
      * @return The most restrictive Aspect
      */
