@@ -88,7 +88,7 @@ public interface ITrackInstance extends INetworkedObject {
      */
     boolean canUpdate();
 
-    void updateEntity();
+    void update();
 
     boolean blockActivated(EntityPlayer player);
 

@@ -298,7 +298,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
     }
 
     @Override
