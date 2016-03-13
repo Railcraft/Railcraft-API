@@ -8,15 +8,16 @@
 
 package mods.railcraft.api.carts;
 
-import java.util.UUID;
 import net.minecraft.entity.item.EntityMinecart;
+
+import java.util.UUID;
 
 /**
  * The LinkageManager contains all the functions needed to link and interact
  * with linked carts.
- *
+ * <p/>
  * To obtain an instance of this interface, call CartTools.getLinkageManager().
- *
+ * <p/>
  * Each cart can up to two links. They are called Link A and Link B. Some carts
  * will have only Link A, for example the Tunnel Bore.
  *
@@ -34,6 +35,12 @@ public interface ILinkageManager {
      */
     public static final float OPTIMAL_DISTANCE = 0.78f;
 
+    boolean setAutoLink(EntityMinecart cart, boolean autoLink);
+
+    boolean hasAutoLink(EntityMinecart cart);
+
+    boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2);
+
     /**
      * Creates a link between two carts, but only if there is nothing preventing
      * such a link.
@@ -43,6 +50,8 @@ public interface ILinkageManager {
      * @return True if the link succeeded.
      */
     boolean createLink(EntityMinecart cart1, EntityMinecart cart2);
+
+    boolean hasFreeLink(EntityMinecart cart);
 
     /**
      * Returns the cart linked to Link A or null if nothing is currently
@@ -113,9 +122,9 @@ public interface ILinkageManager {
     /**
      * Given a persistent Entity UUID, it will return a matching minecart,
      * assuming one is loaded in the world.
-     * 
+     * <p/>
      * The Mapping is stored in a Map<UUID, EntityMinecart> so its fairly fast.
-     *
+     * <p/>
      * This would probably be better in CartTools, but
      * Railcraft really only uses it for linking and this was the
      * easiest way to expose it.

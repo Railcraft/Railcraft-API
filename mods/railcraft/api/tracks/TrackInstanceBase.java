@@ -8,26 +8,26 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.items.IToolCrowbar;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.api.core.items.IToolCrowbar;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.BlockRailBase.Rail;
-import net.minecraft.entity.EntityLivingBase;
 
 /**
  * All ITrackInstances should extend this class. It contains a number of default
@@ -66,7 +66,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         drops.add(getTrackSpec().getItem());
         return drops;
     }
-    
+
     @Override
     public int getBasicRailMetadata(EntityMinecart cart) {
         return tileEntity.getBlockMetadata();
@@ -264,7 +264,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             TileEntity tile = world.getTileEntity(i, j, k);
             if (tile instanceof ITrackTile) {
                 ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
-                if (!(track instanceof ITrackPowered) || track.getTrackSpec() != spec)
+                if (!(track instanceof ITrackPowered) || track.getTrackSpec() != spec || !canPropagatePowerTo(track))
                     return false;
                 if (orientation == 1 && (meta == 0 || meta == 4 || meta == 5))
                     return false;
@@ -278,6 +278,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean canPropagatePowerTo(ITrackInstance track) {
+        return true;
     }
 
     @Override

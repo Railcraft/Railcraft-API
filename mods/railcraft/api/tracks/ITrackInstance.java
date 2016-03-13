@@ -69,6 +69,8 @@ public interface ITrackInstance extends INetworkedObject {
      */
     public void onMinecartPass(EntityMinecart cart);
 
+    boolean canPropagatePowerTo(ITrackInstance track);
+
     /**
      * Return the block texture to be used.
      *
