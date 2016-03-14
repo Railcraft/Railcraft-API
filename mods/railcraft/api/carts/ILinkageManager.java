@@ -35,6 +35,12 @@ public interface ILinkageManager {
      */
     float OPTIMAL_DISTANCE = 0.78f;
 
+    boolean setAutoLink(EntityMinecart cart, boolean autoLink);
+
+    boolean hasAutoLink(EntityMinecart cart);
+
+    boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2);
+
     /**
      * Creates a link between two carts, but only if there is nothing preventing
      * such a link.
@@ -42,6 +48,8 @@ public interface ILinkageManager {
      * @return True if the link succeeded.
      */
     boolean createLink(EntityMinecart cart1, EntityMinecart cart2);
+
+    boolean hasFreeLink(EntityMinecart cart);
 
     /**
      * Returns the cart linked to Link A or null if nothing is currently

@@ -263,7 +263,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             TileEntity tile = world.getTileEntity(i, j, k);
             if (tile instanceof ITrackTile) {
                 ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
-                if (!(track instanceof ITrackPowered) || track.getTrackSpec() != spec)
+                if (!(track instanceof ITrackPowered) || track.getTrackSpec() != spec || !canPropagatePowerTo(track))
                     return false;
                 if (orientation == 1 && (meta == 0 || meta == 4 || meta == 5))
                     return false;
@@ -277,6 +277,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean canPropagatePowerTo(ITrackInstance track) {
+        return true;
     }
 
     @Override
