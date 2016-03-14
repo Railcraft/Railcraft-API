@@ -17,7 +17,7 @@ package mods.railcraft.api.tracks;
 public interface ITrackTile
 {
 
-    public ITrackInstance getTrackInstance();
+    ITrackInstance getTrackInstance();
     
-    public void sendUpdateToClient();
+    void sendUpdateToClient();
 }

@@ -26,5 +26,5 @@ public interface ITrackEmitter extends ITrackInstance
      *
      * @return true if powered
      */
-    public int getPowerOutput();
+    int getPowerOutput();
 }

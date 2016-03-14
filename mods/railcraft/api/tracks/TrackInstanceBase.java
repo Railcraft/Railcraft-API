@@ -12,6 +12,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -21,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -30,6 +30,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 /**
  * All ITrackInstances should extend this class. It contains a number of default
@@ -43,13 +45,10 @@ import java.util.List;
  */
 public abstract class TrackInstanceBase implements ITrackInstance {
 
-    private Block block;
     public TileEntity tileEntity;
 
-    private Block getBlock() {
-        if (block == null)
-            block = getWorld().getBlock(getPos());
-        return block;
+    private BlockRailBase getBlock() {
+        return (BlockRailBase) tileEntity.getBlockType();
     }
 
     @Override
@@ -80,12 +79,12 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public boolean blockActivated(EntityPlayer player) {
-        if (this instanceof ITrackReversable) {
+        if (this instanceof ITrackReversible) {
             ItemStack current = player.getCurrentEquippedItem();
             if (current != null && current.getItem() instanceof IToolCrowbar) {
                 IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
                 if (crowbar.canWhack(player, current, getPos())) {
-                    ITrackReversable track = (ITrackReversable) this;
+                    ITrackReversible track = (ITrackReversible) this;
                     track.setReversed(!track.isReversed());
                     markBlockNeedsUpdate();
                     crowbar.onWhack(player, current, getPos());
@@ -97,20 +96,15 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void onBlockPlaced() {
-        switchTrack(true);
-        testPower();
-        markBlockNeedsUpdate();
-    }
-
-    @Override
-    public void onBlockPlacedBy(EntityLivingBase entityliving) {
-        if (entityliving == null)
+    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if (placer == null)
             return;
-        if (this instanceof ITrackReversable) {
-            int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            ((ITrackReversable) this).setReversed(dir == 0 || dir == 1);
+        if (this instanceof ITrackReversible) {
+            int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+            ((ITrackReversible) this).setReversed(dir == 0 || dir == 1);
         }
+        switchTrack(state, true);
+        testPower(state);
         markBlockNeedsUpdate();
     }
 
@@ -126,6 +120,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         getWorld().markBlockForUpdate(tileEntity.getPos());
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected boolean isRailValid(World world, BlockPos pos, int meta) {
         boolean valid = true;
         if (!world.isSideSolid(pos.down(), EnumFacing.UP))
@@ -142,151 +137,138 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void onNeighborBlockChange(Block blockChanged) {
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
         int meta = tileEntity.getBlockMetadata();
         boolean valid = isRailValid(getWorld(), getPos(), meta);
         if (!valid) {
             Block blockTrack = getBlock();
-            blockTrack.dropBlockAsItem(getWorld(), getPos(), 0, 0);
+            blockTrack.dropBlockAsItem(getWorld(), getPos(), state, 0);
             getWorld().setBlockToAir(getPos());
             return;
         }
 
-        if (blockChanged != null && blockChanged.canProvidePower()
+        if (neighborBlock != null && neighborBlock.canProvidePower()
                 && isFlexibleRail() && RailTools.countAdjacentTracks(getWorld(), getPos()) == 3)
-            switchTrack(false);
-        testPower();
+            switchTrack(state, false);
+        testPower(state);
     }
 
-    protected void switchTrack(boolean flag) {
-        int x = tileEntity.xCoord;
-        int y = tileEntity.yCoord;
-        int z = tileEntity.zCoord;
-        BlockRailBase blockTrack = (BlockRailBase) getBlock();
-        blockTrack.new Rail(getWorld(), x, y, z).func_150655_a(getWorld().isBlockIndirectlyGettingPowered(x, y, z), flag);
+    private void switchTrack(IBlockState state, boolean flag) {
+        BlockPos pos = tileEntity.getPos();
+        BlockRailBase blockTrack = getBlock();
+        blockTrack.new Rail(getWorld(), pos, state).func_180364_a(getWorld().isBlockPowered(pos), flag);
     }
 
-    protected void testPower() {
+    protected final void testPower(IBlockState state) {
         if (!(this instanceof ITrackPowered))
             return;
         ITrackPowered r = (ITrackPowered) this;
-        int meta = tileEntity.getBlockMetadata();
-        boolean powered = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(getWorld(), getPos(), getTrackSpec(), meta, r.getPowerPropagation());
+        boolean powered = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(getWorld(), getPos(), getTrackSpec(), state, r.getPowerPropagation());
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
             getWorld().notifyNeighborsOfStateChange(getPos(), blockTrack);
             getWorld().notifyNeighborsOfStateChange(getPos().down(), blockTrack);
-            if (meta == 2 || meta == 3 || meta == 4 || meta == 5)
+            BlockRailBase.EnumRailDirection railDirection = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+            if (railDirection.isAscending())
                 getWorld().notifyNeighborsOfStateChange(getPos().up(), blockTrack);
             sendUpdateToClient();
             // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
         }
     }
 
-    protected boolean testPowerPropagation(World world, BlockPos pos, TrackSpec spec, int meta, int maxDist) {
-        return isConnectedRailPowered(world, pos, spec, meta, true, 0, maxDist) || isConnectedRailPowered(world, pos, spec, meta, false, 0, maxDist);
+    private boolean testPowerPropagation(World world, BlockPos pos, TrackSpec baseSpec, IBlockState state, int maxDist) {
+        return isConnectedRailPowered(world, pos, baseSpec, state, true, 0, maxDist) || isConnectedRailPowered(world, pos, baseSpec, state, false, 0, maxDist);
     }
 
-    protected boolean isConnectedRailPowered(World world, BlockPos pos, TrackSpec spec, int meta, boolean dir, int dist, int maxDist) {
+    private boolean isConnectedRailPowered(World world, BlockPos pos, TrackSpec baseSpec, IBlockState state, boolean dir, int dist, int maxDist) {
         if (dist >= maxDist)
             return false;
         boolean powered = true;
-        switch (meta) {
-            case 0: // '\0'
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+        BlockRailBase.EnumRailDirection railDirection = state.getValue(getBlock().getShapeProperty());
+        switch (railDirection) {
+            case NORTH_SOUTH: // '\0'
                 if (dir)
-                    k++;
+                    z++;
                 else
-                    k--;
+                    z--;
                 break;
 
-            case 1: // '\001'
+            case EAST_WEST: // '\001'
                 if (dir)
-                    i--;
+                    x--;
                 else
-                    i++;
+                    x++;
                 break;
 
-            case 2: // '\002'
+            case ASCENDING_EAST: // '\002'
                 if (dir)
-                    i--;
+                    x--;
                 else {
-                    i++;
-                    j++;
+                    x++;
+                    y++;
                     powered = false;
                 }
-                meta = 1;
+                railDirection = EAST_WEST;
                 break;
 
-            case 3: // '\003'
+            case ASCENDING_WEST: // '\003'
                 if (dir) {
-                    i--;
-                    j++;
+                    x--;
+                    y++;
                     powered = false;
                 } else
-                    i++;
-                meta = 1;
+                    x++;
+                railDirection = EAST_WEST;
                 break;
 
-            case 4: // '\004'
+            case ASCENDING_NORTH: // '\004'
                 if (dir)
-                    k++;
+                    z++;
                 else {
-                    k--;
-                    j++;
+                    z--;
+                    y++;
                     powered = false;
                 }
-                meta = 0;
+                railDirection = NORTH_SOUTH;
                 break;
 
-            case 5: // '\005'
+            case ASCENDING_SOUTH: // '\005'
                 if (dir) {
-                    k++;
-                    j++;
+                    z++;
+                    y++;
                     powered = false;
                 } else
-                    k--;
-                meta = 0;
+                    z--;
+                railDirection = NORTH_SOUTH;
                 break;
         }
-        if (testPowered(world, i, j, k, spec, dir, dist, maxDist, meta))
-            return true;
-        return powered && testPowered(world, i, j - 1, k, spec, dir, dist, maxDist, meta);
+        pos = new BlockPos(x, y, z);
+        return testPowered(world, pos, baseSpec, dir, dist, maxDist, railDirection) || (powered && testPowered(world, pos.down(), baseSpec, dir, dist, maxDist, railDirection));
     }
 
-    protected boolean testPowered(World world, int i, int j, int k, TrackSpec spec, boolean dir, int dist, int maxDist, int orientation) {
-        // System.out.println("Testing Power at <" + i + ", " + j + ", " + k + ">");
-        Block blockToTest = world.getBlock(i, j, k);
-        Block blockTrack = getBlock();
-        if (blockToTest == blockTrack) {
-            int meta = world.getBlockMetadata(i, j, k);
-            TileEntity tile = world.getTileEntity(i, j, k);
-            if (tile instanceof ITrackTile) {
-                ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
-                if (!(track instanceof ITrackPowered) || track.getTrackSpec() != spec || !canPropagatePowerTo(track))
+    private boolean testPowered(World world, BlockPos nextPos, TrackSpec baseSpec, boolean dir, int dist, int maxDist, BlockRailBase.EnumRailDirection prevOrientation) {
+        // System.out.println("Testing Power at <" + nextPos + ">");
+        IBlockState nextBlockState = world.getBlockState(nextPos);
+        if (nextBlockState.getBlock() == getBlock()) {
+            BlockRailBase.EnumRailDirection nextOrientation = nextBlockState.getValue(((BlockRailBase) nextBlockState.getBlock()).getShapeProperty());
+            TileEntity nextTile = world.getTileEntity(nextPos);
+            if (nextTile instanceof ITrackTile) {
+                ITrackInstance nextTrack = ((ITrackTile) nextTile).getTrackInstance();
+                if (!(nextTrack instanceof ITrackPowered) || nextTrack.getTrackSpec() != baseSpec || !((ITrackPowered)this).canPropagatePowerTo(nextTrack))
                     return false;
-                if (orientation == 1 && (meta == 0 || meta == 4 || meta == 5))
+                if (prevOrientation == EAST_WEST && (nextOrientation == NORTH_SOUTH || nextOrientation == ASCENDING_NORTH || nextOrientation == ASCENDING_SOUTH))
                     return false;
-                if (orientation == 0 && (meta == 1 || meta == 2 || meta == 3))
+                if (prevOrientation == NORTH_SOUTH && (nextOrientation == EAST_WEST || nextOrientation == ASCENDING_EAST || nextOrientation == ASCENDING_WEST))
                     return false;
-                if (((ITrackPowered) track).isPowered())
-                    if (world.isBlockIndirectlyGettingPowered(i, j, k) || world.isBlockIndirectlyGettingPowered(i, j + 1, k))
-                        return true;
-                    else
-                        return isConnectedRailPowered(world, i, j, k, spec, meta, dir, dist + 1, maxDist);
+                if (((ITrackPowered) nextTrack).isPowered())
+                    return world.isBlockPowered(nextPos) || world.isBlockPowered(nextPos.up()) || isConnectedRailPowered(world, nextPos, baseSpec, nextBlockState, dir, dist + 1, maxDist);
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean canPropagatePowerTo(ITrackInstance track) {
-        return true;
-    }
-
-    @Override
-    public IIcon getIcon() {
-        return getTrackSpec().getItemIcon();
     }
 
     @Override

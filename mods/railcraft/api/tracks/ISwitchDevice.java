@@ -23,7 +23,7 @@ public interface ISwitchDevice {
      * @return true if the switch would like the track switched
      * @see mods.railcraft.api.tracks.ITrackSwitch
      */
-    public boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
+    boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
 
     /**
      * Announces track state changes to the device.
@@ -31,7 +31,7 @@ public interface ISwitchDevice {
      *
      * @param isSwitched
      */
-    public void onSwitch(boolean isSwitched);
+    void onSwitch(boolean isSwitched);
 
     /**
      * The track uses this function to tell the switch device what direction it should render its arrows.
@@ -40,7 +40,7 @@ public interface ISwitchDevice {
      * @param redArrow
      * @param whiteArrow
      */
-    public void setRenderState(ArrowDirection redArrow, ArrowDirection whiteArrow);
+    void setRenderState(ArrowDirection redArrow, ArrowDirection whiteArrow);
 
     enum ArrowDirection {
         NORTH, SOUTH, EAST, WEST, NORTH_SOUTH, EAST_WEST

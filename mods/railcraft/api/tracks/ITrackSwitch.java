@@ -8,8 +8,6 @@
 
 package mods.railcraft.api.tracks;
 
-import net.minecraft.util.AxisAlignedBB;
-
 public interface ITrackSwitch extends ITrackInstance {
     /**
      * Returns whether the switch track should "appear" switched.
@@ -18,7 +16,7 @@ public interface ITrackSwitch extends ITrackInstance {
      *
      * @return true if the track appears switched
      */
-    public boolean isVisuallySwitched();
+    boolean isVisuallySwitched();
 
     /**
      * Switch Tracks have an additional orientation state beyond normal tracks.
@@ -26,5 +24,5 @@ public interface ITrackSwitch extends ITrackInstance {
      *
      * @return true if the track is mirrored
      */
-    public boolean isMirrored();
+    boolean isMirrored();
 }

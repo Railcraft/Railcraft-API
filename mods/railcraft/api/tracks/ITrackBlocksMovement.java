@@ -14,5 +14,5 @@ package mods.railcraft.api.tracks;
  */
 public interface ITrackBlocksMovement {
 
-    public boolean blocksMovement();
+    boolean blocksMovement();
 }

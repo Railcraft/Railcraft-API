@@ -24,9 +24,9 @@ import net.minecraft.util.Vec3;
 public interface ITrackCustomShape extends ITrackInstance
 {
 
-    public AxisAlignedBB getCollisionBoundingBoxFromPool();
+    AxisAlignedBB getCollisionBoundingBoxFromPool();
 
-    public AxisAlignedBB getSelectedBoundingBoxFromPool();
+    AxisAlignedBB getSelectedBoundingBoxFromPool();
 
-    public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1);
+    MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1);
 }

@@ -8,18 +8,19 @@
 
 package mods.railcraft.api.tracks;
 
-import java.util.List;
+import mods.railcraft.api.core.INetworkedObject;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IIcon;
-import mods.railcraft.api.core.INetworkedObject;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 /**
  * This interface defines a track.
@@ -70,15 +71,6 @@ public interface ITrackInstance extends INetworkedObject {
      */
     void onMinecartPass(EntityMinecart cart);
 
-    boolean canPropagatePowerTo(ITrackInstance track);
-
-    /**
-     * Return the block texture to be used.
-     *
-     * @return
-     */
-    IIcon getIcon();
-
     void writeToNBT(NBTTagCompound data);
 
     void readFromNBT(NBTTagCompound data);
@@ -94,13 +86,11 @@ public interface ITrackInstance extends INetworkedObject {
 
     boolean blockActivated(EntityPlayer player);
 
-    void onBlockPlaced();
-
     void onBlockRemoved();
 
-    void onBlockPlacedBy(EntityLivingBase entity);
+    void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack);
 
-    void onNeighborBlockChange(Block blockChanged);
+    void onNeighborBlockChange(IBlockState state, Block neighborBlock);
 
     /**
      * Internal function that sets the Track's TileEntity so it can be

@@ -20,7 +20,7 @@ import net.minecraft.entity.item.EntityMinecart;
 public interface ITrackLockdown extends ITrackInstance
 {
 
-    public boolean isCartLockedDown(EntityMinecart cart);
+    boolean isCartLockedDown(EntityMinecart cart);
 
-    public void releaseCart();
+    void releaseCart();
 }

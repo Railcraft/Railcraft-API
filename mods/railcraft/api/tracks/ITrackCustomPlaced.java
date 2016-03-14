@@ -33,5 +33,5 @@ public interface ITrackCustomPlaced extends ITrackInstance
      * @param k z-Coord
      * @return true if the rail can placed at the specified location, false to prevent placement
      */
-    public boolean canPlaceRailAt(World world, int i, int j, int k);
+    boolean canPlaceRailAt(World world, int i, int j, int k);
 }
