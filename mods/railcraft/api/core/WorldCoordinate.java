@@ -12,8 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
 
-import javax.annotation.Nonnull;
-
 /**
  * This immutable class represents a point in the Minecraft world, while taking
  * into account the possibility of coordinates in different dimensions.
