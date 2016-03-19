@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
@@ -30,6 +31,12 @@ import java.util.Set;
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class RailTools {
+    /**
+     * Check if the block at the location is a Track.
+     */
+    public static boolean isRailBlockAt(IBlockAccess world, BlockPos pos) {
+        return world.getBlockState(pos).getBlock() instanceof BlockRailBase;
+    }
 
     /**
      * Attempts to place a rail of the type provided. There is no need to verify
