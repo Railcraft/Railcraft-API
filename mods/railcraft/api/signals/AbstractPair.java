@@ -164,7 +164,14 @@ public abstract class AbstractPair {
 
         final BlockPos pos = coord.getPos();
 
-        if (!IS_BUKKIT) {
+        boolean useCache;
+        try {
+            useCache = !IS_BUKKIT && getCoords().isInSameChunk(coord);
+        } catch (Throwable er) {
+            useCache = false;
+        }
+
+        if (useCache) {
             TileEntity cacheTarget = tileCache.get(coord);
             if (cacheTarget != null) {
                 if (cacheTarget.isInvalid() || !cacheTarget.getPos().equals(pos))
@@ -195,7 +202,7 @@ public abstract class AbstractPair {
             return null;
         }
 
-        if (!IS_BUKKIT && target != null) {
+        if (useCache && target != null) {
             tileCache.put(coord, target);
         }
 

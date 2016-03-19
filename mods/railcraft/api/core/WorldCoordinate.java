@@ -72,6 +72,10 @@ public class WorldCoordinate extends BlockPos {
         data.setIntArray(tag, new int[]{dimension, getX(), getY(), getZ()});
     }
 
+    public boolean isInSameChunk(WorldCoordinate otherCoord) {
+        return dimension == otherCoord.dimension && x >> 4 == otherCoord.x >> 4 && z >> 4 == otherCoord.z >> 4;
+    }
+
     public boolean isEqual(int dim, int x, int y, int z) {
         return getX() == x && getY() == y && getZ() == z && this.dimension == dim;
     }
