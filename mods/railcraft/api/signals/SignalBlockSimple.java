@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
+ *
+ * This work (the API) is licensed under the "MIT" License,
+ * see LICENSE.md for details.
+ ******************************************************************************/
+package mods.railcraft.api.signals;
+
+import mods.railcraft.api.core.WorldCoordinate;
+import net.minecraft.tileentity.TileEntity;
+
+/**
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public class SignalBlockSimple extends SignalBlock {
+
+    private SignalAspect aspect = SignalAspect.BLINK_RED;
+
+    protected SignalBlockSimple(String locTag, TileEntity tile) {
+        super(locTag, tile, 1);
+    }
+
+    @Override
+    public void updateSignalAspect() {
+        aspect = determineAspect(pairings.peek());
+    }
+
+    @Override
+    public SignalAspect getSignalAspect() {
+        return aspect;
+    }
+
+    @Override
+    protected SignalAspect getSignalAspectForPair(WorldCoordinate otherCoord) {
+        return SignalAspect.GREEN;
+    }
+}
