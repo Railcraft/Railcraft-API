@@ -16,7 +16,7 @@ public class SignalBlockSimple extends SignalBlock {
 
     private SignalAspect aspect = SignalAspect.BLINK_RED;
 
-    protected SignalBlockSimple(String locTag, TileEntity tile) {
+    public SignalBlockSimple(String locTag, TileEntity tile) {
         super(locTag, tile, 1);
     }
 
