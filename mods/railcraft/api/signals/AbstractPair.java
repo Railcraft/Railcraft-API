@@ -168,7 +168,14 @@ public abstract class AbstractPair {
         int y = coord.y;
         int z = coord.z;
 
-        if (!IS_BUKKIT) {
+        boolean useCache;
+        try {
+            useCache = !IS_BUKKIT && getCoords().isInSameChunk(coord);
+        } catch (Throwable er) {
+            useCache = false;
+        }
+
+        if (useCache) {
             TileEntity cacheTarget = tileCache.get(coord);
             if (cacheTarget != null) {
                 if (cacheTarget.isInvalid() || cacheTarget.xCoord != x || cacheTarget.yCoord != y || cacheTarget.zCoord != z)
@@ -200,7 +207,7 @@ public abstract class AbstractPair {
             return null;
         }
 
-        if (!IS_BUKKIT && target != null) {
+        if (useCache && target != null) {
             tileCache.put(coord, target);
         }
 

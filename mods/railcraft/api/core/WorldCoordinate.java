@@ -77,6 +77,10 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
         data.setTag(tag, nbt);
     }
 
+    public boolean isInSameChunk(WorldCoordinate otherCoord) {
+        return dimension == otherCoord.dimension && x >> 4 == otherCoord.x >> 4 && z >> 4 == otherCoord.z >> 4;
+    }
+
     public boolean isEqual(int dim, int x, int y, int z) {
         return this.x == x && this.y == y && this.z == z && this.dimension == dim;
     }
