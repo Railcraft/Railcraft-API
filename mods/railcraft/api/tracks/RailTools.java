@@ -8,18 +8,19 @@
 
 package mods.railcraft.api.tracks;
 
-import java.util.HashSet;
-import java.util.Set;
+import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import mods.railcraft.api.core.items.ITrackItem;
-import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler;
-import net.minecraft.block.BlockRailBase;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A number of utility functions related to rails.
@@ -27,23 +28,26 @@ import net.minecraft.block.BlockRailBase;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class RailTools {
+    public static boolean isRailBlockAt(IBlockAccess world, int x, int y, int z) {
+        return world.getBlock(x, y, z) instanceof BlockRailBase;
+    }
 
     /**
      * Attempts to place a rail of the type provided. There is no need to verify
      * that the ItemStack contains a valid rail prior to calling this function.
-     *
+     * <p/>
      * The function takes care of that and will return false if the ItemStack is
      * not a valid ITrackItem or an ItemBlock who's id will return true when
      * passed to BlockRailBase.isRailBlock(itemID).
-     *
+     * <p/>
      * That means this function can place any Railcraft or vanilla rail and has
      * at least a decent chance of being able to place most third party rails.
      *
      * @param stack The ItemStack containing the rail
      * @param world The World object
-     * @param i x-Coord
-     * @param j y-Coord
-     * @param k z-Coord
+     * @param i     x-Coord
+     * @param j     y-Coord
+     * @param k     z-Coord
      * @return true if successful
      * @see ITrackItem
      */
@@ -66,7 +70,7 @@ public abstract class RailTools {
 
     /**
      * Returns true if the ItemStack contains a valid Railcraft Track item.
-     *
+     * <p/>
      * Will return false is passed a vanilla rail.
      *
      * @param stack The ItemStack to test
