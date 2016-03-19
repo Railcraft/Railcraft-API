@@ -73,7 +73,7 @@ public class SimpleSignalController extends SignalController {
     @Override
     protected void loadNBT(NBTTagCompound data) {
         super.loadNBT(data);
-        aspect = SignalAspect.values()[data.getByte("aspect")];
+        aspect = SignalAspect.fromOrdinal(data.getByte("aspect"));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class SimpleSignalController extends SignalController {
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        aspect = SignalAspect.values()[data.readByte()];
+        aspect = SignalAspect.fromOrdinal(data.readByte());
     }
 
     @Override

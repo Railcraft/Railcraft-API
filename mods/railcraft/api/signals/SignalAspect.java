@@ -8,6 +8,8 @@
 
 package mods.railcraft.api.signals;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.util.Locale;
 
 /**
@@ -120,13 +122,29 @@ public enum SignalAspect {
     }
 
     /**
+     * Read an aspect from NBT.
+     */
+    public static SignalAspect readFromNBT(NBTTagCompound nbt, String tag) {
+        if (nbt.hasKey(tag, 1))
+            return fromOrdinal(nbt.getByte(tag));
+        return RED;
+    }
+
+    /**
+     * Write an aspect to NBT.
+     */
+    public void writeToNBT(NBTTagCompound nbt, String tag) {
+        nbt.setByte(tag, (byte) ordinal());
+    }
+
+    /**
      * Tests two Aspects and determines which is more restrictive. The concept
      * of "most restrictive" refers to which aspect enforces the most
      * limitations of movement to a train.
-     *
+     * <p/>
      * In Railcraft the primary use is in Signal Box logic.
      *
-     * @param first aspect one
+     * @param first  aspect one
      * @param second aspect two
      * @return The most restrictive Aspect
      */
