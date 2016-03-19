@@ -8,14 +8,16 @@
 
 package mods.railcraft.api.carts;
 
+import net.minecraft.item.EnumDyeColor;
+
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IPaintedCart {
 
-    byte getPrimaryColor();
+    EnumDyeColor getPrimaryColor();
 
-    byte getSecondaryColor();
+    EnumDyeColor getSecondaryColor();
     
 }
