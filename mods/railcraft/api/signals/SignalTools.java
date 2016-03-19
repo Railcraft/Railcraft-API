@@ -14,6 +14,8 @@ package mods.railcraft.api.signals;
  */
 public abstract class SignalTools {
 
+    public static boolean printSignalDebug = false;
+
     public static IPairEffectRenderer effectManager;
     public static ISignalPacketBuilder packetBuilder;
 }
