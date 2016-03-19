@@ -8,6 +8,7 @@
 package mods.railcraft.api.core;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.world.IWorldNameable;
 
 /**
  * Implemented by objects that can be owned.
@@ -16,16 +17,9 @@ import com.mojang.authlib.GameProfile;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IOwnable {
+public interface IOwnable extends IWorldNameable {
     /**
      * Returns the GameProfile of the owner of the object.
-     *
      */
     GameProfile getOwner();
-
-    /**
-     * Returns a localization tag (object-tag.name) that can be used in chat messages and such.
-     *
-     */
-    String getLocalizationTag();
 }
