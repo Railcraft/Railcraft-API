@@ -8,6 +8,8 @@
 
 package mods.railcraft.api.signals;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.util.Locale;
 
 /**
@@ -116,6 +118,22 @@ public enum SignalAspect {
         if (ordinal < 0 || ordinal >= VALUES.length)
             return SignalAspect.RED;
         return VALUES[ordinal];
+    }
+
+    /**
+     * Read an aspect from NBT.
+     */
+    public static SignalAspect readFromNBT(NBTTagCompound nbt, String tag) {
+        if (nbt.hasKey(tag, 1))
+            return fromOrdinal(nbt.getByte(tag));
+        return RED;
+    }
+
+    /**
+     * Write an aspect to NBT.
+     */
+    public void writeToNBT(NBTTagCompound nbt, String tag) {
+        nbt.setByte(tag, (byte) ordinal());
     }
 
     /**

@@ -7,6 +7,8 @@
 package mods.railcraft.api.signals;
 
 import mods.railcraft.api.core.WorldCoordinate;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.HashMap;
@@ -56,5 +58,32 @@ public class SignalBlockRelay extends SignalBlock {
             aspect = SignalAspect.mostRestrictive(aspect, entry.getValue());
         }
         return aspect;
+    }
+
+    @Override
+    protected void saveNBT(NBTTagCompound data) {
+        super.saveNBT(data);
+        NBTTagList tagList = data.getTagList("aspects", 10);
+        for (int i = 0; i < tagList.tagCount(); i++) {
+            NBTTagCompound nbt = tagList.getCompoundTagAt(i);
+            WorldCoordinate coord = WorldCoordinate.readFromNBT(nbt, "coord");
+            SignalAspect aspect = SignalAspect.readFromNBT(nbt, "aspect");
+            aspects.put(coord, aspect);
+        }
+    }
+
+    @Override
+    protected void loadNBT(NBTTagCompound data) {
+        super.loadNBT(data);
+        NBTTagList tagList = new NBTTagList();
+        for (Map.Entry<WorldCoordinate, SignalAspect> entry : aspects.entrySet()) {
+            NBTTagCompound nbt = new NBTTagCompound();
+            if (entry.getKey() != null && entry.getValue() != null) {
+                entry.getKey().writeToNBT(nbt, "coord");
+                entry.getValue().writeToNBT(nbt, "aspect");
+                tagList.appendTag(nbt);
+            }
+        }
+        data.setTag("aspects", tagList);
     }
 }

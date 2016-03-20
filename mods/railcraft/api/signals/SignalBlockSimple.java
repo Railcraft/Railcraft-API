@@ -7,6 +7,7 @@
 package mods.railcraft.api.signals;
 
 import mods.railcraft.api.core.WorldCoordinate;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 /**
@@ -33,5 +34,17 @@ public class SignalBlockSimple extends SignalBlock {
     @Override
     protected SignalAspect getSignalAspectForPair(WorldCoordinate otherCoord) {
         return SignalAspect.GREEN;
+    }
+
+    @Override
+    protected void saveNBT(NBTTagCompound data) {
+        super.saveNBT(data);
+        aspect.writeToNBT(data, "aspect");
+    }
+
+    @Override
+    protected void loadNBT(NBTTagCompound data) {
+        super.loadNBT(data);
+        aspect = SignalAspect.readFromNBT(data, "aspect");
     }
 }
