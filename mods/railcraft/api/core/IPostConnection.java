@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.core;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -34,10 +35,11 @@ public interface IPostConnection {
      * connects to a post.
      *
      * @param world The World
-     * @param pos Block Position
+     * @param pos Our position
+     * @param state Our BlockState
      * @param side  Side to connect to
      * @return true if connect
      */
-    ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, EnumFacing side);
+    ConnectStyle connectsToPost(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side);
 
 }
