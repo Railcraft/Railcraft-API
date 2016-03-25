@@ -202,14 +202,14 @@ public abstract class SignalBlock extends AbstractPair {
             return false;
         }
         printDebugPair("Signal Block creation being attempted.", other.tile);
-        locateTrack();
-        other.locateTrack();
-        WorldCoordinate myTrack = getTrackLocation();
-        WorldCoordinate otherTrack = other.getTrackLocation();
-        if (myTrack == null || otherTrack == null) {
+        Status myTrackStatus = getTrackStatus();
+        Status otherTrackStatus = other.getTrackStatus();
+        if (myTrackStatus == Status.INVALID || otherTrackStatus == Status.INVALID) {
             printDebugPair("Signal Block creation failed, could not find Track.", other.tile);
             return false;
         }
+        WorldCoordinate myTrack = getTrackLocation();
+        WorldCoordinate otherTrack = other.getTrackLocation();
         TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack, otherTrack);
         if (!scan.areConnected) {
             printDebugPair("Signal Block creation failed, could not find Path.", other.tile);
@@ -315,8 +315,8 @@ public abstract class SignalBlock extends AbstractPair {
         SignalBlock otherSignalBlock = getSignalAt(other);
         if (otherSignalBlock == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_SIGNAL_NULL");
-        WorldCoordinate myTrack = getTrackLocation();
-        if (myTrack == null)
+        Status trackStatus = getTrackStatus();
+        if (trackStatus == Status.INVALID)
             return new TrackValidationStatus(false, "INVALID_MY_TRACK_NULL");
         Status otherTrackStatus = otherSignalBlock.getTrackStatus();
         if (otherTrackStatus == Status.INVALID)
@@ -332,6 +332,7 @@ public abstract class SignalBlock extends AbstractPair {
         }
         if (otherTrack == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_NULL");
+        WorldCoordinate myTrack = getTrackLocation();
         TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack, otherTrack);
         trackScans.put(otherTrack, scan);
         if (scan.verdict == TrackScanner.ScanResult.Verdict.VALID)
@@ -396,14 +397,14 @@ public abstract class SignalBlock extends AbstractPair {
         return trackLocation;
     }
 
-    private Status getTrackStatus() {
+    public Status getTrackStatus() {
         if (trackLocation == null)
             return locateTrack();
         if (!tile.getWorld().isBlockLoaded(trackLocation))
             return Status.UNKNOWN;
         if (!RailTools.isRailBlockAt(tile.getWorld(), trackLocation)) {
             trackLocation = null;
-            return Status.INVALID;
+            return locateTrack();
         }
         return Status.VALID;
     }
