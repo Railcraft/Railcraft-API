@@ -8,14 +8,17 @@
 
 package mods.railcraft.api.carts.locomotive;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import net.minecraft.client.renderer.texture.IIconRegister;
+
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class is used to register new Locomotive Skins with Railcraft.
@@ -55,10 +58,10 @@ public enum LocomotiveRenderType {
      *
      * @param iconRegister
      */
-    public void registerIcons(IIconRegister iconRegister) {
+    public void registerSprites(TextureMap textureMap) {
         Set<LocomotiveModelRenderer> set = new HashSet<LocomotiveModelRenderer>(renderers.values());
         for (LocomotiveModelRenderer renderer : set) {
-            renderer.registerItemIcons(iconRegister);
+            renderer.registerItemSprites(textureMap);
         }
     }
 
@@ -83,9 +86,10 @@ public enum LocomotiveRenderType {
      * @return
      */
     public ItemStack getItemWithRenderer(String rendererTag) {
-        ItemStack stack = GameRegistry.findItemStack("Railcraft", cartTag, 1);
-        if (stack == null)
+        Item item = GameRegistry.findItem("Railcraft", cartTag);
+        if (item == null)
             return null;
+        ItemStack stack = new ItemStack(item, 1);
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("model", rendererTag);
         stack.setTagCompound(nbt);

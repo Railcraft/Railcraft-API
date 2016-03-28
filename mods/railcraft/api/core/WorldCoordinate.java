@@ -73,7 +73,7 @@ public class WorldCoordinate extends BlockPos {
     }
 
     public boolean isInSameChunk(WorldCoordinate otherCoord) {
-        return dimension == otherCoord.dimension && x >> 4 == otherCoord.x >> 4 && z >> 4 == otherCoord.z >> 4;
+        return dimension == otherCoord.dimension && getX() >> 4 == otherCoord.getX() >> 4 && getZ() >> 4 == otherCoord.getZ() >> 4;
     }
 
     public boolean isEqual(int dim, int x, int y, int z) {

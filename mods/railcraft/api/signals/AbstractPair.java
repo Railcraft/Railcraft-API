@@ -123,7 +123,7 @@ public abstract class AbstractPair {
         if (!pairingsToTestNext.isEmpty()) {
             pairingsToTestNext.retainAll(pairings);
             for (WorldCoordinate coord : pairingsToTestNext) {
-                final BlockPos pos = coord.getPos();
+                final BlockPos pos = coord;
 
                 World world = tile.getWorld();
                 if (!world.isBlockLoaded(pos))
@@ -162,7 +162,7 @@ public abstract class AbstractPair {
         if (!pairings.contains(coord))
             return null;
 
-        final BlockPos pos = coord.getPos();
+        final BlockPos pos = coord;
 
         boolean useCache;
         try {

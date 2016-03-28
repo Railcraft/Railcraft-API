@@ -8,9 +8,9 @@
 
 package mods.railcraft.api.carts.locomotive;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -76,7 +76,7 @@ public abstract class LocomotiveModelRenderer {
      *
      * @return icons
      */
-    public IIcon[] getItemIcons() {
+    public TextureAtlasSprite[] getItemSprites() {
         return null;
     }
 
@@ -85,7 +85,7 @@ public abstract class LocomotiveModelRenderer {
      *
      * @param iconRegister
      */
-    public void registerItemIcons(IIconRegister iconRegister) {
+    public void registerItemSprites(TextureMap textureMap) {
     }
 
     /**

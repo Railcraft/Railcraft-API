@@ -7,7 +7,7 @@
  */
 package mods.railcraft.api.carts;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * Used by the renderer to renders blocks in carts.
@@ -15,6 +15,8 @@ import net.minecraft.util.IIcon;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ICartContentsTextureProvider{
-
-    public IIcon getBlockTextureOnSide(int side);
+    /**
+     * Gets the sprite for a given side. The sprite MUST be registered to the main texture map.
+     */
+    public TextureAtlasSprite getBlockTextureOnSide(int side);
 }
