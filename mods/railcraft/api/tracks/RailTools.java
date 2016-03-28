@@ -11,6 +11,7 @@ package mods.railcraft.api.tracks;
 import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
@@ -54,7 +55,7 @@ public abstract class RailTools {
      * @return true if successful
      * @see ITrackItem
      */
-    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos) {
+    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos, EnumRailDirection direction) {
         if (stack == null)
             return false;
         if (stack.getItem() instanceof ITrackItem)
@@ -63,6 +64,7 @@ public abstract class RailTools {
             Block block = ((ItemBlock) stack.getItem()).getBlock();
             IBlockState blockState = block.getDefaultState();
             if (BlockRailBase.isRailBlock(blockState)) {
+                blockState = blockState.withProperty(((BlockRailBase) blockState.getBlock()).getShapeProperty(), direction);
                 boolean success = world.setBlockState(pos, blockState);
                 if (success)
                     world.playSoundEffect((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
