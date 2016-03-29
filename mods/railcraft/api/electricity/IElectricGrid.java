@@ -42,9 +42,9 @@ public interface IElectricGrid {
                         @Override
                         public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
                             int dim = gridObject.getTile().getWorld().provider.getDimensionId();
-                            int x = gridObject.getTile().xCoord;
-                            int y = gridObject.getTile().yCoord;
-                            int z = gridObject.getTile().zCoord;
+                            int x = gridObject.getTile().getPos().getX();
+                            int y = gridObject.getTile().getPos().getY();
+                            int z = gridObject.getTile().getPos().getZ();
                             Map<WorldCoordinate, EnumSet<ConnectType>> positions = new HashMap<WorldCoordinate, EnumSet<ConnectType>>();
 
                             EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
@@ -78,9 +78,9 @@ public interface IElectricGrid {
                         @Override
                         public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
                             int dim = gridObject.getTile().getWorld().provider.getDimensionId();
-                            int x = gridObject.getTile().xCoord;
-                            int y = gridObject.getTile().yCoord;
-                            int z = gridObject.getTile().zCoord;
+                            int x = gridObject.getTile().getPos().getX();
+                            int y = gridObject.getTile().getPos().getY();
+                            int z = gridObject.getTile().getPos().getZ();
                             Map<WorldCoordinate, EnumSet<ConnectType>> positions = new HashMap<WorldCoordinate, EnumSet<ConnectType>>();
 
                             EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
@@ -100,9 +100,9 @@ public interface IElectricGrid {
                         @Override
                         public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
                             int dim = gridObject.getTile().getWorld().provider.getDimensionId();
-                            int x = gridObject.getTile().xCoord;
-                            int y = gridObject.getTile().yCoord;
-                            int z = gridObject.getTile().zCoord;
+                            int x = gridObject.getTile().getPos().getX();
+                            int y = gridObject.getTile().getPos().getY();
+                            int z = gridObject.getTile().getPos().getZ();
                             Map<WorldCoordinate, EnumSet<ConnectType>> positions = new HashMap<WorldCoordinate, EnumSet<ConnectType>>();
 
                             EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);

@@ -38,6 +38,7 @@ public class RailcraftItemRegistry {
         stack = Objects.requireNonNull(stack, "Registered ItemStacks cannot be null.");
         if (!"Railcraft".equals(Loader.instance().activeModContainer().getModId()))
             throw new RuntimeException("Only Railcraft can register Railcraft ItemStack, if you see this message there is probably a bug.");
+        if (stacks.containsKey(tag)) throw new RuntimeException("Tried to register the tag " + tag + " multiple times!");
         stacks.put(tag, stack);
         tags.add(tag);
     }

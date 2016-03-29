@@ -8,7 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  *
@@ -16,5 +16,5 @@ import net.minecraft.util.IIcon;
  */
 public interface ITrackItemIconProvider {
 
-    IIcon getTrackItemIcon(TrackSpec spec);
+    TextureAtlasSprite getTrackItemSprite(TrackSpec spec);
 }

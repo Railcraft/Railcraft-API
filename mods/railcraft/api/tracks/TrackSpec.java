@@ -11,10 +11,10 @@ package mods.railcraft.api.tracks;
 import java.util.List;
 import java.util.Locale;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 /**
  * Each type of Track has a single instance of TrackSpec that corresponds with
@@ -123,10 +123,10 @@ public final class TrackSpec {
         }
     }
 
-    public IIcon getItemIcon() {
+    public TextureAtlasSprite getItemSprite() {
         if (iconProvider == null)
-            return Blocks.rail.getIcon(0, 0);
-        return iconProvider.getTrackItemIcon(this);
+            return null;
+        return iconProvider.getTrackItemSprite(this);
     }
 
     public List<String> getItemToolTip() {
