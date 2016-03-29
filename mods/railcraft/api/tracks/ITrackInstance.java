@@ -9,6 +9,7 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.INetworkedObject;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -51,11 +52,13 @@ public interface ITrackInstance extends INetworkedObject {
      * Can be used to make the cart think the rail something other than it is,
      * for example when making diamond junctions or switches.
      *
+     * @param state The blockstate in the world.
+     * @param current The current rail direction, as given by the blockstate.
      * @param cart The cart asking for the metadata, null if it is not called by
      * EntityMinecart.
      * @return The direction.
      */
-    EnumRailDirection getRailDirection(EntityMinecart cart);
+    EnumRailDirection getRailDirection(IBlockState state, EnumRailDirection current, EntityMinecart cart);
 
     /**
      * This function is called by any minecart that passes over this rail. It is

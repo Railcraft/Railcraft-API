@@ -12,6 +12,7 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -331,6 +332,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     @Override
     public boolean canMakeSlopes() {
         return true;
+    }
+
+    @Override
+    public EnumRailDirection getRailDirection(IBlockState state, EnumRailDirection current, EntityMinecart cart) {
+        return current;
     }
 
     /**
