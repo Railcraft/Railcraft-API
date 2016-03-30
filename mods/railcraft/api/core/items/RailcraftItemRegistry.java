@@ -34,10 +34,14 @@ public class RailcraftItemRegistry {
     /**
      * This should only be called by Railcraft. It will throw an exception if called during another mod's load sequence.
      */
+    @SuppressWarnings("ConstantConditions")
     public static void register(String tag, @Nonnull ItemStack stack) {
-        stack = Objects.requireNonNull(stack, "Registered ItemStacks cannot be null.");
+        if (stack == null)
+            throw new RuntimeException("Tried to register a null stack with the tag: " + tag);
         if (!"Railcraft".equals(Loader.instance().activeModContainer().getModId()))
             throw new RuntimeException("Only Railcraft can register Railcraft ItemStack, if you see this message there is probably a bug.");
+        if (stacks.containsKey(tag))
+            throw new RuntimeException("Tried to register the tag " + tag + " multiple times!");
         stacks.put(tag, stack);
         tags.add(tag);
     }
