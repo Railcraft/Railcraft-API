@@ -68,8 +68,8 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public int getBasicRailMetadata(EntityMinecart cart) {
-        return tileEntity.getBlockMetadata();
+    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+        return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
     }
 
     @Override

@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -21,12 +22,11 @@ import net.minecraft.util.Vec3;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackCustomShape extends ITrackInstance
-{
+public interface ITrackCustomShape extends ITrackInstance {
 
-    AxisAlignedBB getCollisionBoundingBoxFromPool();
+    AxisAlignedBB getCollisionBoundingBox(IBlockState state);
 
-    AxisAlignedBB getSelectedBoundingBoxFromPool();
+    AxisAlignedBB getSelectedBoundingBox();
 
     MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1);
 }
