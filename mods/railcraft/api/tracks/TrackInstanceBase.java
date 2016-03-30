@@ -9,7 +9,6 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.blocks.tracks.EnumTrackMeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -121,25 +120,24 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected boolean isRailValid(World world, BlockPos pos, int meta) {
+    protected boolean isRailValid(World world, BlockPos pos, BlockRailBase.EnumRailDirection dir) {
         boolean valid = true;
         if (!world.isSideSolid(pos.down(), EnumFacing.UP))
             valid = false;
-        if (EnumTrackMeta.EAST_SLOPE.isEqual(meta) && !world.isSideSolid(pos.east(), EnumFacing.UP))
+        if (dir == ASCENDING_EAST && !world.isSideSolid(pos.east(), EnumFacing.UP))
             valid = false;
-        else if (EnumTrackMeta.WEST_SLOPE.isEqual(meta) && !world.isSideSolid(pos.west(), EnumFacing.UP))
+        else if (dir == ASCENDING_WEST && !world.isSideSolid(pos.west(), EnumFacing.UP))
             valid = false;
-        else if (EnumTrackMeta.NORTH_SLOPE.isEqual(meta) && !world.isSideSolid(pos.north(), EnumFacing.UP))
+        else if (dir == ASCENDING_NORTH && !world.isSideSolid(pos.north(), EnumFacing.UP))
             valid = false;
-        else if (EnumTrackMeta.SOUTH_SLOPE.isEqual(meta) && !world.isSideSolid(pos.south(), EnumFacing.UP))
+        else if (dir == ASCENDING_SOUTH && !world.isSideSolid(pos.south(), EnumFacing.UP))
             valid = false;
         return valid;
     }
 
     @Override
     public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
-        int meta = tileEntity.getBlockMetadata();
-        boolean valid = isRailValid(getWorld(), getPos(), meta);
+        boolean valid = isRailValid(getWorld(), getPos(), state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty()));
         if (!valid) {
             Block blockTrack = getBlock();
             blockTrack.dropBlockAsItem(getWorld(), getPos(), state, 0);
@@ -258,7 +256,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             TileEntity nextTile = world.getTileEntity(nextPos);
             if (nextTile instanceof ITrackTile) {
                 ITrackInstance nextTrack = ((ITrackTile) nextTile).getTrackInstance();
-                if (!(nextTrack instanceof ITrackPowered) || nextTrack.getTrackSpec() != baseSpec || !((ITrackPowered)this).canPropagatePowerTo(nextTrack))
+                if (!(nextTrack instanceof ITrackPowered) || nextTrack.getTrackSpec() != baseSpec || !((ITrackPowered) this).canPropagatePowerTo(nextTrack))
                     return false;
                 if (prevOrientation == EAST_WEST && (nextOrientation == NORTH_SOUTH || nextOrientation == ASCENDING_NORTH || nextOrientation == ASCENDING_SOUTH))
                     return false;
