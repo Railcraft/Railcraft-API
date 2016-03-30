@@ -8,13 +8,13 @@
 
 package mods.railcraft.api.tracks;
 
-import java.util.List;
-import java.util.Locale;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Each type of Track has a single instance of TrackSpec that corresponds with
@@ -30,10 +30,9 @@ import net.minecraft.util.IIcon;
  * Track ItemStacks can be acquired from the TrackSpec, but you are required to
  * register a proper display name yourself (during Post-Init).
  *
+ * @author CovertJaguar <http://www.railcraft.info>
  * @see TrackRegistry
  * @see ITrackInstance
- *
- * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class TrackSpec {
 
@@ -41,39 +40,37 @@ public final class TrackSpec {
     private final String tag;
     private final short trackId;
     private final List<String> tooltip;
-    private final ITrackItemIconProvider iconProvider;
+    private final ModelResourceLocation iconProvider;
     private final Class<? extends ITrackInstance> instanceClass;
 
     /**
      * Defines a new track spec.
      *
-     * @param trackId A unique identifier for the track type. 0-512 are reserved
-     * for Railcraft. Capped at Short.MAX_VALUE
-     * @param tag A unique internal string identifier (ex.
-     * "railcraft:track.speed.transition")
-     * @param iconProvider The provider for Track item icons
+     * @param trackId       A unique identifier for the track type. 0-512 are reserved
+     *                      for Railcraft. Capped at Short.MAX_VALUE
+     * @param tag           A unique internal string identifier (ex.
+     *                      "railcraft:track.speed.transition")
+     * @param iconProvider  The provider for Track item icons
      * @param instanceClass The ITrackInstance class that corresponds to this
-     * TrackSpec
-     * @see ITrackItemIconProvider
+     *                      TrackSpec
      */
-    public TrackSpec(short trackId, String tag, ITrackItemIconProvider iconProvider, Class<? extends ITrackInstance> instanceClass) {
+    public TrackSpec(short trackId, String tag, ModelResourceLocation iconProvider, Class<? extends ITrackInstance> instanceClass) {
         this(trackId, tag, iconProvider, instanceClass, null);
     }
 
     /**
      * Defines a new track spec.
      *
-     * @param trackId A unique identifier for the track type. 0-512 are reserved
-     * for Railcraft. Capped at Short.MAX_VALUE
-     * @param tag A unique internal string identifier (ex.
-     * "railcraft:track.speed.transition")
-     * @param iconProvider The provider for Track item icons
+     * @param trackId       A unique identifier for the track type. 0-512 are reserved
+     *                      for Railcraft. Capped at Short.MAX_VALUE
+     * @param tag           A unique internal string identifier (ex.
+     *                      "railcraft:track.speed.transition")
+     * @param iconProvider  The provider for Track item icons
      * @param instanceClass The ITrackInstance class that corresponds to this
-     * TrackSpec
-     * @param tooltip The tool tip for the Track Item
-     * @see ITrackItemIconProvider
+     *                      TrackSpec
+     * @param tooltip       The tool tip for the Track Item
      */
-    public TrackSpec(short trackId, String tag, ITrackItemIconProvider iconProvider, Class<? extends ITrackInstance> instanceClass, List<String> tooltip) {
+    public TrackSpec(short trackId, String tag, ModelResourceLocation iconProvider, Class<? extends ITrackInstance> instanceClass, List<String> tooltip) {
         this.trackId = trackId;
         this.tag = tag.toLowerCase(Locale.ENGLISH);
         this.iconProvider = iconProvider;
@@ -101,7 +98,6 @@ public final class TrackSpec {
     /**
      * This function will only work after the Init Phase.
      *
-     * @param qty
      * @return an ItemStack that can be used to place the track.
      */
     public ItemStack getItem(int qty) {
@@ -123,18 +119,16 @@ public final class TrackSpec {
         }
     }
 
-    public IIcon getItemIcon() {
-        if (iconProvider == null)
-            return Blocks.rail.getIcon(0, 0);
-        return iconProvider.getTrackItemIcon(this);
+    public ModelResourceLocation getItemIcon() {
+        return iconProvider;
     }
 
     public List<String> getItemToolTip() {
         return tooltip;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Track -> " + getTrackTag();
     }
 
