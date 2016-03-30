@@ -9,6 +9,8 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -75,7 +77,18 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
-        return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+        return getRailDirection(state);
+    }
+
+    protected final BlockRailBase.EnumRailDirection getRailDirection() {
+        IBlockState state = getWorld().getBlockState(getPos());
+        return getRailDirection(state);
+    }
+
+    protected static final BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
+        BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
+        if (dir == null) return NORTH_SOUTH;
+        return dir;
     }
 
     @Override
@@ -351,5 +364,4 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     public float getRailMaxSpeed(EntityMinecart cart) {
         return 0.4f;
     }
-
 }
