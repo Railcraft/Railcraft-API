@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.Explosion;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -96,7 +97,7 @@ public interface ITrackInstance extends INetworkedObject {
 
     float getHardness();
 
-    float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder);
+    float getExplosionResistance(Explosion explosion, Entity exploder);
 
     /**
      * Return true if the rail can make corners. Used by placement logic.

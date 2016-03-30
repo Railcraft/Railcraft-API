@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import java.io.DataInputStream;
@@ -292,7 +293,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public float getExplosionResistance(double srcX, double srcY, double srcZ, Entity exploder) {
+    public float getExplosionResistance(Explosion explosion, Entity exploder) {
         return 3.5f;
     }
 
