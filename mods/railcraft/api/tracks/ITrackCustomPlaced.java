@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -17,8 +18,7 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackCustomPlaced extends ITrackInstance
-{
+public interface ITrackCustomPlaced extends ITrackInstance {
 
     /**
      * Used to override normal track placement.
@@ -28,10 +28,7 @@ public interface ITrackCustomPlaced extends ITrackInstance
      * Warning: This is called before the TileEntity is set.
      *
      * @param world The World
-     * @param i x-Coord
-     * @param j y-Coord
-     * @param k z-Coord
      * @return true if the rail can placed at the specified location, false to prevent placement
      */
-    boolean canPlaceRailAt(World world, int i, int j, int k);
+    boolean canPlaceRailAt(World world, BlockPos pos);
 }
