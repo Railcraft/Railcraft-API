@@ -9,7 +9,6 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -85,10 +84,10 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         return getRailDirection(state);
     }
 
-    protected static final BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
-        BlockRailBase.EnumRailDirection dir = TrackTools.getTrackDirectionRaw(state);
-        if (dir == null) return NORTH_SOUTH;
-        return dir;
+    protected static final BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) { 
+        if (state.getBlock() instanceof BlockRailBase)
+            return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+        return NORTH_SOUTH;
     }
 
     @Override
