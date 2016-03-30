@@ -9,7 +9,7 @@ package mods.railcraft.api.signals;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackScanner;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -402,7 +402,7 @@ public abstract class SignalBlock extends AbstractPair {
             return locateTrack();
         if (!tile.getWorld().isBlockLoaded(trackLocation))
             return Status.UNKNOWN;
-        if (!RailTools.isRailBlockAt(tile.getWorld(), trackLocation)) {
+        if (!TrackToolsAPI.isRailBlockAt(tile.getWorld(), trackLocation)) {
             trackLocation = null;
             return locateTrack();
         }
@@ -449,7 +449,7 @@ public abstract class SignalBlock extends AbstractPair {
             BlockPos pos = new BlockPos(x, y - jj, z);
             if (!world.isBlockLoaded(pos))
                 return Status.UNKNOWN;
-            if (RailTools.isRailBlockAt(world, pos)) {
+            if (TrackToolsAPI.isRailBlockAt(world, pos)) {
                 trackLocation = new WorldCoordinate(world.provider.getDimensionId(), pos);
                 return Status.VALID;
             }

@@ -48,7 +48,7 @@ public interface ITrackInstance extends INetworkedObject {
     List<ItemStack> getDrops(int fortune);
 
     /**
-     * Return the rail's metadata (without the power bit if the rail uses one).
+     * Return the rail's shape.
      * Can be used to make the cart think the rail something other than it is,
      * for example when making diamond junctions or switches.
      *

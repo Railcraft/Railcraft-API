@@ -119,7 +119,7 @@ public final class TrackSpec {
         }
     }
 
-    public ModelResourceLocation getItemIcon() {
+    public ModelResourceLocation getItemModel() {
         return iconProvider;
     }
 

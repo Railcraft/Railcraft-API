@@ -11,6 +11,7 @@ package mods.railcraft.api.tracks;
 import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
@@ -30,12 +31,20 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public abstract class RailTools {
+public abstract class TrackToolsAPI {
     /**
      * Check if the block at the location is a Track.
      */
     public static boolean isRailBlockAt(IBlockAccess world, BlockPos pos) {
         return world.getBlockState(pos).getBlock() instanceof BlockRailBase;
+    }
+
+    public static IBlockState makeTrackState(BlockRailBase block, BlockRailBase.EnumRailDirection trackShape) {
+        IBlockState state = block.getDefaultState();
+        IProperty<BlockRailBase.EnumRailDirection> property = block.getShapeProperty();
+        if (property.getAllowedValues().contains(trackShape))
+            state = state.withProperty(property, trackShape);
+        return state;
     }
 
     /**
@@ -54,22 +63,26 @@ public abstract class RailTools {
      * @return true if successful
      * @see ITrackItem
      */
-    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos) {
+    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos, BlockRailBase.EnumRailDirection trackShape) {
         if (stack == null)
             return false;
         if (stack.getItem() instanceof ITrackItem)
-            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, pos);
+            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, pos, trackShape);
         if (stack.getItem() instanceof ItemBlock) {
             Block block = ((ItemBlock) stack.getItem()).getBlock();
-            IBlockState blockState = block.getDefaultState();
-            if (BlockRailBase.isRailBlock(blockState)) {
+            if (block instanceof BlockRailBase) {
+                IBlockState blockState = makeTrackState((BlockRailBase) block, trackShape);
                 boolean success = world.setBlockState(pos, blockState);
                 if (success)
-                    world.playSoundEffect((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
+                    world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
                 return success;
             }
         }
         return false;
+    }
+
+    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos) {
+        return placeRailAt(stack, world, pos, BlockRailBase.EnumRailDirection.NORTH_SOUTH);
     }
 
     /**

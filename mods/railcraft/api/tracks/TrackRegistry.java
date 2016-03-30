@@ -9,9 +9,10 @@
 package mods.railcraft.api.tracks;
 
 import net.minecraftforge.fml.common.FMLLog;
-import java.util.*;
-import mods.railcraft.api.core.ITextureLoader;
 import org.apache.logging.log4j.Level;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * The TrackRegistry is part of a system that allows 3rd party addons to simply,
@@ -39,26 +40,7 @@ public class TrackRegistry {
     private static final Map<String, TrackSpec> trackSpecsFromTag = new HashMap<String, TrackSpec>();
     private static final Set<Short> invalidSpecIDs = new HashSet<Short>();
     private static final Set<String> invalidSpecTags = new HashSet<String>();
-    private static final List<ITextureLoader> iconLoaders = new ArrayList<ITextureLoader>();
-
-    /**
-     * Provides a means to hook into the texture loader of my Track block.
-     *
-     * You should load your track textures in the ITextureLoader and put them
-     * someplace to be fed to the TrackSpec/TrackInstance later.
-     *
-     * This should be called before the Post-Init Phase, during the Init or
-     * Pre-Init Phase.
-     *
-     * @param iconLoader
-     */
-    public static void registerIconLoader(ITextureLoader iconLoader) {
-        iconLoaders.add(iconLoader);
-    }
-
-    public static List<ITextureLoader> getIconLoaders() {
-        return iconLoaders;
-    }
+    private static final TrackSpec defaultSpec = new TrackSpec((short) -1, "railcraft:default", null, TrackInstanceDefault.class);
 
     public static class TrackSpecConflictException extends RuntimeException {
 
@@ -68,11 +50,16 @@ public class TrackRegistry {
 
     }
 
+    private TrackRegistry() {
+    }
+
+    static {
+        registerTrackSpec(defaultSpec);
+    }
+
     /**
      * Registers a new TrackSpec. This should be called before the Post-Init
      * Phase, during the Init or Pre-Init Phase.
-     *
-     * @param trackSpec
      */
     public static void registerTrackSpec(TrackSpec trackSpec) {
         if (trackSpecsFromID.put(trackSpec.getTrackId(), trackSpec) != null)
@@ -83,10 +70,9 @@ public class TrackRegistry {
 
     /**
      * Returns a cached copy of a TrackSpec object.
-     *
-     * @param trackId
-     * @return
      */
+    @Nonnull
+    @Deprecated
     public static TrackSpec getTrackSpec(int trackId) {
         Short id = (short) trackId;
         TrackSpec spec = trackSpecsFromID.get(id);
@@ -99,18 +85,15 @@ public class TrackRegistry {
                 }
                 invalidSpecIDs.add(id);
             }
-            id = -1;
-            spec = trackSpecsFromID.get(id);
+            spec = getDefaultTrackSpec();
         }
         return spec;
     }
 
     /**
      * Returns a cached copy of a TrackSpec object.
-     *
-     * @param trackTag
-     * @return
      */
+    @Nonnull
     public static TrackSpec getTrackSpec(String trackTag) {
         trackTag = trackTag.toLowerCase(Locale.ENGLISH);
         TrackSpec spec = trackSpecsFromTag.get(trackTag);
@@ -123,9 +106,14 @@ public class TrackRegistry {
                 }
                 invalidSpecTags.add(trackTag);
             }
-            spec = trackSpecsFromTag.get("railcraft:default");
+            spec = getDefaultTrackSpec();
         }
         return spec;
+    }
+
+    @Nonnull
+    public static TrackSpec getDefaultTrackSpec() {
+        return defaultSpec;
     }
 
     /**

@@ -10,7 +10,7 @@ package mods.railcraft.api.electricity;
 
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
-import mods.railcraft.api.tracks.RailTools;
+import mods.railcraft.api.tracks.TrackToolsAPI;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -213,7 +213,7 @@ public interface IElectricMinecart {
          */
         public void tickOnTrack(BlockPos pos) {
             if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
-                IElectricGrid track = RailTools.getTrackObjectAt(minecart.worldObj, pos, IElectricGrid.class);
+                IElectricGrid track = TrackToolsAPI.getTrackObjectAt(minecart.worldObj, pos, IElectricGrid.class);
                 if (track != null) {
                     double drawnFromTrack = track.getChargeHandler().removeCharge(capacity - charge);
                     if (drawnFromTrack > 0.0)

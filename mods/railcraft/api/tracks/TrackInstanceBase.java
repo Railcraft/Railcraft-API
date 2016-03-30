@@ -147,7 +147,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         }
 
         if (neighborBlock != null && neighborBlock.canProvidePower()
-                && isFlexibleRail() && RailTools.countAdjacentTracks(getWorld(), getPos()) == 3)
+                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(getWorld(), getPos()) == 3)
             switchTrack(state, false);
         testPower(state);
     }

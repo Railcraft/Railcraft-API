@@ -59,12 +59,12 @@ public class TrackScanner {
             for (int xx = min; xx <= max; xx++) {
 //                if (world.blockExists(xx, yy, z1))
                 BlockPos p = new BlockPos(xx, yy, z1);
-                if (RailTools.isRailBlockAt(world, p)) {
-                } else if (RailTools.isRailBlockAt(world, p.down())) {
+                if (TrackToolsAPI.isRailBlockAt(world, p)) {
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.down())) {
                     yy--;
                     if (yy < minY)
                         minY = yy;
-                } else if (RailTools.isRailBlockAt(world, p.up())) {
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.up())) {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
@@ -89,12 +89,12 @@ public class TrackScanner {
             for (int zz = min; zz <= max; zz++) {
 //                if (world.blockExists(x1, yy, zz))
                 BlockPos p = new BlockPos(x1, yy, zz);
-                if (RailTools.isRailBlockAt(world, p)) {
-                } else if (RailTools.isRailBlockAt(world, p.down())) {
+                if (TrackToolsAPI.isRailBlockAt(world, p)) {
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.down())) {
                     yy--;
                     if (yy < minY)
                         minY = yy;
-                } else if (RailTools.isRailBlockAt(world, p.up())) {
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.up())) {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
