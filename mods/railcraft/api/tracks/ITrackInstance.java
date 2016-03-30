@@ -11,6 +11,7 @@ package mods.railcraft.api.tracks;
 import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -44,6 +45,11 @@ import java.util.List;
 public interface ITrackInstance extends INetworkedObject {
 
     TrackSpec getTrackSpec();
+
+    /**
+     * Use this to add properties to the state for rendering information.
+     */
+    IBlockState getActualState(IBlockState state);
 
     List<ItemStack> getDrops(int fortune);
 

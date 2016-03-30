@@ -8,7 +8,12 @@
 
 package mods.railcraft.api.tracks;
 
+import net.minecraft.block.properties.PropertyBool;
+
 public interface ITrackSwitch extends ITrackInstance {
+
+    PropertyBool MIRRORED = PropertyBool.create("mirrored");
+
     /**
      * Returns whether the switch track should "appear" switched.
      * Has no influence on where a cart actually ends up.

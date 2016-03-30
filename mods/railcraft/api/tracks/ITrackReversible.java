@@ -8,6 +8,8 @@
 
 package mods.railcraft.api.tracks;
 
+import net.minecraft.block.properties.PropertyBool;
+
 /**
  * Implementing this interface will allow your track to be direction specific.
  *
@@ -16,8 +18,9 @@ package mods.railcraft.api.tracks;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackReversible extends ITrackInstance
-{
+public interface ITrackReversible extends ITrackInstance {
+
+    PropertyBool REVERSED = PropertyBool.create("reversed");
 
     boolean isReversed();
 

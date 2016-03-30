@@ -62,6 +62,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
+    public IBlockState getActualState(IBlockState state) {
+        return state;
+    }
+
+    @Override
     public List<ItemStack> getDrops(int fortune) {
         List<ItemStack> drops = new ArrayList<ItemStack>();
         drops.add(getTrackSpec().getItem());

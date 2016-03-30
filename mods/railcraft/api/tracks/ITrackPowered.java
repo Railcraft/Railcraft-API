@@ -8,6 +8,8 @@
 
 package mods.railcraft.api.tracks;
 
+import net.minecraft.block.properties.PropertyBool;
+
 /**
  * Implementing this interface will allow your track to be
  * powered via Redstone.
@@ -18,6 +20,8 @@ package mods.railcraft.api.tracks;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITrackPowered extends ITrackInstance {
+
+    PropertyBool POWERED = PropertyBool.create("powered");
 
     /**
      * Getter for a simple boolean variable for caching the power state.
