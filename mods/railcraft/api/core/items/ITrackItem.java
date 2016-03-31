@@ -10,6 +10,7 @@ package mods.railcraft.api.core.items;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -36,7 +37,7 @@ public interface ITrackItem {
      * @param trackShape The preferred EnumRailDirection. May be null. If the shape is invalid for your track, use your default value.
      * @return true if successful
      */
-    boolean placeTrack(ItemStack stack, World world, BlockPos pos, @Nullable BlockRailBase.EnumRailDirection trackShape);
+    boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable BlockRailBase.EnumRailDirection trackShape);
 
     /**
      * Return the block of a placed track.
