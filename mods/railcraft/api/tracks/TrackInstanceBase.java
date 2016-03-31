@@ -84,7 +84,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         return getRailDirection(state);
     }
 
-    protected static final BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) { 
+    protected static BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
         if (state.getBlock() instanceof BlockRailBase)
             return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
         return NORTH_SOUTH;
