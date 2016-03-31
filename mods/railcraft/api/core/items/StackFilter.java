@@ -40,7 +40,6 @@ public class StackFilter implements IStackFilter {
 
     @Override
     public final StackFilter and(@Nonnull final Predicate<? super ItemStack>... other) {
-        Objects.requireNonNull(other);
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -55,7 +54,6 @@ public class StackFilter implements IStackFilter {
 
     @Override
     public final StackFilter or(@Nonnull final Predicate<? super ItemStack>... other) {
-        Objects.requireNonNull(other);
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -82,7 +80,6 @@ public class StackFilter implements IStackFilter {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
-                Objects.requireNonNull(stack);
                 for (Predicate<? super ItemStack> filter : filters) {
                     if (!filter.apply(stack))
                         return false;
@@ -96,7 +93,6 @@ public class StackFilter implements IStackFilter {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
-                Objects.requireNonNull(stack);
                 for (Predicate<? super ItemStack> filter : filters) {
                     if (filter.apply(stack))
                         return true;
@@ -111,18 +107,6 @@ public class StackFilter implements IStackFilter {
             @Override
             public boolean apply(ItemStack stack) {
                 return !filter.apply(stack);
-            }
-        };
-    }
-
-    public static StackFilter anyOf(@Nonnull final ItemStack[] stacks) {
-        return new StackFilter() {
-            @Override
-            public boolean apply(ItemStack input) {
-                for (ItemStack stack : stacks) {
-                    if (ItemStack.areItemStacksEqual(stack, input)) return true;
-                }
-                return false;
             }
         };
     }
