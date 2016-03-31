@@ -9,6 +9,8 @@
 package mods.railcraft.api.core.items;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -113,4 +115,15 @@ public class StackFilter implements IStackFilter {
         };
     }
 
+    public static StackFilter anyOf(@Nonnull final ItemStack[] stacks) {
+        return new StackFilter() {
+            @Override
+            public boolean apply(ItemStack input) {
+                for (ItemStack stack : stacks) {
+                    if (ItemStack.areItemStacksEqual(stack, input)) return true;
+                }
+                return false;
+            }
+        };
+    }
 }

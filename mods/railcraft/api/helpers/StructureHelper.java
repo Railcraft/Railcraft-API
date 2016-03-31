@@ -10,6 +10,7 @@ package mods.railcraft.api.helpers;
 
 import java.util.List;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -19,24 +20,24 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public interface StructureHelper {
 
-    void placeBlastFurnace(World world, int x, int y, int z, ItemStack input, ItemStack output, ItemStack fuel);
+    void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel);
 
-    void placeCokeOven(World world, int x, int y, int z, int creosote, ItemStack input, ItemStack output);
+    void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output);
 
-    void placeFluidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, FluidStack fuel);
+    void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel);
 
-    void placeIronTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid);
+    void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid);
 
-    void placeRockCrusher(World world, int x, int y, int z, int patternIndex, List<ItemStack> input, List<ItemStack> output);
+    void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output);
 
-    void placeSolidBoiler(World world, int x, int y, int z, int width, int height, boolean highPressure, int water, List<ItemStack> fuel);
+    void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel);
 
-    void placeSteamOven(World world, int x, int y, int z, List<ItemStack> input, List<ItemStack> output);
+    void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output);
 
-    void placeSteelTank(World world, int x, int y, int z, int patternIndex, FluidStack fluid);
+    void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid);
 
-    void placeWaterTank(World world, int x, int y, int z, int water);
+    void placeWaterTank(World world, BlockPos pos, int water);
     
-    void placeFluxTransformer(World world, int x, int y, int z);
+    void placeFluxTransformer(World world, BlockPos pos);
 
 }
