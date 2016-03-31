@@ -84,7 +84,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         return getRailDirection(state);
     }
 
-    protected static final BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) { 
+    protected static BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
         if (state.getBlock() instanceof BlockRailBase)
             return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
         return NORTH_SOUTH;
@@ -114,9 +114,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (placer == null)
-            return;
-        if (this instanceof ITrackReversible) {
+        if (placer != null && this instanceof ITrackReversible) {
             int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             ((ITrackReversible) this).setReversed(dir == 0 || dir == 1);
         }

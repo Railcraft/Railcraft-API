@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -21,7 +22,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,10 +42,10 @@ public abstract class TrackToolsAPI {
         return world.getBlockState(pos).getBlock() instanceof BlockRailBase;
     }
 
-    public static IBlockState makeTrackState(BlockRailBase block, BlockRailBase.EnumRailDirection trackShape) {
-        IBlockState state = block.getDefaultState();
+    public static IBlockState makeTrackState(BlockRailBase block, @Nullable BlockRailBase.EnumRailDirection trackShape) {
         IProperty<BlockRailBase.EnumRailDirection> property = block.getShapeProperty();
-        if (property.getAllowedValues().contains(trackShape))
+        IBlockState state = block.getDefaultState();
+        if (trackShape != null && property.getAllowedValues().contains(trackShape))
             state = state.withProperty(property, trackShape);
         return state;
     }
@@ -67,7 +70,7 @@ public abstract class TrackToolsAPI {
         if (stack == null)
             return false;
         if (stack.getItem() instanceof ITrackItem)
-            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, pos, trackShape);
+            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), RailcraftFakePlayer.get((WorldServer) world, pos.offset(EnumFacing.UP)), world, pos, trackShape);
         if (stack.getItem() instanceof ItemBlock) {
             Block block = ((ItemBlock) stack.getItem()).getBlock();
             if (block instanceof BlockRailBase) {
