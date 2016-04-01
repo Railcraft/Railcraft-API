@@ -12,7 +12,7 @@ import net.minecraft.block.properties.PropertyBool;
 
 public interface ITrackSwitch extends ITrackInstance {
 
-    PropertyBool MIRRORED = PropertyBool.create("mirrored");
+    PropertyBool SWITCHED = PropertyBool.create("switched");
 
     /**
      * Returns whether the switch track should "appear" switched.
