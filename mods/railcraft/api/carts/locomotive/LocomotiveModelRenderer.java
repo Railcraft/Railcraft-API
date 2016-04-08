@@ -8,9 +8,8 @@
 
 package mods.railcraft.api.carts.locomotive;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -25,11 +24,10 @@ public abstract class LocomotiveModelRenderer {
     private boolean renderIn3D = true;
 
     /**
-     *
      * @param rendererTag The Renderer Tag should be in the form of
-     * "<modid>:<name>", and should be unique among all the renderers defined
-     * for that type of locomotive. The Railcraft default model for each type of
-     * locomotive is defined as "railcraft:default".
+     *                    "<modid>:<name>", and should be unique among all the renderers defined
+     *                    for that type of locomotive. The Railcraft default model for each type of
+     *                    locomotive is defined as "railcraft:default".
      */
     public LocomotiveModelRenderer(String rendererTag) {
         this.rendererTag = rendererTag;
@@ -42,8 +40,6 @@ public abstract class LocomotiveModelRenderer {
     /**
      * This is the string that will be displayed on the Item tool tip. It should
      * be localized.
-     *
-     * @return
      */
     public abstract String getDisplayName();
 
@@ -56,8 +52,6 @@ public abstract class LocomotiveModelRenderer {
      *
      * If you wish to provide an IIcon instead, you must set it to false, and
      * implement getItemIcons().
-     *
-     * @param renderIn3D
      */
     public final void setRenderItemIn3D(boolean renderIn3D) {
         this.renderIn3D = renderIn3D;
@@ -74,18 +68,10 @@ public abstract class LocomotiveModelRenderer {
      * <li>2 = white
      * </ul>
      *
-     * @return icons
+     * @return model
      */
-    public IIcon[] getItemIcons() {
+    public ModelResourceLocation getItemModel() {
         return null;
-    }
-
-    /**
-     * Register any item textures you require here.
-     *
-     * @param iconRegister
-     */
-    public void registerItemIcons(IIconRegister iconRegister) {
     }
 
     /**
@@ -102,13 +88,9 @@ public abstract class LocomotiveModelRenderer {
      * You do not need to worry about rotation or anything like that, that is
      * taken care of already by Railcraft.
      *
-     * @param renderer
-     * @param cart
-     * @param primaryColor the primary color
+     * @param primaryColor   the primary color
      * @param secondaryColor the secondary color
-     * @param emblemTexture the emblem texture to render
-     * @param light
-     * @param time
+     * @param emblemTexture  the emblem texture to render
      */
     public abstract void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time);
 

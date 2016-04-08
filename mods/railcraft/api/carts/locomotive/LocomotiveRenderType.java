@@ -9,10 +9,12 @@
 package mods.railcraft.api.carts.locomotive;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,8 +45,6 @@ public enum LocomotiveRenderType {
      * This is how you register a new renderer. It can be a model renderer, an
      * obj renderer, or anything else you want. It just needs to extend
      * LocomotiveModelRenderer.
-     *
-     * @param renderer
      */
     public void registerRenderer(LocomotiveModelRenderer renderer) {
         renderers.put(renderer.getRendererTag(), renderer);
@@ -52,21 +52,6 @@ public enum LocomotiveRenderType {
 
     /**
      * Railcraft calls this method, you don't need to worry about it.
-     *
-     * @param iconRegister
-     */
-    public void registerIcons(IIconRegister iconRegister) {
-        Set<LocomotiveModelRenderer> set = new HashSet<LocomotiveModelRenderer>(renderers.values());
-        for (LocomotiveModelRenderer renderer : set) {
-            renderer.registerItemIcons(iconRegister);
-        }
-    }
-
-    /**
-     * Railcraft calls this method, you don't need to worry about it.
-     *
-     * @param tag
-     * @return
      */
     public LocomotiveModelRenderer getRenderer(String tag) {
         LocomotiveModelRenderer renderer = renderers.get(tag);
@@ -78,9 +63,6 @@ public enum LocomotiveRenderType {
     /**
      * This function will return a Locomotive item with the skin identifier
      * saved in the NBT. Use it to create a recipe for your skin.
-     *
-     * @param rendererTag
-     * @return
      */
     public ItemStack getItemWithRenderer(String rendererTag) {
         ItemStack stack = GameRegistry.findItemStack("Railcraft", cartTag, 1);
@@ -94,8 +76,6 @@ public enum LocomotiveRenderType {
 
     /**
      * Railcraft calls this method, you don't need to worry about it.
-     *
-     * @return
      */
     public Set<String> getRendererTags() {
         return renderers.keySet();
