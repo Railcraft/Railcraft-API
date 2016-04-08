@@ -16,6 +16,7 @@ import net.minecraft.util.BlockPos;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IToolCrowbar {
+    String ORE_TAG = "toolCrowbar";
 
     /**
      * Controls non-rotational interactions with blocks. Crowbar specific stuff.
