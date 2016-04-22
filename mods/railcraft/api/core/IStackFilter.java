@@ -1,12 +1,11 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
  *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+ * This work (the API) is licensed under the "MIT" License,
+ * see LICENSE.md for details.
+ ******************************************************************************/
 
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.core;
 
 import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;

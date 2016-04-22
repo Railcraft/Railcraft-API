@@ -1,15 +1,13 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
+/*******************************************************************************
+ * Copyright (c) CovertJaguar, 2011-2016
  *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+ * This work (the API) is licensed under the "MIT" License,
+ * see LICENSE.md for details.
+ ******************************************************************************/
 
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.core;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.item.ItemStack;
 
@@ -17,7 +15,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * This class is used to provide a convenient means of dealing with entire classes of items without having to specify each item individually.

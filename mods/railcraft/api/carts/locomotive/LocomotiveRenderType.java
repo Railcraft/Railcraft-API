@@ -8,16 +8,13 @@
 
 package mods.railcraft.api.carts.locomotive;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
+import mods.railcraft.api.core.RailcraftItemRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is used to register new Locomotive Skins with Railcraft.
@@ -65,7 +62,8 @@ public enum LocomotiveRenderType {
      * saved in the NBT. Use it to create a recipe for your skin.
      */
     public ItemStack getItemWithRenderer(String rendererTag) {
-        ItemStack stack = GameRegistry.findItemStack("Railcraft", cartTag, 1);
+        // TODO: Test this!
+        ItemStack stack = RailcraftItemRegistry.getStack(cartTag, 1);
         if (stack == null)
             return null;
         NBTTagCompound nbt = new NBTTagCompound();

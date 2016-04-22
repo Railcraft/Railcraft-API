@@ -8,7 +8,7 @@
  */
 package mods.railcraft.api.carts;
 
-import mods.railcraft.api.core.items.IStackFilter;
+import mods.railcraft.api.core.IStackFilter;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
