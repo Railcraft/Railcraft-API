@@ -8,12 +8,13 @@
 
 package mods.railcraft.api.electricity;
 
-import java.util.Random;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.Random;
 
 /**
  * This interface provides a simple means of using or producing Electricity
@@ -29,15 +30,16 @@ import net.minecraft.nbt.NBTTagCompound;
  * of their design. An alternative loader block utilizing the IElectricMinecart
  * interface may be provided in the future, but no guarantee.
  * <p>
+ *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IElectricMinecart {
 
-    public ChargeHandler getChargeHandler();
+    ChargeHandler getChargeHandler();
 
-    public static final class ChargeHandler {
+    final class ChargeHandler {
 
-        public static final int DRAW_INTERVAL = 8;
+        static final int DRAW_INTERVAL = 8;
         private static final Random rand = new Random();
 
         public enum Type {
@@ -60,7 +62,7 @@ public interface IElectricMinecart {
              * trackside block in the future for charging Storage, but does not
              * currently.
              */
-            STORAGE;
+            STORAGE
         }
 
         private final EntityMinecart minecart;
@@ -101,23 +103,15 @@ public interface IElectricMinecart {
             return type;
         }
 
-        /**
-         * Averages the charge between two ChargeHandlers.
-         * <p>
-         * @param other
-         */
-        public void balance(ChargeHandler other) {
-            double total = charge + other.charge;
-            double half = total / 2.0;
-            charge = half;
-            other.charge = half;
-        }
-
         public void setCharge(double charge) {
+            if (type == Type.USER)
+                return;
             this.charge = charge;
         }
 
         public void addCharge(double charge) {
+            if (type == Type.USER)
+                return;
             this.charge += charge;
         }
 
@@ -125,10 +119,12 @@ public interface IElectricMinecart {
          * Remove up to the requested amount of charge and returns the amount
          * removed.
          * <p>
-         * @param request
+         *
          * @return charge removed
          */
         public double removeCharge(double request) {
+            if (request <= 0.0)
+                return 0.0;
             if (charge >= request) {
                 charge -= request;
                 lastTickDraw += request;
@@ -208,9 +204,6 @@ public interface IElectricMinecart {
          *  }
          * }
          * </pre></blockquote>
-         * @param trackX
-         * @param trackY
-         * @param trackZ
          */
         public void tickOnTrack(int trackX, int trackY, int trackZ) {
             if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
@@ -237,7 +230,6 @@ public interface IElectricMinecart {
          * }
          * </pre></blockquote>
          * <p>
-         * @param nbt
          */
         public void writeToNBT(NBTTagCompound nbt) {
             NBTTagCompound tag = new NBTTagCompound();
@@ -258,7 +250,6 @@ public interface IElectricMinecart {
          * }
          * </pre></blockquote>
          * <p>
-         * @param nbt
          */
         public void readFromNBT(NBTTagCompound nbt) {
             NBTTagCompound tag = nbt.getCompoundTag("chargeHandler");
