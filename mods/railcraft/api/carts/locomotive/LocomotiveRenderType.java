@@ -84,6 +84,19 @@ public enum LocomotiveRenderType {
      */
     public ItemStack getItemWithRenderer(String rendererTag) {
         ItemStack stack = GameRegistry.findItemStack("Railcraft", cartTag, 1);
+        return getItemWithRenderer(rendererTag, stack);
+    }
+
+
+    /**
+     * This function will return a Locomotive item with the skin identifier
+     * saved in the NBT. Use it to create a recipe for your skin.
+     *
+     * @param rendererTag
+     * @param stack
+     * @return
+     */
+    public ItemStack getItemWithRenderer(String rendererTag, ItemStack stack) {
         if (stack == null)
             return null;
         NBTTagCompound nbt = new NBTTagCompound();
