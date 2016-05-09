@@ -40,7 +40,7 @@ public interface IElectricMinecart {
 
     final class ChargeHandler {
 
-        public static final int DRAW_INTERVAL = 8;
+        static final int DRAW_INTERVAL = 8;
         private static final Random rand = new Random();
 
         public enum Type {
@@ -63,7 +63,7 @@ public interface IElectricMinecart {
              * trackside block in the future for charging Storage, but does not
              * currently.
              */
-            STORAGE;
+            STORAGE
         }
 
         private final EntityMinecart minecart;
@@ -104,22 +104,15 @@ public interface IElectricMinecart {
             return type;
         }
 
-        /**
-         * Averages the charge between two ChargeHandlers.
-         * <p/>
-         */
-        public void balance(ChargeHandler other) {
-            double total = charge + other.charge;
-            double half = total / 2.0;
-            charge = half;
-            other.charge = half;
-        }
-
         public void setCharge(double charge) {
+            if (type == Type.USER)
+                return;
             this.charge = charge;
         }
 
         public void addCharge(double charge) {
+            if (type == Type.USER)
+                return;
             this.charge += charge;
         }
 
@@ -131,6 +124,8 @@ public interface IElectricMinecart {
          * @return charge removed
          */
         public double removeCharge(double request) {
+            if (request <= 0.0)
+                return 0.0;
             if (charge >= request) {
                 charge -= request;
                 lastTickDraw += request;

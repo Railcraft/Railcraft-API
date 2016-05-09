@@ -28,19 +28,13 @@ public interface ISwitchDevice {
     /**
      * Announces track state changes to the device.
      * Server side only.
-     *
-     * @param isSwitched
      */
     void onSwitch(boolean isSwitched);
 
     /**
-     * The track uses this function to tell the switch device what direction it should render its arrows.
-     * Client side only.
-     *
-     * @param redArrow
-     * @param whiteArrow
+     * Tell the switch device to refresh its arrows directions.
      */
-    void setRenderState(ArrowDirection redArrow, ArrowDirection whiteArrow);
+    void updateArrows();
 
     enum ArrowDirection {
         NORTH, SOUTH, EAST, WEST, NORTH_SOUTH, EAST_WEST
