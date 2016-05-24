@@ -10,7 +10,7 @@ package mods.railcraft.api.core.items;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

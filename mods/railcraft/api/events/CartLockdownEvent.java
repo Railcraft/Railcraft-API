@@ -9,7 +9,7 @@
 package mods.railcraft.api.events;
 
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**

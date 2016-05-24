@@ -11,7 +11,7 @@ package mods.railcraft.api.core.items;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**

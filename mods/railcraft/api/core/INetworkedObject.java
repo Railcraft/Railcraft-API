@@ -13,9 +13,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public interface INetworkedObject
 {
 
+    @Nonnull
     World getWorld();
 
     void writePacketData(DataOutputStream data) throws IOException;

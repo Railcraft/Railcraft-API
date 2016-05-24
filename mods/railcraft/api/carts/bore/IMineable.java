@@ -10,7 +10,7 @@ package mods.railcraft.api.carts.bore;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**

@@ -13,7 +13,7 @@ import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.api.tracks.ITrackInstance;
 import mods.railcraft.api.tracks.ITrackTile;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import java.util.EnumSet;

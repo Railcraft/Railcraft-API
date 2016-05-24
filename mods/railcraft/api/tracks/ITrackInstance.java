@@ -11,7 +11,6 @@ package mods.railcraft.api.tracks;
 import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,7 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 
 import javax.annotation.Nullable;

@@ -13,7 +13,7 @@ import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Random;
 

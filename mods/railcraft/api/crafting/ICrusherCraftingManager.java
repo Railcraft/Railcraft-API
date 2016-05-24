@@ -10,7 +10,7 @@ package mods.railcraft.api.crafting;
 
 import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -132,7 +132,7 @@ public interface ICrusherCraftingManager {
         /**
          * A brief description of the rules for generating this entry.
          */
-        List<IChatComponent> getToolTip();
+        List<ITextComponent> getToolTip();
     }
 
     interface IOutputEntry {
