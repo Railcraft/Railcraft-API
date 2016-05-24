@@ -36,7 +36,7 @@ public class TrackInstanceDefault extends TrackInstanceBase {
         if (Game.isHost(getWorld())) {
             IBlockState oldState = getWorld().getBlockState(getPos());
             BlockRailBase oldBlock = (BlockRailBase) oldState.getBlock();
-            BlockRailBase newBlock = (BlockRailBase) Blocks.rail;
+            BlockRailBase newBlock = (BlockRailBase) Blocks.RAIL;
             IBlockState newState = newBlock.getDefaultState().withProperty(newBlock.getShapeProperty(), oldState.getValue(oldBlock.getShapeProperty()));
             getWorld().setBlockState(getPos(), newState);
         }
