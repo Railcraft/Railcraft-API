@@ -8,17 +8,15 @@
 
 package mods.railcraft.api.core;
 
+import net.minecraft.world.World;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+public interface INetworkedObject {
 
-public interface INetworkedObject
-{
-
-    @Nonnull
+    //TODO: rename this
     World getWorld();
 
     void writePacketData(DataOutputStream data) throws IOException;
