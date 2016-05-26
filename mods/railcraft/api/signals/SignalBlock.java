@@ -450,7 +450,7 @@ public abstract class SignalBlock extends AbstractPair {
             if (!world.isBlockLoaded(pos))
                 return Status.UNKNOWN;
             if (TrackToolsAPI.isRailBlockAt(world, pos)) {
-                trackLocation = new WorldCoordinate(world.provider.getDimensionId(), pos);
+                trackLocation = new WorldCoordinate(world.provider.getDimension(), pos);
                 return Status.VALID;
             }
         }

@@ -50,7 +50,7 @@ public class WorldCoordinate extends BlockPos {
 
     public WorldCoordinate(TileEntity tile) {
         super(tile.getPos());
-        this.dimension = tile.getWorld().provider.getDimensionId();
+        this.dimension = tile.getWorld().provider.getDimension();
     }
 
     public static WorldCoordinate readFromNBT(NBTTagCompound data, String key) {

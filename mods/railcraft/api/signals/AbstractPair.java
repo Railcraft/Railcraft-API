@@ -215,7 +215,7 @@ public abstract class AbstractPair {
 
     public WorldCoordinate getCoords() {
         if (coords == null)
-            coords = new WorldCoordinate(tile.getWorld().provider.getDimensionId(), tile.getPos());
+            coords = new WorldCoordinate(tile.getWorld().provider.getDimension(), tile.getPos());
         return coords;
     }
 
@@ -307,12 +307,12 @@ public abstract class AbstractPair {
 
     @SideOnly(Side.CLIENT)
     public void addPair(int x, int y, int z) {
-        pairings.add(new WorldCoordinate(tile.getWorld().provider.getDimensionId(), x, y, z));
+        pairings.add(new WorldCoordinate(tile.getWorld().provider.getDimension(), x, y, z));
     }
 
     @SideOnly(Side.CLIENT)
     public void removePair(int x, int y, int z) {
-        pairings.remove(new WorldCoordinate(tile.getWorld().provider.getDimensionId(), x, y, z));
+        pairings.remove(new WorldCoordinate(tile.getWorld().provider.getDimension(), x, y, z));
     }
 
     public void clearPairings() {
