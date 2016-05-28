@@ -12,7 +12,6 @@ import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +28,7 @@ public interface ICrusherCraftingManager {
      * @see #createInputMatcher(ItemStack, boolean, boolean)
      * @see Predicate
      */
-    ICrusherRecipe createRecipe(@Nonnull IInputMatcher inputMatcher);
+    ICrusherRecipe createRecipe(IInputMatcher inputMatcher);
 
     /**
      * Creates a new ICrusherRecipe object.
@@ -57,7 +56,7 @@ public interface ICrusherCraftingManager {
      * @see #createInputMatcher(ItemStack, boolean, boolean)
      * @see Predicate
      */
-    ICrusherRecipe createAndAddRecipe(@Nonnull IInputMatcher inputMatcher);
+    ICrusherRecipe createAndAddRecipe(IInputMatcher inputMatcher);
 
     /**
      * Creates a new ICrusherRecipe object and adds it to the recipe list.
@@ -82,7 +81,6 @@ public interface ICrusherCraftingManager {
     /**
      * Returns the list of Recipes, it is safe to modify this list (probably).
      */
-    @Nonnull
     Collection<? extends ICrusherRecipe> recipes();
 
     /**

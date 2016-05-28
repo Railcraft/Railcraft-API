@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
+
 /**
  * To define a new Locomotive Model Renderer, extend this class and register it
  * with the appropriate LocomotiveRendererType.
@@ -29,7 +31,7 @@ public abstract class LocomotiveModelRenderer {
      *                    for that type of locomotive. The Railcraft default model for each type of
      *                    locomotive is defined as "railcraft:default".
      */
-    public LocomotiveModelRenderer(String rendererTag) {
+    protected LocomotiveModelRenderer(String rendererTag) {
         this.rendererTag = rendererTag;
     }
 
@@ -70,6 +72,8 @@ public abstract class LocomotiveModelRenderer {
      *
      * @return model
      */
+    //TODO: fix this?
+    @Nullable
     public ModelResourceLocation getItemModel() {
         return null;
     }

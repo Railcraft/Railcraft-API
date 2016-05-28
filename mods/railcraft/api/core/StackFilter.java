@@ -8,10 +8,8 @@
 package mods.railcraft.api.core;
 
 import com.google.common.base.Predicate;
-
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +34,7 @@ public class StackFilter implements IStackFilter {
     }
 
     @Override
-    public final StackFilter and(@Nonnull final Predicate<? super ItemStack>... other) {
+    public final StackFilter and(final Predicate<? super ItemStack>... other) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -50,7 +48,7 @@ public class StackFilter implements IStackFilter {
     }
 
     @Override
-    public final StackFilter or(@Nonnull final Predicate<? super ItemStack>... other) {
+    public final StackFilter or(final Predicate<? super ItemStack>... other) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -73,7 +71,7 @@ public class StackFilter implements IStackFilter {
         };
     }
 
-    public static StackFilter buildAnd(@Nonnull final Predicate<? super ItemStack>... filters) {
+    public static StackFilter buildAnd(final Predicate<? super ItemStack>... filters) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -86,7 +84,7 @@ public class StackFilter implements IStackFilter {
         };
     }
 
-    public static StackFilter buildOr(@Nonnull final Predicate<? super ItemStack>... filters) {
+    public static StackFilter buildOr(final Predicate<? super ItemStack>... filters) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {
@@ -99,7 +97,7 @@ public class StackFilter implements IStackFilter {
         };
     }
 
-    public static StackFilter invert(@Nonnull final Predicate<? super ItemStack> filter) {
+    public static StackFilter invert(final Predicate<? super ItemStack> filter) {
         return new StackFilter() {
             @Override
             public boolean apply(ItemStack stack) {

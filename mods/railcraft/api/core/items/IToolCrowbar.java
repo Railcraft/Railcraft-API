@@ -31,7 +31,7 @@ public interface IToolCrowbar {
      * @param pos     the block
      * @return true if can whack a block
      */
-    boolean canWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, BlockPos pos);
+    boolean canWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos);
 
     /**
      * Callback to do damage to the item.
@@ -40,7 +40,7 @@ public interface IToolCrowbar {
      * @param crowbar the crowbar
      * @param pos     the block
      */
-    void onWhack(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, BlockPos pos);
+    void onWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos);
 
     /**
      * Controls whether you can link a cart.
@@ -50,7 +50,7 @@ public interface IToolCrowbar {
      * @param cart    the cart
      * @return true if can link a cart
      */
-    boolean canLink(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart);
+    boolean canLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Callback to do damage.
@@ -59,7 +59,7 @@ public interface IToolCrowbar {
      * @param crowbar the crowbar
      * @param cart    the cart
      */
-    void onLink(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart);
+    void onLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Controls whether you can boost a cart.
@@ -69,7 +69,7 @@ public interface IToolCrowbar {
      * @param cart    the cart
      * @return true if can boost a cart
      */
-    boolean canBoost(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart);
+    boolean canBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Callback to do damage, boosting a cart usually does more damage than

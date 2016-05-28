@@ -7,11 +7,11 @@
 
 package mods.railcraft.api.core;
 
+import com.google.common.base.Optional;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -46,20 +46,17 @@ public class RailcraftItemRegistry {
         tags.add(tag);
     }
 
-    @Nullable
-    public static ItemStack getStack(@Nonnull String tag) {
+    public static com.google.common.base.Optional<ItemStack> getStack(@Nonnull String tag) {
         return getStack(tag, 1);
     }
 
-    @Nullable
-    public static ItemStack getStack(@Nonnull String tag, int qty) {
+    public static com.google.common.base.Optional<ItemStack> getStack(@Nonnull String tag, int qty) {
         ItemStack stack = stacks.get(tag);
         if (stack != null) {
             stack = stack.copy();
             stack.stackSize = Math.min(qty, stack.getMaxStackSize());
-            return stack;
         }
-        return null;
+        return Optional.fromNullable(stack);
     }
 
     /**

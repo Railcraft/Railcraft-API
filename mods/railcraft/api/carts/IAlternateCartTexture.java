@@ -22,5 +22,5 @@ public interface IAlternateCartTexture {
      *
      * @return the texture file
      */
-    public ResourceLocation getTextureFile();
+    ResourceLocation getTextureFile();
 }

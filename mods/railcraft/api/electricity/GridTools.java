@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.electricity;
 
+import com.google.common.base.Optional;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.electricity.IElectricGrid.ChargeHandler.ConnectType;
 import mods.railcraft.api.tracks.ITrackInstance;
@@ -31,28 +32,27 @@ public class GridTools {
 
         WorldCoordinate myPos = new WorldCoordinate(gridObject.getTile());
         for (Map.Entry<BlockPos, EnumSet<ConnectType>> position : gridObject.getChargeHandler().getPossibleConnectionLocations().entrySet()) {
-            IElectricGrid otherObj = getGridObjectAt(gridObject.getTile().getWorld(), position.getKey());
-            if (otherObj != null && position.getValue().contains(otherObj.getChargeHandler().getType())) {
-                EnumSet<ConnectType> otherType = otherObj.getChargeHandler().getPossibleConnectionLocations().get(myPos);
+            Optional<IElectricGrid> otherObj = getGridObjectAt(gridObject.getTile().getWorld(), position.getKey());
+            if (otherObj.isPresent() && position.getValue().contains(otherObj.get().getChargeHandler().getType())) {
+                EnumSet<ConnectType> otherType = otherObj.get().getChargeHandler().getPossibleConnectionLocations().get(myPos);
                 if (otherType != null && otherType.contains(gridObject.getChargeHandler().getType()))
-                    connectedObjects.add(otherObj);
+                    connectedObjects.add(otherObj.get());
             }
         }
         return connectedObjects;
     }
 
-    public static IElectricGrid getGridObjectAt(IBlockAccess world, BlockPos pos) {
+    public static Optional<IElectricGrid> getGridObjectAt(IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile == null)
-            return null;
+        IElectricGrid gridObject = null;
         if (tile instanceof IElectricGrid)
-            return (IElectricGrid) tile;
+            gridObject = (IElectricGrid) tile;
         if (tile instanceof ITrackTile) {
             ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
             if (track instanceof IElectricGrid)
-                return (IElectricGrid) track;
+                gridObject = (IElectricGrid) track;
         }
-        return null;
+        return Optional.fromNullable(gridObject);
     }
 
 }

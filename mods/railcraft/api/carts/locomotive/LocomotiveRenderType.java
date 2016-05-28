@@ -12,6 +12,7 @@ import mods.railcraft.api.core.RailcraftItemRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,7 @@ public enum LocomotiveRenderType {
     private final Map<String, LocomotiveModelRenderer> renderers = new HashMap<String, LocomotiveModelRenderer>();
     private final String cartTag;
 
-    private LocomotiveRenderType(String cartTag) {
+    LocomotiveRenderType(String cartTag) {
         this.cartTag = cartTag;
     }
 
@@ -61,22 +62,18 @@ public enum LocomotiveRenderType {
      * This function will return a Locomotive item with the skin identifier
      * saved in the NBT. Use it to create a recipe for your skin.
      */
+    @Nullable
     public ItemStack getItemWithRenderer(String rendererTag) {
         // TODO: Test this!
-        ItemStack stack = RailcraftItemRegistry.getStack(cartTag, 1);
-        return getItemWithRenderer(rendererTag, stack);
+        return getItemWithRenderer(rendererTag, RailcraftItemRegistry.getStack(cartTag, 1).orNull());
     }
-
 
     /**
      * This function will return a Locomotive item with the skin identifier
      * saved in the NBT. Use it to create a recipe for your skin.
-     *
-     * @param rendererTag
-     * @param stack
-     * @return
      */
-    public ItemStack getItemWithRenderer(String rendererTag, ItemStack stack) {
+    @Nullable
+    public ItemStack getItemWithRenderer(String rendererTag, @Nullable ItemStack stack) {
         if (stack == null)
             return null;
         NBTTagCompound nbt = new NBTTagCompound();

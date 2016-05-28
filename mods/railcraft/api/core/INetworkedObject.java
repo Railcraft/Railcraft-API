@@ -10,7 +10,6 @@ package mods.railcraft.api.core;
 
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,7 +20,7 @@ public interface INetworkedObject {
     @Nullable
     World theWorld();
 
-    void writePacketData(@Nonnull DataOutputStream data) throws IOException;
+    void writePacketData(DataOutputStream data) throws IOException;
 
-    void readPacketData(@Nonnull DataInputStream data) throws IOException;
+    void readPacketData(DataInputStream data) throws IOException;
 }

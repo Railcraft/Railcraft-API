@@ -11,7 +11,6 @@ package mods.railcraft.api.carts.locomotive;
 import net.minecraft.util.ResourceLocation;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IRenderer {
