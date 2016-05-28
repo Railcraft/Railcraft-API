@@ -7,6 +7,7 @@
  */
 package mods.railcraft.api.carts;
 
+import com.google.common.base.Objects;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
@@ -21,6 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import org.apache.commons.lang3.Validate;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -135,16 +137,6 @@ public abstract class CartTools {
             }
 
         return null;
-    }
-
-    /**
-     * Offers an item stack to linked carts or drops it if no one wants it.
-     */
-    public static void offerOrDropItem(EntityMinecart cart, @Nullable ItemStack stack) {
-        stack = transferHelper.pushStack(cart, stack);
-
-        if (stack != null && stack.stackSize > 0)
-            cart.entityDropItem(stack, 1);
     }
 
     public static boolean isMinecartOnRailAt(World world, BlockPos pos, float sensitivity) {

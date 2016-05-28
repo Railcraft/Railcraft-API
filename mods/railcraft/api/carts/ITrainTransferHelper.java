@@ -55,6 +55,15 @@ public interface ITrainTransferHelper {
     @Nullable
     ItemStack pullStack(EntityMinecart requester, IStackFilter filter);
 
+    /**
+     * Offers an item stack to the Train or drops it if no one wants it.
+     *
+     * @param requester  the source EntityMinecart
+     * @param stack the ItemStack to be offered
+     */
+    void offerOrDropItem(EntityMinecart requester, ItemStack stack);
+
+
     // ***************************************************************************************************************************
     // Fluids
     // ***************************************************************************************************************************
