@@ -10,16 +10,18 @@ package mods.railcraft.api.core;
 
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public interface INetworkedObject {
 
-    //TODO: rename this
-    World getWorld();
+    @Nullable
+    World theWorld();
 
-    void writePacketData(DataOutputStream data) throws IOException;
+    void writePacketData(@Nonnull DataOutputStream data) throws IOException;
 
-    void readPacketData(DataInputStream data) throws IOException;
+    void readPacketData(@Nonnull DataInputStream data) throws IOException;
 }

@@ -94,7 +94,7 @@ public class TrackRegistry {
      * Returns a cached copy of a TrackSpec object.
      */
     @Nonnull
-    public static TrackSpec getTrackSpec(String trackTag) {
+    public static TrackSpec getTrackSpec(@Nonnull String trackTag) {
         trackTag = trackTag.toLowerCase(Locale.ENGLISH);
         TrackSpec spec = trackSpecsFromTag.get(trackTag);
         if (spec == null) {

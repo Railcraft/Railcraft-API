@@ -12,6 +12,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * This immutable class represents a point in the Minecraft world, while taking
  * into account the possibility of coordinates in different dimensions.
@@ -50,9 +53,10 @@ public class WorldCoordinate extends BlockPos {
 
     public WorldCoordinate(TileEntity tile) {
         super(tile.getPos());
-        this.dimension = tile.getWorld().provider.getDimension();
+        this.dimension = tile.getWorld().provider != null ? tile.getWorld().provider.getDimension() : 0;
     }
 
+    @Nullable
     public static WorldCoordinate readFromNBT(NBTTagCompound data, String key) {
         if (data.hasKey(key, 10)) {
             NBTTagCompound nbt = data.getCompoundTag(key);
@@ -73,15 +77,15 @@ public class WorldCoordinate extends BlockPos {
     }
 
     public boolean isInSameChunk(WorldCoordinate otherCoord) {
-        return dimension == otherCoord.dimension && x >> 4 == otherCoord.x >> 4 && z >> 4 == otherCoord.z >> 4;
+        return dimension == otherCoord.dimension && getX() >> 4 == otherCoord.getX() >> 4 && getZ() >> 4 == otherCoord.getZ() >> 4;
     }
 
     public boolean isEqual(int dim, int x, int y, int z) {
-        return getX() == x && getY() == y && getZ() == z && this.dimension == dim;
+        return getX() == x && getY() == y && getZ() == z && dimension == dim;
     }
 
     public boolean isEqual(int dim, BlockPos p) {
-        return getX() == p.getX() && getY() == p.getY() && getZ() == p.getZ() && this.dimension == dim;
+        return getX() == p.getX() && getY() == p.getY() && getZ() == p.getZ() && dimension == dim;
     }
 
 //    public int compareTo(@Nonnull WorldCoordinate o) {
@@ -97,7 +101,7 @@ public class WorldCoordinate extends BlockPos {
 //    }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
@@ -113,6 +117,7 @@ public class WorldCoordinate extends BlockPos {
         return result;
     }
 
+    @Nonnull
     @Override
     public String toString() {
         return "WorldCoordinate{" + "dimension=" + dimension + ", x=" + getX() + ", y=" + getY() + ", z=" + getZ() + '}';

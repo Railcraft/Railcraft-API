@@ -6,16 +6,28 @@
  ******************************************************************************/
 package mods.railcraft.api.tracks;
 
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrackInstanceDefault extends TrackInstanceBase {
+    private final boolean swapOut;
 
+    public TrackInstanceDefault() {
+        this(true);
+    }
+
+    public TrackInstanceDefault(boolean swapOut) {
+        this.swapOut = swapOut;
+    }
+
+    @Nonnull
     @Override
     public TrackSpec getTrackSpec() {
         return TrackRegistry.getTrackSpec("Railcraft:default");
@@ -28,17 +40,18 @@ public class TrackInstanceDefault extends TrackInstanceBase {
 
     @Override
     public boolean canUpdate() {
-        return true;
+        return swapOut;
     }
 
     @Override
     public void update() {
-        if (Game.isHost(getWorld())) {
-            IBlockState oldState = getWorld().getBlockState(getPos());
+        World world = theWorld();
+        if (swapOut && world != null && !world.isRemote) {
+            IBlockState oldState = world.getBlockState(getPos());
             BlockRailBase oldBlock = (BlockRailBase) oldState.getBlock();
             BlockRailBase newBlock = (BlockRailBase) Blocks.RAIL;
             IBlockState newState = newBlock.getDefaultState().withProperty(newBlock.getShapeProperty(), oldState.getValue(oldBlock.getShapeProperty()));
-            getWorld().setBlockState(getPos(), newState);
+            world.setBlockState(getPos(), newState);
         }
     }
 }

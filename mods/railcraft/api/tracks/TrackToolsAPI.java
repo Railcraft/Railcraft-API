@@ -18,6 +18,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -67,8 +68,6 @@ public abstract class TrackToolsAPI {
      * @see ITrackItem
      */
     public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos, BlockRailBase.EnumRailDirection trackShape) {
-        if (stack == null)
-            return false;
         if (stack.getItem() instanceof ITrackItem)
             return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), RailcraftFakePlayer.get((WorldServer) world, pos.offset(EnumFacing.UP)), world, pos, trackShape);
         if (stack.getItem() instanceof ItemBlock) {
@@ -77,7 +76,7 @@ public abstract class TrackToolsAPI {
                 IBlockState blockState = makeTrackState((BlockRailBase) block, trackShape);
                 boolean success = world.setBlockState(pos, blockState);
                 if (success)
-                    world.playSoundEffect(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
+                    world.playSound(null, pos, block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
                 return success;
             }
         }
@@ -97,7 +96,7 @@ public abstract class TrackToolsAPI {
      * @return true if rail
      * @see ITrackItem
      */
-    public static boolean isTrackItem(ItemStack stack) {
+    public static boolean isTrackItem(@Nullable ItemStack stack) {
         return stack != null && stack.getItem() instanceof ITrackItem;
     }
 
@@ -110,10 +109,10 @@ public abstract class TrackToolsAPI {
     public static boolean isCartLockedDown(EntityMinecart cart) {
         BlockPos pos = cart.getPosition();
 
-        if (BlockRailBase.isRailBlock(cart.worldObj, pos.down()))
+        if (BlockRailBase.isRailBlock(cart.getEntityWorld(), pos.down()))
             pos = pos.down();
 
-        TileEntity tile = cart.worldObj.getTileEntity(pos);
+        TileEntity tile = cart.getEntityWorld().getTileEntity(pos);
         if (tile instanceof ITrackTile) {
             ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
             return track instanceof ITrackLockdown && ((ITrackLockdown) track).isCartLockedDown(cart);
@@ -149,6 +148,7 @@ public abstract class TrackToolsAPI {
         return tracks;
     }
 
+    @Nullable
     public static ITrackTile getTrackFuzzyAt(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof ITrackTile)
@@ -174,6 +174,7 @@ public abstract class TrackToolsAPI {
         return tracks;
     }
 
+    @Nullable
     public static <T> T getTrackObjectFuzzyAt(World world, BlockPos pos, Class<T> type) {
         T object = getTrackObjectAt(world, pos, type);
         if (object != null)
@@ -187,6 +188,7 @@ public abstract class TrackToolsAPI {
         return null;
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     public static <T> T getTrackObjectAt(World world, BlockPos pos, Class<T> type) {
         TileEntity tile = world.getTileEntity(pos);

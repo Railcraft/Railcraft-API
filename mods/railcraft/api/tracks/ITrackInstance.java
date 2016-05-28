@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import mcp.MethodsReturnNonnullByDefault;
 import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -19,10 +20,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
@@ -34,6 +37,8 @@ import java.util.List;
  * Instead of implementing this interface directly, you should probably extend
  * TrackInstanceBase. It will simplify your life.
  *
+ * You must have a constructor that accepts a single TileEntity object.
+ *
  * All packet manipulation is handled by Railcraft's code, you just need to
  * implement the functions in INetworkedObject to pass data from the server to
  * the client.
@@ -41,7 +46,13 @@ import java.util.List;
  * @author CovertJaguar
  * @see TrackInstanceBase
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public interface ITrackInstance extends INetworkedObject {
+
+    TileEntity getTile();
+
+    void setTile(TileEntity tileEntity);
 
     TrackSpec getTrackSpec();
 
@@ -82,21 +93,13 @@ public interface ITrackInstance extends INetworkedObject {
 
     void update();
 
-    boolean blockActivated(EntityPlayer player);
+    boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem);
 
     void onBlockRemoved();
 
-    void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack);
+    void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack);
 
-    void onNeighborBlockChange(IBlockState state, Block neighborBlock);
-
-    /**
-     * Internal function that sets the Track's TileEntity so it can be
-     * referenced for position information, etc...
-     */
-    void setTile(TileEntity tile);
-
-    TileEntity getTile();
+    void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock);
 
     BlockPos getPos();
 

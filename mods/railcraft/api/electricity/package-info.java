@@ -5,6 +5,12 @@
  *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
  * ***************************************************************************
  */
-@API(apiVersion="3.0.0", owner="RailcraftAPI|core", provides="RailcraftAPI|electricity")
+@API(apiVersion = "3.0.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|electricity")
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 package mods.railcraft.api.electricity;
+
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraftforge.fml.common.API;
+
+import javax.annotation.ParametersAreNonnullByDefault;

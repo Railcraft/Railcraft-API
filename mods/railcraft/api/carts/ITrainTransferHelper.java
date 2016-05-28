@@ -13,6 +13,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+
 /**
  * This interface is the API facing wrapper for an internal helper class that makes it
  * simple to pass items and fluids around within a Train.
@@ -39,6 +41,7 @@ public interface ITrainTransferHelper {
      * @return the ItemStack that remains after any pushed items were removed, or null if it was fully pushed
      * @see mods.railcraft.api.carts.IFluidCart
      */
+    @Nullable
     ItemStack pushStack(EntityMinecart requester, ItemStack stack);
 
     /**
@@ -49,6 +52,7 @@ public interface ITrainTransferHelper {
      * @return the ItemStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IItemCart
      */
+    @Nullable
     ItemStack pullStack(EntityMinecart requester, IStackFilter filter);
 
     // ***************************************************************************************************************************
@@ -63,6 +67,7 @@ public interface ITrainTransferHelper {
      * @return the FluidStack that remains after any pushed Fluid was removed, or null if it was fully pushed
      * @see mods.railcraft.api.carts.IFluidCart
      */
+    @Nullable
     FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack);
 
     /**
@@ -73,5 +78,6 @@ public interface ITrainTransferHelper {
      * @return the FluidStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IFluidCart
      */
+    @Nullable
     FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack);
 }

@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,7 +61,7 @@ public abstract class CartTools {
      * The is really only needed by the bukkit ports.
      */
     public static void setCartOwner(EntityMinecart cart, GameProfile owner) {
-        if (!cart.worldObj.isRemote) {
+        if (!cart.getEntityWorld().isRemote) {
             NBTTagCompound data = cart.getEntityData();
             if (owner.getName() != null)
                 data.setString("owner", owner.getName());
@@ -111,6 +112,7 @@ public abstract class CartTools {
      * @return the cart placed or null if failed
      * @see IMinecartItem, ItemMinecart
      */
+    @Nullable
     public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
         if (cart == null)
             return null;
@@ -138,7 +140,7 @@ public abstract class CartTools {
     /**
      * Offers an item stack to linked carts or drops it if no one wants it.
      */
-    public static void offerOrDropItem(EntityMinecart cart, ItemStack stack) {
+    public static void offerOrDropItem(EntityMinecart cart, @Nullable ItemStack stack) {
         stack = transferHelper.pushStack(cart, stack);
 
         if (stack != null && stack.stackSize > 0)

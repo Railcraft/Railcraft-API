@@ -9,7 +9,6 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -20,12 +19,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -46,15 +48,17 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
  */
 public abstract class TrackInstanceBase implements ITrackInstance {
 
-    public TileEntity tileEntity;
+    @Nonnull
+    private TileEntity tileEntity = new TileEntity() {
+    };
 
     private BlockRailBase getBlock() {
-        return (BlockRailBase) tileEntity.getBlockType();
+        return (BlockRailBase) getTile().getBlockType();
     }
 
     @Override
-    public void setTile(TileEntity tile) {
-        tileEntity = tile;
+    public void setTile(TileEntity tileEntity) {
+        this.tileEntity = tileEntity;
     }
 
     @Override
@@ -75,12 +79,13 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
         return getRailDirection(state);
     }
 
     protected final BlockRailBase.EnumRailDirection getRailDirection() {
-        IBlockState state = getWorld().getBlockState(getPos());
+        World world = theWorldAsserted();
+        IBlockState state = world.getBlockState(getPos());
         return getRailDirection(state);
     }
 
@@ -95,16 +100,15 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
         if (this instanceof ITrackReversible) {
-            ItemStack current = player.getCurrentEquippedItem();
-            if (current != null && current.getItem() instanceof IToolCrowbar) {
-                IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-                if (crowbar.canWhack(player, current, getPos())) {
+            if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+                IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+                if (crowbar.canWhack(player, heldItem, getPos())) {
                     ITrackReversible track = (ITrackReversible) this;
                     track.setReversed(!track.isReversed());
                     markBlockNeedsUpdate();
-                    crowbar.onWhack(player, current, getPos());
+                    crowbar.onWhack(player, heldItem, getPos());
                     return true;
                 }
             }
@@ -113,7 +117,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer != null && this instanceof ITrackReversible) {
             int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             ((ITrackReversible) this).setReversed(dir == 0 || dir == 1);
@@ -128,11 +132,13 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     public void sendUpdateToClient() {
-        ((ITrackTile) tileEntity).sendUpdateToClient();
+        ((ITrackTile) getTile()).sendUpdateToClient();
     }
 
     public void markBlockNeedsUpdate() {
-        getWorld().markBlockForUpdate(tileEntity.getPos());
+        World world = theWorldAsserted();
+        IBlockState state = world.getBlockState(getTile().getPos());
+        world.notifyBlockUpdate(getTile().getPos(), state, state, 3);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -152,40 +158,43 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
-        boolean valid = isRailValid(getWorld(), getPos(), state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty()));
+    public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
+        World world = theWorldAsserted();
+        boolean valid = isRailValid(world, getPos(), state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty()));
         if (!valid) {
             Block blockTrack = getBlock();
-            blockTrack.dropBlockAsItem(getWorld(), getPos(), state, 0);
-            getWorld().setBlockToAir(getPos());
+            blockTrack.dropBlockAsItem(world, getPos(), state, 0);
+            world.setBlockToAir(getPos());
             return;
         }
 
-        if (neighborBlock != null && neighborBlock.canProvidePower()
-                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(getWorld(), getPos()) == 3)
+        if (neighborBlock != null && neighborBlock.getDefaultState().canProvidePower()
+                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(world, getPos()) == 3)
             switchTrack(state, false);
         testPower(state);
     }
 
     private void switchTrack(IBlockState state, boolean flag) {
-        BlockPos pos = tileEntity.getPos();
+        World world = theWorldAsserted();
+        BlockPos pos = getTile().getPos();
         BlockRailBase blockTrack = getBlock();
-        blockTrack.new Rail(getWorld(), pos, state).func_180364_a(getWorld().isBlockPowered(pos), flag);
+        blockTrack.new Rail(world, pos, state).place(world.isBlockPowered(pos), flag);
     }
 
     protected final void testPower(IBlockState state) {
         if (!(this instanceof ITrackPowered))
             return;
+        World world = theWorldAsserted();
         ITrackPowered r = (ITrackPowered) this;
-        boolean powered = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(getWorld(), getPos(), getTrackSpec(), state, r.getPowerPropagation());
+        boolean powered = world.isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(world, getPos(), getTrackSpec(), state, r.getPowerPropagation());
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
-            getWorld().notifyNeighborsOfStateChange(getPos(), blockTrack);
-            getWorld().notifyNeighborsOfStateChange(getPos().down(), blockTrack);
+            world.notifyNeighborsOfStateChange(getPos(), blockTrack);
+            world.notifyNeighborsOfStateChange(getPos().down(), blockTrack);
             BlockRailBase.EnumRailDirection railDirection = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
             if (railDirection.isAscending())
-                getWorld().notifyNeighborsOfStateChange(getPos().up(), blockTrack);
+                world.notifyNeighborsOfStateChange(getPos().up(), blockTrack);
             sendUpdateToClient();
             // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
         }
@@ -313,21 +322,34 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
+    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
     }
 
     @Override
-    public void readPacketData(DataInputStream data) throws IOException {
+    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
     }
 
+    @Nullable
     @Override
-    public World getWorld() {
-        return tileEntity.getWorld();
+    public World theWorld() {
+        return getTile().getWorld();
+    }
+
+    /**
+     * Be careful where you call this function from.
+     * Only call it if you have a reasonable assumption that the world can't be null,
+     * otherwise the game will crash.
+     */
+    @Nonnull
+    public World theWorldAsserted() throws NullPointerException {
+        World world = theWorld();
+        if (world == null) throw new NullPointerException("World was null");
+        return world;
     }
 
     @Override
     public BlockPos getPos() {
-        return tileEntity.getPos();
+        return getTile().getPos();
     }
 
     /**

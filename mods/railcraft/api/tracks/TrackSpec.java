@@ -12,7 +12,10 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,10 +40,12 @@ import java.util.Locale;
 public final class TrackSpec {
 
     public static Block blockTrack;
+    @Nonnull
     private final String tag;
     private final short trackId;
     private final List<String> tooltip;
     private final ModelResourceLocation iconProvider;
+    @Nonnull
     private final Class<? extends ITrackInstance> instanceClass;
 
     /**
@@ -54,7 +59,7 @@ public final class TrackSpec {
      * @param instanceClass The ITrackInstance class that corresponds to this
      *                      TrackSpec
      */
-    public TrackSpec(short trackId, String tag, ModelResourceLocation iconProvider, Class<? extends ITrackInstance> instanceClass) {
+    public TrackSpec(short trackId, @Nonnull String tag, ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass) {
         this(trackId, tag, iconProvider, instanceClass, null);
     }
 
@@ -70,7 +75,7 @@ public final class TrackSpec {
      *                      TrackSpec
      * @param tooltip       The tool tip for the Track Item
      */
-    public TrackSpec(short trackId, String tag, ModelResourceLocation iconProvider, Class<? extends ITrackInstance> instanceClass, List<String> tooltip) {
+    public TrackSpec(short trackId, @Nonnull String tag, ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass, @Nullable List<String> tooltip) {
         this.trackId = trackId;
         this.tag = tag.toLowerCase(Locale.ENGLISH);
         this.iconProvider = iconProvider;
@@ -78,6 +83,7 @@ public final class TrackSpec {
         this.tooltip = tooltip;
     }
 
+    @Nonnull
     public String getTrackTag() {
         return tag;
     }
@@ -91,6 +97,7 @@ public final class TrackSpec {
      *
      * @return an ItemStack that can be used to place the track.
      */
+    @Nullable
     public ItemStack getItem() {
         return getItem(1);
     }
@@ -100,6 +107,7 @@ public final class TrackSpec {
      *
      * @return an ItemStack that can be used to place the track.
      */
+    @Nullable
     public ItemStack getItem(int qty) {
         if (blockTrack != null) {
             ItemStack stack = new ItemStack(blockTrack, qty, getTrackTag().hashCode() % (Short.MAX_VALUE - 1));
@@ -111,9 +119,13 @@ public final class TrackSpec {
         return null;
     }
 
-    public ITrackInstance createInstanceFromSpec() {
+    @Nonnull
+    public ITrackInstance createInstanceFromSpec(@Nonnull TileEntity tile) {
         try {
-            return (ITrackInstance) instanceClass.newInstance();
+            ITrackInstance trackInstance = instanceClass.newInstance();
+            if (trackInstance == null) throw new NullPointerException("No track constructor found");
+            trackInstance.setTile(tile);
+            return trackInstance;
         } catch (Exception ex) {
             throw new RuntimeException("Improper Track Instance Constructor", ex);
         }
@@ -123,6 +135,7 @@ public final class TrackSpec {
         return iconProvider;
     }
 
+    @Nullable
     public List<String> getItemToolTip() {
         return tooltip;
     }
