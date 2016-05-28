@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * The TrackRegistry is part of a system that allows 3rd party addons to simply,
+ * The TrackRegistry is part of a system that allows 3rd party addon to simply,
  * quickly, and easily define new Tracks with unique behaviors without requiring
  * that any additional block ids be used.
  *
@@ -27,7 +27,7 @@ import java.util.*;
  * ITrackInstance.
  *
  * The TrackSpec contains basic constant information about the Track, while the
- * TrackInstace controls how an individual Track block interact with the world.
+ * TrackInstance controls how an individual Track block interact with the world.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  * @see TrackSpec

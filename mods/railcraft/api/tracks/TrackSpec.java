@@ -59,7 +59,7 @@ public final class TrackSpec {
      * @param instanceClass The ITrackInstance class that corresponds to this
      *                      TrackSpec
      */
-    public TrackSpec(short trackId, @Nonnull String tag, ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass) {
+    public TrackSpec(short trackId, @Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass) {
         this(trackId, tag, iconProvider, instanceClass, null);
     }
 
@@ -75,7 +75,7 @@ public final class TrackSpec {
      *                      TrackSpec
      * @param tooltip       The tool tip for the Track Item
      */
-    public TrackSpec(short trackId, @Nonnull String tag, ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass, @Nullable List<String> tooltip) {
+    public TrackSpec(short trackId, @Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass, @Nullable List<String> tooltip) {
         this.trackId = trackId;
         this.tag = tag.toLowerCase(Locale.ENGLISH);
         this.iconProvider = iconProvider;

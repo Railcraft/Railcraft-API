@@ -11,15 +11,17 @@ import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class SignalController extends AbstractPair {
-    public SignalController(String locTag, TileEntity tile, int maxPairings) {
+    protected SignalController(String locTag, TileEntity tile, int maxPairings) {
         super(locTag, tile, maxPairings);
     }
 
+    @Nullable
     public SignalReceiver getReceiverAt(WorldCoordinate coord) {
         TileEntity recv = getPairAt(coord);
         if (recv != null) {
@@ -33,9 +35,9 @@ public abstract class SignalController extends AbstractPair {
 
     @Override
     public void informPairsOfNameChange() {
-        for(WorldCoordinate coord : getPairs()) {
+        for (WorldCoordinate coord : getPairs()) {
             SignalReceiver recv = getReceiverAt(coord);
-            if(recv != null){
+            if (recv != null) {
                 recv.onPairNameChange(getCoords(), getName());
             }
         }

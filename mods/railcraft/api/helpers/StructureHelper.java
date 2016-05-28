@@ -8,36 +8,38 @@
 
 package mods.railcraft.api.helpers;
 
-import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+@SuppressWarnings("unused")
 public interface StructureHelper {
 
-    void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack fuel);
+    void placeBlastFurnace(World world, BlockPos pos, @Nullable ItemStack input, @Nullable ItemStack output, @Nullable ItemStack fuel);
 
-    void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output);
+    void placeCokeOven(World world, BlockPos pos, int creosote, @Nullable ItemStack input, @Nullable ItemStack output);
 
-    void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel);
+    void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable FluidStack fuel);
 
-    void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid);
+    void placeIronTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid);
 
-    void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output);
+    void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output);
 
-    void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel);
+    void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable List<ItemStack> fuel);
 
-    void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output);
+    void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output);
 
-    void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid);
+    void placeSteelTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid);
 
     void placeWaterTank(World world, BlockPos pos, int water);
-    
+
     void placeFluxTransformer(World world, BlockPos pos);
 
 }

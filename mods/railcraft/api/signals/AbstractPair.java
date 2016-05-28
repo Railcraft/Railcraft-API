@@ -13,11 +13,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -58,29 +58,28 @@ public abstract class AbstractPair {
     private boolean needsInit = true;
     private String name;
 
-    public AbstractPair(String locTag, TileEntity tile, int maxPairings) {
+    protected AbstractPair(String locTag, TileEntity tile, int maxPairings) {
         this.tile = tile;
         this.maxPairings = maxPairings;
         this.locTag = locTag;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         if (name == null || this.name == null || !this.name.equals(name)) {
             this.name = name;
-            this.informPairsOfNameChange();
+            informPairsOfNameChange();
         }
     }
 
     public void informPairsOfNameChange() {
-
     }
 
+    @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
     public void onPairNameChange(WorldCoordinate coords, String name) {
-
     }
 
     protected boolean isLoaded() {
@@ -123,19 +122,18 @@ public abstract class AbstractPair {
         if (!pairingsToTestNext.isEmpty()) {
             pairingsToTestNext.retainAll(pairings);
             for (WorldCoordinate coord : pairingsToTestNext) {
-                final BlockPos pos = coord;
 
                 World world = tile.getWorld();
-                if (!world.isBlockLoaded(pos))
+                if (!world.isBlockLoaded(coord))
                     continue;
 
-                IBlockState blockState = world.getBlockState(pos);
+                IBlockState blockState = world.getBlockState(coord);
                 if (!blockState.getBlock().hasTileEntity(blockState)) {
                     clearPairing(coord);
                     continue;
                 }
 
-                TileEntity target = world.getTileEntity(pos);
+                TileEntity target = world.getTileEntity(coord);
                 if (target != null && !isValidPair(coord, target))
                     clearPairing(coord);
             }
@@ -158,11 +156,10 @@ public abstract class AbstractPair {
             SignalTools.packetBuilder.sendPairPacketUpdate(this);
     }
 
+    @Nullable
     protected TileEntity getPairAt(WorldCoordinate coord) {
         if (!pairings.contains(coord))
             return null;
-
-        final BlockPos pos = coord;
 
         boolean useCache;
         try {
@@ -174,7 +171,7 @@ public abstract class AbstractPair {
         if (useCache) {
             TileEntity cacheTarget = tileCache.get(coord);
             if (cacheTarget != null) {
-                if (cacheTarget.isInvalid() || !cacheTarget.getPos().equals(pos))
+                if (cacheTarget.isInvalid() || !cacheTarget.getPos().equals(coord))
                     tileCache.remove(coord);
                 else if (isValidPair(coord, cacheTarget))
                     return cacheTarget;
@@ -187,16 +184,16 @@ public abstract class AbstractPair {
         }
 
         World world = tile.getWorld();
-        if (!world.isBlockLoaded(pos))
+        if (!world.isBlockLoaded(coord))
             return null;
 
-        IBlockState blockState = world.getBlockState(pos);
+        IBlockState blockState = world.getBlockState(coord);
         if (!blockState.getBlock().hasTileEntity(blockState)) {
             pairingsToTest.add(coord);
             return null;
         }
 
-        TileEntity target = world.getTileEntity(pos);
+        TileEntity target = world.getTileEntity(coord);
         if (target != null && !isValidPair(coord, target)) {
             pairingsToTest.add(coord);
             return null;
@@ -209,6 +206,7 @@ public abstract class AbstractPair {
         return target;
     }
 
+    @SuppressWarnings("UnusedParameters")
     public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
         return false;
     }
@@ -271,8 +269,8 @@ public abstract class AbstractPair {
             list.appendTag(tag);
         }
         data.setTag("pairings", list);
-        if (this.name != null) {
-            data.setString("name", this.name);
+        if (name != null) {
+            data.setString("name", name);
         }
     }
 
@@ -289,18 +287,18 @@ public abstract class AbstractPair {
             pairings.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
         }
         this.name = data.getString("name");
-        if (this.name.isEmpty()) {
+        if (name.isEmpty()) {
             this.name = null;
         }
     }
 
     public void writePacketData(DataOutputStream data) throws IOException {
-        data.writeUTF(this.name != null ? this.name : "");
+        data.writeUTF(name != null ? name : "");
     }
 
     public void readPacketData(DataInputStream data) throws IOException {
         this.name = data.readUTF();
-        if (this.name.isEmpty()) {
+        if (name.isEmpty()) {
             this.name = null;
         }
     }

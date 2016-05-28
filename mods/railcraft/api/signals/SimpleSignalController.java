@@ -10,7 +10,6 @@ import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.io.IOException;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SimpleSignalController extends SignalController {
-    @Nonnull
+
     private SignalAspect aspect = SignalAspect.BLINK_RED;
     private boolean needsInit = true;
 
@@ -27,12 +26,11 @@ public class SimpleSignalController extends SignalController {
         super(locTag, tile, 1);
     }
 
-    @Nonnull
     public SignalAspect getAspect() {
         return aspect;
     }
 
-    public void setAspect(@Nonnull SignalAspect aspect) {
+    public void setAspect(SignalAspect aspect) {
         if (this.aspect != aspect) {
             this.aspect = aspect;
             updateReceiver();
@@ -40,7 +38,6 @@ public class SimpleSignalController extends SignalController {
     }
 
     @Override
-    @Nonnull
     public SignalAspect getAspectFor(WorldCoordinate receiver) {
         return aspect;
     }
