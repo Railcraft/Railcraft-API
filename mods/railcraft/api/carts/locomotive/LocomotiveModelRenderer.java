@@ -96,6 +96,6 @@ public abstract class LocomotiveModelRenderer {
      * @param secondaryColor the secondary color
      * @param emblemTexture  the emblem texture to render
      */
-    public abstract void renderLocomotive(IRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time);
+    public abstract void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time);
 
 }

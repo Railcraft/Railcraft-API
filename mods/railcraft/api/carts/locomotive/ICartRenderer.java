@@ -8,13 +8,16 @@
 
 package mods.railcraft.api.carts.locomotive;
 
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IRenderer {
+public interface ICartRenderer {
 
     void bindTex(ResourceLocation texture);
+
+    void bindTex(EntityMinecart texture);
 
 }
