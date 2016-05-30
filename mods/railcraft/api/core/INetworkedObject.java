@@ -15,12 +15,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public interface INetworkedObject {
+public interface INetworkedObject<I extends DataInputStream, O extends DataOutputStream> {
 
     @Nullable
     World theWorld();
 
-    void writePacketData(DataOutputStream data) throws IOException;
+    void readPacketData(I data) throws IOException;
 
-    void readPacketData(DataInputStream data) throws IOException;
+    void writePacketData(O data) throws IOException;
+
 }
