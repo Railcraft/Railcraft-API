@@ -15,6 +15,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -34,8 +35,10 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+//TODO: convert to capability
 public interface IElectricMinecart {
 
+    @Nullable
     ChargeHandler getChargeHandler();
 
     final class ChargeHandler {

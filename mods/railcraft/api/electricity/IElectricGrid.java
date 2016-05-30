@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -25,6 +26,7 @@ import java.util.*;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+//TODO: convert to capability
 public interface IElectricGrid {
 
     double MAX_CHARGE = 10000.0;
@@ -32,6 +34,7 @@ public interface IElectricGrid {
     int SEARCH_INTERVAL = 64;
     Random rand = new Random();
 
+    @Nullable
     ChargeHandler getChargeHandler();
 
     TileEntity getTile();
