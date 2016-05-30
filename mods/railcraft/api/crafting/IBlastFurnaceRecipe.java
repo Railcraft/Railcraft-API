@@ -10,12 +10,12 @@ package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IBlastFurnaceRecipe
-{
+public interface IBlastFurnaceRecipe {
 
     int getCookTime();
 
@@ -25,5 +25,5 @@ public interface IBlastFurnaceRecipe
 
     int getOutputStackSize();
 
-    boolean isRoomForOutput(ItemStack outputSlot);
+    boolean isRoomForOutput(@Nullable ItemStack outputSlot);
 }
