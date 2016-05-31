@@ -64,11 +64,12 @@ public abstract class AbstractPair {
         this.locTag = locTag;
     }
 
+    @Nullable
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@Nullable String name) {
         if (name == null || this.name == null || !this.name.equals(name)) {
             this.name = name;
             informPairsOfNameChange();
