@@ -85,6 +85,32 @@ public enum SignalAspect {
     }
 
     /**
+     * Returns true if the aspect should appear off. The return value varies for
+     * Blink states.
+     *
+     * @return true if appears off.
+     */
+    public boolean isOffState() {
+        return this == OFF || (isBlinkAspect() && !isBlinkOn());
+    }
+
+    /**
+     * Returns the SignalAspect that should be used during rendering.
+     * This will vary for blinking SignalAspects based on the global blink state.
+     *
+     * @return the SignalAspect that should be rendered
+     */
+    public SignalAspect getDisplayAspect() {
+        if (isOffState())
+            return OFF;
+        if (this == BLINK_YELLOW)
+            return YELLOW;
+        if (this == BLINK_RED)
+            return RED;
+        return this;
+    }
+
+    /**
      * Returns the level at which the Aspect emits light.
      */
     public int getLightValue() {
