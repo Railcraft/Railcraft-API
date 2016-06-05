@@ -70,9 +70,9 @@ public enum SignalAspect {
      *
      * @return brightness
      */
-    public int getTextureBrightness() {
-        if (this == OFF) return -1;
-        return SIGNAL_BRIGHTNESS;
+    public float getTextureBrightness() {
+        if (this == OFF) return 0F;
+        return SIGNAL_BRIGHTNESS / 16F;
     }
 
     /**
