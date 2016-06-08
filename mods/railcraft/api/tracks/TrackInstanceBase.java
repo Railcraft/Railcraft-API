@@ -104,11 +104,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         if (this instanceof ITrackReversible) {
             if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
                 IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-                if (crowbar.canWhack(player, heldItem, getPos())) {
+                if (crowbar.canWhack(player, hand, heldItem, getPos())) {
                     ITrackReversible track = (ITrackReversible) this;
                     track.setReversed(!track.isReversed());
                     markBlockNeedsUpdate();
-                    crowbar.onWhack(player, heldItem, getPos());
+                    crowbar.onWhack(player, hand, heldItem, getPos());
                     return true;
                 }
             }
@@ -322,11 +322,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void writePacketData(@Nonnull DataOutputStream data) throws IOException {
+    public void writePacketData(DataOutputStream data) throws IOException {
     }
 
     @Override
-    public void readPacketData(@Nonnull DataInputStream data) throws IOException {
+    public void readPacketData(DataInputStream data) throws IOException {
     }
 
     @Nullable
@@ -340,10 +340,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
      * Only call it if you have a reasonable assumption that the world can't be null,
      * otherwise the game will crash.
      */
-    @Nonnull
+
     public World theWorldAsserted() throws NullPointerException {
         World world = theWorld();
-        if (world == null) throw new NullPointerException("World was null");
+        assert world != null;
+//        if (world == null) throw new NullPointerException("World was null");
         return world;
     }
 

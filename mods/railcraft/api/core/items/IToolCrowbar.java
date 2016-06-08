@@ -10,9 +10,8 @@ package mods.railcraft.api.core.items;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-
-import javax.annotation.Nonnull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -28,10 +27,9 @@ public interface IToolCrowbar {
      *
      * @param player  the player
      * @param crowbar the crowbar
-     * @param pos     the block
-     * @return true if can whack a block
+     * @param pos     the block   @return true if can whack a block
      */
-    boolean canWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos);
+    boolean canWhack(EntityPlayer player, EnumHand hand, ItemStack crowbar, BlockPos pos);
 
     /**
      * Callback to do damage to the item.
@@ -40,17 +38,16 @@ public interface IToolCrowbar {
      * @param crowbar the crowbar
      * @param pos     the block
      */
-    void onWhack(EntityPlayer player, ItemStack crowbar, BlockPos pos);
+    void onWhack(EntityPlayer player, EnumHand hand, ItemStack crowbar, BlockPos pos);
 
     /**
      * Controls whether you can link a cart.
      *
      * @param player  the player
      * @param crowbar the crowbar
-     * @param cart    the cart
-     * @return true if can link a cart
+     * @param cart    the cart   @return true if can link a cart
      */
-    boolean canLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    boolean canLink(EntityPlayer player, EnumHand hand, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Callback to do damage.
@@ -59,17 +56,16 @@ public interface IToolCrowbar {
      * @param crowbar the crowbar
      * @param cart    the cart
      */
-    void onLink(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    void onLink(EntityPlayer player, EnumHand hand, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Controls whether you can boost a cart.
      *
      * @param player  the player
      * @param crowbar the crowbar
-     * @param cart    the cart
-     * @return true if can boost a cart
+     * @param cart    the cart   @return true if can boost a cart
      */
-    boolean canBoost(EntityPlayer player, ItemStack crowbar, EntityMinecart cart);
+    boolean canBoost(EntityPlayer player, EnumHand hand, ItemStack crowbar, EntityMinecart cart);
 
     /**
      * Callback to do damage, boosting a cart usually does more damage than
@@ -79,5 +75,5 @@ public interface IToolCrowbar {
      * @param crowbar the crowbar
      * @param cart    the cart
      */
-    void onBoost(@Nonnull EntityPlayer player, @Nonnull ItemStack crowbar, @Nonnull EntityMinecart cart);
+    void onBoost(EntityPlayer player, EnumHand hand, ItemStack crowbar, EntityMinecart cart);
 }

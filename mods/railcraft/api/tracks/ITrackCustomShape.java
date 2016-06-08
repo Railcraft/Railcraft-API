@@ -13,6 +13,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
+import javax.annotation.Nullable;
+
 /**
  * Used by rails that modify the bounding boxes.
  *
@@ -24,9 +26,11 @@ import net.minecraft.util.math.Vec3d;
  */
 public interface ITrackCustomShape extends ITrackInstance {
 
+    @Nullable
     AxisAlignedBB getCollisionBoundingBox(IBlockState state);
 
     AxisAlignedBB getSelectedBoundingBox();
 
+    @Nullable
     RayTraceResult collisionRayTrace(Vec3d vec3d, Vec3d vec3d1);
 }

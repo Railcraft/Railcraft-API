@@ -26,6 +26,8 @@ import net.minecraft.world.Explosion;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.List;
 
 /**
@@ -48,7 +50,7 @@ import java.util.List;
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public interface ITrackInstance extends INetworkedObject {
+public interface ITrackInstance extends INetworkedObject<DataInputStream, DataOutputStream> {
 
     TileEntity getTile();
 
