@@ -51,5 +51,5 @@ public interface ITrackItem {
      * <p/>
      * If the track has no tile entity, return true on null.
      */
-    boolean isPlacedTileEntity(ItemStack stack, TileEntity tile);
+    boolean isPlacedTileEntity(ItemStack stack, @Nullable TileEntity tile);
 }
