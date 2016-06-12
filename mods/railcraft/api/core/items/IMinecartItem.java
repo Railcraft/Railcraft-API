@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 /**
  * This interface should be implemented by any cart item,
  * but it is generally optional.
@@ -41,5 +43,6 @@ public interface IMinecartItem {
      * @param world The World
      * @return the cart placed or null if failed
      */
+    @Nullable
     EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, BlockPos pos);
 }
