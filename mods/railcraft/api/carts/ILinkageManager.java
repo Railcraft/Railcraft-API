@@ -10,6 +10,7 @@ package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -58,6 +59,7 @@ public interface ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
+    @Nullable
     EntityMinecart getLinkedCartA(EntityMinecart cart);
 
     /**
@@ -67,6 +69,7 @@ public interface ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
+    @Nullable
     EntityMinecart getLinkedCartB(EntityMinecart cart);
 
     /**
