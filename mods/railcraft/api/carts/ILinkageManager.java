@@ -123,6 +123,7 @@ public interface ILinkageManager {
      * @param id Persistent Entity UUID
      * @return A Minecart
      */
+    @Nullable
     EntityMinecart getCartFromUUID(UUID id);
 
 }

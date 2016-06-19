@@ -11,16 +11,18 @@ package mods.railcraft.api.carts;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IRoutableCart {
 
+    @Nullable
     String getDestination();
 
     boolean setDestination(ItemStack ticket);
-    
+
     GameProfile getOwner();
 
 }
