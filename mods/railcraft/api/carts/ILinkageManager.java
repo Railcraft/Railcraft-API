@@ -12,6 +12,7 @@ import net.minecraft.entity.item.EntityMinecart;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * The LinkageManager contains all the functions needed to link and interact
@@ -108,7 +109,12 @@ public interface ILinkageManager {
     @SuppressWarnings("unused")
     int countCartsInTrain(EntityMinecart cart);
 
-    Iterable<EntityMinecart> getCartsInTrain(EntityMinecart cart);
+    /**
+     * Returns an iterator which will iterate over every cart in the provided cart's train.
+     *
+     * There is no guarantee of order.
+     */
+    Iterable<EntityMinecart> trainIterator(EntityMinecart cart);
 
     /**
      * Given a persistent Entity UUID, it will return a matching minecart,
