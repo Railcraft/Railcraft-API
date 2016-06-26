@@ -18,10 +18,9 @@ import javax.annotation.Nullable;
  */
 public interface IRoutableCart {
 
-    @Nullable
     String getDestination();
 
-    boolean setDestination(ItemStack ticket);
+    boolean setDestination(@Nullable ItemStack ticket);
 
     GameProfile getOwner();
 
