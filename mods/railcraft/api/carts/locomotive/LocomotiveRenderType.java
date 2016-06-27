@@ -8,7 +8,7 @@
 
 package mods.railcraft.api.carts.locomotive;
 
-import mods.railcraft.api.core.RailcraftItemRegistry;
+import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -65,7 +65,7 @@ public enum LocomotiveRenderType {
     @Nullable
     public ItemStack getItemWithRenderer(String rendererTag) {
         // TODO: Test this!
-        return getItemWithRenderer(rendererTag, RailcraftItemRegistry.getStack(cartTag, 1).orNull());
+        return getItemWithRenderer(rendererTag, RailcraftItemStackRegistry.getStack(cartTag, 1).orNull());
     }
 
     /**

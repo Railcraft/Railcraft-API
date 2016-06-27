@@ -23,12 +23,12 @@ import java.util.*;
  * <p/>
  * Created by CovertJaguar on 3/3/2016.
  */
-public class RailcraftItemRegistry {
+public class RailcraftItemStackRegistry {
     private static final SortedSet<String> tags = new TreeSet<String>();
     private static final SortedSet<String> tagsImmutable = Collections.unmodifiableSortedSet(tags);
     private static final Map<String, ItemStack> stacks = new HashMap<String, ItemStack>();
 
-    private RailcraftItemRegistry() {
+    private RailcraftItemStackRegistry() {
     }
 
     /**
