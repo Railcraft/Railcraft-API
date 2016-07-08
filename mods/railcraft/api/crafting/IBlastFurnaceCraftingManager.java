@@ -21,6 +21,8 @@ public interface IBlastFurnaceCraftingManager {
     /**
      * Adds a new Blast Furnace Recipe.
      *
+     * If either the input or output are null, the recipe will not registered.
+     *
      * @param input       the input, if null the function will silently abort
      * @param matchDamage if true, it will compare item damage, if false, just
      *                    the item ID
@@ -28,7 +30,7 @@ public interface IBlastFurnaceCraftingManager {
      * @param cookTime    the time it takes to cook the recipe
      * @param output      the output
      */
-    void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime, ItemStack output);
+    void addRecipe(@Nullable ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime,@Nullable  ItemStack output);
 
     List<ItemStack> getFuels();
 
