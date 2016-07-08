@@ -21,7 +21,7 @@ public interface IBlastFurnaceCraftingManager {
     /**
      * Adds a new Blast Furnace Recipe.
      *
-     * If either the input or output are null, the recipe will not registered.
+     * If either the input or output are null, the recipe will not be registered.
      *
      * @param input       the input, if null the function will silently abort
      * @param matchDamage if true, it will compare item damage, if false, just
