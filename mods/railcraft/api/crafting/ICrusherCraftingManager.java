@@ -150,6 +150,8 @@ public interface ICrusherCraftingManager {
          *
          * It accepts a Predicate object to be used for determining if an output entry should generate during result processing.
          *
+         * If the output is null, the call will be ignored.
+         *
          * Note to ModTweaker Devs:
          * I'd suggest adding production rules similar to the following:
          * "random:XX" - Simple random chance to generate
@@ -161,10 +163,12 @@ public interface ICrusherCraftingManager {
          * @see #createGenRule(float, int, String...)
          * @see Predicate
          */
-        void addOutput(ItemStack output, IGenRule genRule);
+        void addOutput(@Nullable ItemStack output, IGenRule genRule);
 
         /**
          * Adds a new entry to the output list.
+         *
+         * If the output is null, the call will be ignored.
          *
          * This is equivalent to:
          * <code>
@@ -174,10 +178,12 @@ public interface ICrusherCraftingManager {
          * @param output       the stack to output
          * @param randomChance the change to output this stack
          */
-        void addOutput(ItemStack output, float randomChance);
+        void addOutput(@Nullable ItemStack output, float randomChance);
 
         /**
          * Adds a new entry to the output list.
+         *
+         * If the output is null, the call will be ignored.
          *
          * This is equivalent to:
          * <code>
@@ -188,10 +194,12 @@ public interface ICrusherCraftingManager {
          * @param maxItems     if the number of outputs already generated has exceeded this number, don't generate this entry, -1 will disable this check
          * @param groupNames   only one entry from the set of entries sharing identical group names will generate
          */
-        void addOutput(ItemStack output, float randomChance, int maxItems, String... groupNames);
+        void addOutput(@Nullable ItemStack output, float randomChance, int maxItems, String... groupNames);
 
         /**
          * Adds a new entry to the output list.
+         *
+         * If the output is null, the call will be ignored.
          *
          * This is equivalent to:
          * <code>
@@ -200,7 +208,7 @@ public interface ICrusherCraftingManager {
          *
          * @param output the stack to output
          */
-        void addOutput(ItemStack output);
+        void addOutput(@Nullable ItemStack output);
 
         /**
          * Returns a list containing each output entry.
