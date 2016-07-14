@@ -6,12 +6,14 @@
  ******************************************************************************/
 package mods.railcraft.api.tracks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -45,6 +47,16 @@ public class TrackInstanceDefault extends TrackInstanceBase {
 
     @Override
     public void update() {
+        swapTrack();
+    }
+
+    @Override
+    public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
+        super.onNeighborBlockChange(state, neighborBlock);
+        swapTrack();
+    }
+
+    private void swapTrack() {
         World world = theWorld();
         if (swapOut && world != null && !world.isRemote) {
             IBlockState oldState = world.getBlockState(getPos());

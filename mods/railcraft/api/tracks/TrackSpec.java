@@ -12,7 +12,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -120,11 +119,10 @@ public final class TrackSpec {
     }
 
     @Nonnull
-    public ITrackInstance createInstanceFromSpec(@Nonnull TileEntity tile) {
+    public ITrackInstance createInstanceFromSpec() {
         try {
             ITrackInstance trackInstance = instanceClass.newInstance();
             if (trackInstance == null) throw new NullPointerException("No track constructor found");
-            trackInstance.setTile(tile);
             return trackInstance;
         } catch (Exception ex) {
             throw new RuntimeException("Improper Track Instance Constructor", ex);
