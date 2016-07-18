@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
@@ -78,7 +79,7 @@ public class TrackRegistry {
         TrackSpec spec = trackSpecsFromID.get(id);
         if (spec == null) {
             if (!invalidSpecIDs.contains(id)) {
-                FMLLog.log("Railcraft", Level.WARN, "Unknown Track Spec ID(%d), reverting to normal track", trackId);
+                FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Unknown Track Spec ID(%d), reverting to normal track", trackId);
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 for (int i = 1; i < stackTrace.length && i < 9; i++) {
                     FMLLog.log(Level.DEBUG, stackTrace[i].toString());
@@ -99,7 +100,7 @@ public class TrackRegistry {
         TrackSpec spec = trackSpecsFromTag.get(trackTag);
         if (spec == null) {
             if (!invalidSpecTags.contains(trackTag)) {
-                FMLLog.log("Railcraft", Level.WARN, "Unknown Track Spec Tag(%s), reverting to normal track", trackTag);
+                FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Unknown Track Spec Tag(%s), reverting to normal track", trackTag);
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 for (int i = 1; i < stackTrace.length && i < 9; i++) {
                     FMLLog.log(Level.DEBUG, stackTrace[i].toString());

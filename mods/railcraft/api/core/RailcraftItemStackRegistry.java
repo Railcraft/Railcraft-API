@@ -38,8 +38,8 @@ public class RailcraftItemStackRegistry {
     public static void register(String tag, @Nonnull ItemStack stack) {
         if (stack == null)
             throw new RuntimeException("Tried to register a null stack with the tag: " + tag);
-        if (!"Railcraft".equals(Loader.instance().activeModContainer().getModId()))
-            throw new RuntimeException("Only Railcraft can register Railcraft ItemStack, if you see this message there is probably a bug.");
+        if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId()))
+            throw new RuntimeException("Only Railcraft can register a Railcraft ItemStack, if you see this message there is probably a bug.");
         if (stacks.containsKey(tag))
             throw new RuntimeException("Tried to register the tag " + tag + " multiple times!");
         stacks.put(tag, stack);

@@ -8,6 +8,7 @@
 package mods.railcraft.api.carts;
 
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -22,7 +23,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.FakePlayerFactory;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -31,7 +31,6 @@ import java.util.UUID;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class CartTools {
-    private static final GameProfile railcraftProfile = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
     public static ILinkageManager linkageManager;
     public static ITrainTransferHelper transferHelper;
 
@@ -79,7 +78,7 @@ public abstract class CartTools {
      */
     public static GameProfile getCartOwner(EntityMinecart cart) {
         NBTTagCompound data = cart.getEntityData();
-        String ownerName = "[Unknown]";
+        String ownerName = "[unknown]";
         if (data.hasKey("owner"))
             ownerName = data.getString("owner");
 
@@ -122,7 +121,7 @@ public abstract class CartTools {
             return mi.placeCart(owner, cart, world, pos);
         } else if (cart.getItem() instanceof ItemMinecart)
             try {
-                EnumActionResult placed = cart.getItem().onItemUse(cart, FakePlayerFactory.get(world, railcraftProfile), world, pos, EnumHand.MAIN_HAND, EnumFacing.DOWN, 0, 0, 0);
+                EnumActionResult placed = cart.getItem().onItemUse(cart, RailcraftFakePlayer.get(world, pos), world, pos, EnumHand.MAIN_HAND, EnumFacing.DOWN, 0, 0, 0);
                 if (placed == EnumActionResult.SUCCESS) {
                     List<EntityMinecart> carts = getMinecartsAt(world, pos, 0.3f);
                     if (carts.size() > 0) {

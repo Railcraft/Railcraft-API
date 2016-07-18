@@ -8,13 +8,15 @@
 
 package mods.railcraft.api.fuel;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import org.apache.logging.log4j.Level;
+
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraftforge.fluids.Fluid;
-import org.apache.logging.log4j.Level;
 
 /**
  *
@@ -35,11 +37,11 @@ public class FuelManager {
         ModContainer mod = Loader.instance().activeModContainer();
         String modName = mod != null ? mod.getName() : "An Unknown Mod";
         if (fluid == null) {
-            FMLLog.log("Railcraft", Level.WARN, String.format("An error occurred while %s was registering a Boiler fuel source", modName));
+            FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, String.format("An error occurred while %s was registering a Boiler fuel source", modName));
             return;
         }
         boilerFuel.put(fluid, heatValuePerBucket);
-        FMLLog.log("Railcraft", Level.DEBUG, String.format("%s registered \"%s\" as a valid Boiler fuel source with %d heat.", modName, fluid.getName(), heatValuePerBucket));
+        FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.DEBUG, String.format("%s registered \"%s\" as a valid Boiler fuel source with %d heat.", modName, fluid.getName(), heatValuePerBucket));
     }
 
     public static int getBoilerFuelValue(Fluid fluid) {

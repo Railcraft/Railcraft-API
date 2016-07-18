@@ -6,6 +6,7 @@
  ******************************************************************************/
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +33,7 @@ public class TrackInstanceDefault extends TrackInstanceBase {
     @Nonnull
     @Override
     public TrackSpec getTrackSpec() {
-        return TrackRegistry.getTrackSpec("Railcraft:default");
+        return TrackRegistry.getTrackSpec(RailcraftConstantsAPI.MOD_ID + ":default");
     }
 
     @Override

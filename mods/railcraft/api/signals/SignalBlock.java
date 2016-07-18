@@ -57,7 +57,7 @@ public abstract class SignalBlock extends AbstractPair {
     public abstract SignalAspect getSignalAspect();
 
     public void log(Level level, String msg, Object... args) {
-        LogManager.getLogger("Railcraft").log(level, new MessageFormatMessage(msg, args));
+        LogManager.getLogger("railcraft").log(level, new MessageFormatMessage(msg, args));
     }
 
     private void printDebug(String msg, Object... args) {
