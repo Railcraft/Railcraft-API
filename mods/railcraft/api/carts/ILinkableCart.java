@@ -1,8 +1,8 @@
-/******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016                                      *
- *                                                                            *
- * This work (the API) is licensed under the "MIT" License,                   *
- * see LICENSE.md for details.                                                *
+/*******************************************************************************
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
  ******************************************************************************/
 
 package mods.railcraft.api.carts;
@@ -14,40 +14,52 @@ import net.minecraft.entity.item.EntityMinecart;
  * to change the default linkage behavior.
  * It is NOT required to be able to link a cart,
  * it merely gives you more control over the process.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ILinkableCart
-{
+public interface ILinkableCart {
 
     /**
      * To disable linking altogether, return false here.
+     *
      * @return True if this cart is linkable.
      */
-    boolean isLinkable();
+    default boolean isLinkable() {
+        return true;
+    }
 
     /**
      * Check called when attempting to link carts.
+     *
      * @param cart The cart that we are attempting to link with.
      * @return True if we can link with this cart.
      */
-    boolean canLinkWithCart(EntityMinecart cart);
+    default boolean canLinkWithCart(EntityMinecart cart) {
+        return true;
+    }
 
     /**
      * Returns true if this cart has two links
      * or false if it can only link with one cart.
+     *
      * @return True if two links
      */
-    boolean hasTwoLinks();
+    default boolean hasTwoLinks() {
+        return true;
+    }
 
     /**
      * Gets the distance at which this cart can be linked.
      * This is called on both carts and added together to determine
      * how close two carts need to be for a successful link.
      * Default = LinkageManager.LINKAGE_DISTANCE
+     *
      * @param cart The cart that you are attempting to link with.
      * @return The linkage distance
      */
-    float getLinkageDistance(EntityMinecart cart);
+    default float getLinkageDistance(EntityMinecart cart) {
+        return ILinkageManager.LINKAGE_DISTANCE;
+    }
 
     /**
      * Gets the optimal distance between linked carts.
@@ -56,29 +68,39 @@ public interface ILinkableCart
      * The LinkageManager will attempt to maintain this distance
      * between linked carts at all times.
      * Default = LinkageManager.OPTIMAL_DISTANCE
+     *
      * @param cart The cart that you are linked with.
      * @return The optimal rest distance
      */
-    float getOptimalDistance(EntityMinecart cart);
+    default float getOptimalDistance(EntityMinecart cart) {
+        return ILinkageManager.OPTIMAL_DISTANCE;
+    }
 
     /**
      * Return false if linked carts have no effect on the velocity of this cart.
      * Use carefully, if you link two carts that can't be adjusted,
      * it will behave as if they are not linked.
+     *
      * @param cart The cart doing the adjusting.
      * @return Whether the cart can have its velocity adjusted.
      */
-    boolean canBeAdjusted(EntityMinecart cart);
+    default boolean canBeAdjusted(EntityMinecart cart) {
+        return true;
+    }
 
     /**
      * Called upon successful link creation.
+     *
      * @param cart The cart we linked with.
      */
-    void onLinkCreated(EntityMinecart cart);
+    default void onLinkCreated(EntityMinecart cart) {
+    }
 
     /**
      * Called when a link is broken (usually).
+     *
      * @param cart The cart we were linked with.
      */
-    void onLinkBroken(EntityMinecart cart);
+    default void onLinkBroken(EntityMinecart cart) {
+    }
 }

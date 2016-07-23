@@ -20,8 +20,10 @@ public interface INetworkedObject<I extends DataInputStream, O extends DataOutpu
     @Nullable
     World theWorld();
 
-    void readPacketData(I data) throws IOException;
+    default void readPacketData(I data) throws IOException {
+    }
 
-    void writePacketData(O data) throws IOException;
+    default void writePacketData(O data) throws IOException {
+    }
 
 }
