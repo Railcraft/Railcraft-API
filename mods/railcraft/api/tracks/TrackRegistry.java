@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -41,7 +40,7 @@ public class TrackRegistry {
     private static final Map<String, TrackSpec> trackSpecsFromTag = new HashMap<String, TrackSpec>();
     private static final Set<Short> invalidSpecIDs = new HashSet<Short>();
     private static final Set<String> invalidSpecTags = new HashSet<String>();
-    private static final TrackSpec defaultSpec = new TrackSpec((short) -1, "railcraft:default", null, TrackInstanceDefault.class);
+    private static final TrackSpec defaultSpec = new TrackSpec((short) -1, "railcraft:default", null, TrackInstanceDefault.class, null);
 
     public static class TrackSpecConflictException extends RuntimeException {
 

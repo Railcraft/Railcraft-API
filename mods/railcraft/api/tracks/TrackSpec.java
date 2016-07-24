@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -17,6 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 /**
  * Each type of Track has a single instance of TrackSpec that corresponds with
@@ -42,7 +42,7 @@ public final class TrackSpec {
     @Nonnull
     private final String tag;
     private final short trackId;
-    private final List<String> tooltip;
+    private final Function<ItemStack, List<String>> tooltipProvider;
     private final ModelResourceLocation iconProvider;
     @Nonnull
     private final Class<? extends ITrackInstance> instanceClass;
@@ -50,36 +50,21 @@ public final class TrackSpec {
     /**
      * Defines a new track spec.
      *
-     * @param trackId       A unique identifier for the track type. 0-512 are reserved
-     *                      for Railcraft. Capped at Short.MAX_VALUE
-     * @param tag           A unique internal string identifier (ex.
-     *                      "railcraft:track.speed.transition")
-     * @param iconProvider  The provider for Track item icons
-     * @param instanceClass The ITrackInstance class that corresponds to this
-     *                      TrackSpec
+     * @param trackId         A unique identifier for the track type. 0-512 are reserved
+     *                        for Railcraft. Capped at Short.MAX_VALUE
+     * @param tag             A unique internal string identifier (ex.
+     *                        "railcraft:track.speed.transition")
+     * @param iconProvider    The provider for Track item icons
+     * @param instanceClass   The ITrackInstance class that corresponds to this
+     *                        TrackSpec
+     * @param tooltipProvider The tool tip for the Track Item
      */
-    public TrackSpec(short trackId, @Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass) {
-        this(trackId, tag, iconProvider, instanceClass, null);
-    }
-
-    /**
-     * Defines a new track spec.
-     *
-     * @param trackId       A unique identifier for the track type. 0-512 are reserved
-     *                      for Railcraft. Capped at Short.MAX_VALUE
-     * @param tag           A unique internal string identifier (ex.
-     *                      "railcraft:track.speed.transition")
-     * @param iconProvider  The provider for Track item icons
-     * @param instanceClass The ITrackInstance class that corresponds to this
-     *                      TrackSpec
-     * @param tooltip       The tool tip for the Track Item
-     */
-    public TrackSpec(short trackId, @Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass, @Nullable List<String> tooltip) {
+    public TrackSpec(short trackId, @Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass, @Nullable Function<ItemStack, List<String>> tooltipProvider) {
         this.trackId = trackId;
         this.tag = tag.toLowerCase(Locale.ENGLISH);
         this.iconProvider = iconProvider;
         this.instanceClass = instanceClass;
-        this.tooltip = tooltip;
+        this.tooltipProvider = tooltipProvider;
     }
 
     @Nonnull
@@ -134,8 +119,8 @@ public final class TrackSpec {
     }
 
     @Nullable
-    public List<String> getItemToolTip() {
-        return tooltip;
+    public Function<ItemStack, List<String>> getToolTipProvider() {
+        return tooltipProvider;
     }
 
     @Override

@@ -1,14 +1,13 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.electricity;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import net.minecraft.entity.item.EntityMinecart;
@@ -179,7 +178,7 @@ public interface IElectricMinecart {
             if (drewFromTrack > 0)
                 drewFromTrack--;
             else if (type == Type.USER && charge < (capacity / 2.0) && clock % DRAW_INTERVAL == 0) {
-                ILinkageManager lm = CartTools.getLinkageManager(minecart.worldObj);
+                ILinkageManager lm = CartToolsAPI.getLinkageManager(minecart.worldObj);
                 for (EntityMinecart cart : lm.trainIterator(minecart)) {
                     if (cart instanceof IElectricMinecart) {
                         ChargeHandler ch = ((IElectricMinecart) cart).getChargeHandler();

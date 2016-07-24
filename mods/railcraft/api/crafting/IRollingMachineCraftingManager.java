@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.crafting;
 
@@ -13,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -34,7 +34,7 @@ public interface IRollingMachineCraftingManager {
      * @param output     the result
      * @param components the crafting matrix
      */
-    void addRecipe(ItemStack output, Object... components);
+    void addRecipe(@Nullable ItemStack output, Object... components);
 
     /**
      * Adds a vanilla style shapeless recipe.
@@ -42,7 +42,7 @@ public interface IRollingMachineCraftingManager {
      * @param output     the result
      * @param components the crafting matrix
      */
-    void addShapelessRecipe(ItemStack output, Object... components);
+    void addShapelessRecipe(@Nullable ItemStack output, Object... components);
 
     /**
      * Given a specific combination of ItemStacks, this function will output the resulting crafting result.

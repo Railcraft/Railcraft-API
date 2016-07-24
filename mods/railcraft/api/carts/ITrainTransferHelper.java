@@ -1,11 +1,9 @@
-/*
- * Copyright (c) CovertJaguar, 2015 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.carts;
 
 import mods.railcraft.api.core.IStackFilter;
@@ -23,7 +21,7 @@ import javax.annotation.Nullable;
  * <p/>
  * Created by CovertJaguar on 5/11/2015.
  *
- * @see mods.railcraft.api.carts.CartTools
+ * @see CartToolsAPI
  * @see mods.railcraft.api.carts.IItemCart
  * @see mods.railcraft.api.carts.IFluidCart
  */

@@ -1,13 +1,13 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.carts.CartTools;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.tracks.TrackScanner;
 import mods.railcraft.api.tracks.TrackToolsAPI;
@@ -266,7 +266,7 @@ public abstract class SignalBlock extends AbstractPair {
         int xOffset = otherTrack.getX() > myTrack.getX() ? -3 : 3;
         int zOffset = otherTrack.getZ() > myTrack.getZ() ? -3 : 3;
 
-        List<EntityMinecart> carts = CartTools.getMinecartsIn(tile.getWorld(), new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2));
+        List<EntityMinecart> carts = CartToolsAPI.getMinecartsIn(tile.getWorld(), new BlockPos(x1, y1, z1), new BlockPos(x2, y2, z2));
 //        System.out.printf("%d, %d, %d, %d, %d, %d\n", i1, j1, k1, i2, j2, k2);
 //        System.out.println("carts = " + carts.size());
         SignalAspect newAspect = SignalAspect.GREEN;

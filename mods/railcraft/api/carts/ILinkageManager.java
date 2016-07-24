@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.carts;
 
@@ -12,7 +11,6 @@ import net.minecraft.entity.item.EntityMinecart;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 /**
  * The LinkageManager contains all the functions needed to link and interact
@@ -24,7 +22,7 @@ import java.util.stream.Stream;
  * will have only Link A, for example the Tunnel Bore.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see CartTools, ILinkableCart
+ * @see CartToolsAPI , ILinkableCart
  */
 public interface ILinkageManager {
 
