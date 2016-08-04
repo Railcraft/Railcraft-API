@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -381,7 +380,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
      * @return The max speed of the current rail.
      */
     @Override
-    public float getRailMaxSpeed(EntityMinecart cart) {
+    public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         return 0.4f;
     }
 }
