@@ -6,12 +6,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.carts;
 
-import mods.railcraft.api.core.IStackFilter;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * This interface is the API facing wrapper for an internal helper class that makes it
@@ -46,18 +46,18 @@ public interface ITrainTransferHelper {
      * Will request an item from the Train.
      *
      * @param requester the source EntityMinecart
-     * @param filter    a IStackFilter that defines the requested item
+     * @param filter    aPredicate<ItemStack> that defines the requested item
      * @return the ItemStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IItemCart
      */
     @Nullable
-    ItemStack pullStack(EntityMinecart requester, IStackFilter filter);
+    ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter);
 
     /**
      * Offers an item stack to the Train or drops it if no one wants it.
      *
-     * @param requester  the source EntityMinecart
-     * @param stack the ItemStack to be offered
+     * @param requester the source EntityMinecart
+     * @param stack     the ItemStack to be offered
      */
     void offerOrDropItem(EntityMinecart requester, ItemStack stack);
 
