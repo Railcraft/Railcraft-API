@@ -1,13 +1,12 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.core;
 
-import com.google.common.base.Optional;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 
@@ -46,17 +45,17 @@ public class RailcraftItemStackRegistry {
         tags.add(tag);
     }
 
-    public static com.google.common.base.Optional<ItemStack> getStack(@Nonnull String tag) {
+    public static Optional<ItemStack> getStack(@Nonnull String tag) {
         return getStack(tag, 1);
     }
 
-    public static com.google.common.base.Optional<ItemStack> getStack(@Nonnull String tag, int qty) {
+    public static Optional<ItemStack> getStack(@Nonnull String tag, int qty) {
         ItemStack stack = stacks.get(tag);
         if (stack != null) {
             stack = stack.copy();
             stack.stackSize = Math.min(qty, stack.getMaxStackSize());
         }
-        return Optional.fromNullable(stack);
+        return Optional.ofNullable(stack);
     }
 
     /**
