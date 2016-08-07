@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -18,9 +17,9 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -114,10 +113,10 @@ public abstract class TrackToolsAPI {
 
         TileEntity tile = cart.getEntityWorld().getTileEntity(pos);
         if (tile instanceof ITrackTile) {
-            ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
-            return track instanceof ITrackLockdown && ((ITrackLockdown) track).isCartLockedDown(cart);
-        } else if (tile instanceof ITrackLockdown)
-            return ((ITrackLockdown) tile).isCartLockedDown(cart);
+            ITrackKit track = ((ITrackTile) tile).getTrackKit();
+            return track instanceof ITrackKitLockdown && ((ITrackKitLockdown) track).isCartLockedDown(cart);
+        } else if (tile instanceof ITrackKitLockdown)
+            return ((ITrackKitLockdown) tile).isCartLockedDown(cart);
         return false;
     }
 
@@ -197,7 +196,7 @@ public abstract class TrackToolsAPI {
         if (type.isInstance(tile))
             return (T) tile;
         if (tile instanceof ITrackTile) {
-            ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
+            ITrackKit track = ((ITrackTile) tile).getTrackKit();
             if (type.isInstance(track))
                 return (T) track;
         }

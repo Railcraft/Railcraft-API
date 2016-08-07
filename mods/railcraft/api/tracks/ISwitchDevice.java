@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -21,9 +20,9 @@ public interface ISwitchDevice {
      * @param cart        The cart that the switch may use to determine switch status.
      *                    Implementations should expect null values.
      * @return true if the switch would like the track switched
-     * @see mods.railcraft.api.tracks.ITrackSwitch
+     * @see ITrackKitSwitch
      */
-    boolean shouldSwitch(ITrackSwitch switchTrack, EntityMinecart cart);
+    boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart);
 
     /**
      * Announces track state changes to the device.

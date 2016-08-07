@@ -8,15 +8,11 @@
 package mods.railcraft.api.tracks;
 
 /**
- * Don't use this, its an interface that allows other API code
- * access to internal functions of the code.
+ * Use for Gate Tracks
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackTile
-{
+public interface ITrackKitMovementBlocker {
 
-    ITrackKit getTrackKit();
-    
-    void sendUpdateToClient();
+    boolean blocksMovement();
 }

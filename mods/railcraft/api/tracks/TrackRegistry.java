@@ -30,17 +30,15 @@ import java.util.*;
  * TrackInstance controls how an individual Track block interact with the world.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see TrackSpec
- * @see ITrackInstance
- * @see TrackInstanceBase
+ * @see TrackKitSpec
+ * @see ITrackKit
+ * @see TrackKit
  */
 public class TrackRegistry {
 
-    private static final Map<Short, TrackSpec> trackSpecsFromID = new HashMap<Short, TrackSpec>();
-    private static final Map<String, TrackSpec> trackSpecsFromTag = new HashMap<String, TrackSpec>();
-    private static final Set<Short> invalidSpecIDs = new HashSet<Short>();
+    private static final Map<String, TrackKitSpec> trackSpecsFromTag = new HashMap<String, TrackKitSpec>();
     private static final Set<String> invalidSpecTags = new HashSet<String>();
-    private static final TrackSpec defaultSpec = new TrackSpec((short) -1, "railcraft:default", null, TrackInstanceDefault.class, null);
+    private static final TrackKitSpec defaultSpec = new TrackKitSpec("railcraft:default", null, TrackKitDefault.class, null);
 
     public static class TrackSpecConflictException extends RuntimeException {
 
@@ -61,42 +59,18 @@ public class TrackRegistry {
      * Registers a new TrackSpec. This should be called before the Post-Init
      * Phase, during the Init or Pre-Init Phase.
      */
-    public static void registerTrackSpec(TrackSpec trackSpec) {
-        if (trackSpecsFromID.put(trackSpec.getTrackId(), trackSpec) != null)
-            throw new TrackSpecConflictException("TrackId conflict detected, please adjust your config (id:" + trackSpec.getTrackId() + ") or contact the author of the " + trackSpec.getTrackTag());
-        if (trackSpecsFromTag.put(trackSpec.getTrackTag(), trackSpec) != null)
-            throw new TrackSpecConflictException("TrackTag conflict detected, please contact the author of the " + trackSpec.getTrackTag());
+    public static void registerTrackSpec(TrackKitSpec trackKitSpec) {
+        if (trackSpecsFromTag.put(trackKitSpec.getTrackTag(), trackKitSpec) != null)
+            throw new TrackSpecConflictException("TrackTag conflict detected, please contact the author of the " + trackKitSpec.getTrackTag());
     }
 
     /**
      * Returns a cached copy of a TrackSpec object.
      */
     @Nonnull
-    @Deprecated
-    public static TrackSpec getTrackSpec(int trackId) {
-        Short id = (short) trackId;
-        TrackSpec spec = trackSpecsFromID.get(id);
-        if (spec == null) {
-            if (!invalidSpecIDs.contains(id)) {
-                FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Unknown Track Spec ID(%d), reverting to normal track", trackId);
-                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-                for (int i = 1; i < stackTrace.length && i < 9; i++) {
-                    FMLLog.log(Level.DEBUG, stackTrace[i].toString());
-                }
-                invalidSpecIDs.add(id);
-            }
-            spec = getDefaultTrackSpec();
-        }
-        return spec;
-    }
-
-    /**
-     * Returns a cached copy of a TrackSpec object.
-     */
-    @Nonnull
-    public static TrackSpec getTrackSpec(@Nonnull String trackTag) {
+    public static TrackKitSpec getTrackSpec(@Nonnull String trackTag) {
         trackTag = trackTag.toLowerCase(Locale.ENGLISH);
-        TrackSpec spec = trackSpecsFromTag.get(trackTag);
+        TrackKitSpec spec = trackSpecsFromTag.get(trackTag);
         if (spec == null) {
             if (!invalidSpecTags.contains(trackTag)) {
                 FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Unknown Track Spec Tag(%s), reverting to normal track", trackTag);
@@ -112,7 +86,7 @@ public class TrackRegistry {
     }
 
     @Nonnull
-    public static TrackSpec getDefaultTrackSpec() {
+    public static TrackKitSpec getDefaultTrackSpec() {
         return defaultSpec;
     }
 
@@ -121,16 +95,7 @@ public class TrackRegistry {
      *
      * @return list of TrackSpecs
      */
-    public static Map<Short, TrackSpec> getTrackSpecIDs() {
-        return trackSpecsFromID;
-    }
-
-    /**
-     * Returns all Registered TrackSpecs.
-     *
-     * @return list of TrackSpecs
-     */
-    public static Map<String, TrackSpec> getTrackSpecTags() {
+    public static Map<String, TrackKitSpec> getTrackSpecTags() {
         return trackSpecsFromTag;
     }
 

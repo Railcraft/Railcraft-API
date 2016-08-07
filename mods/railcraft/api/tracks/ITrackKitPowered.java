@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -19,7 +18,7 @@ import net.minecraft.block.properties.PropertyBool;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackPowered extends ITrackInstance {
+public interface ITrackKitPowered extends ITrackKit {
 
     PropertyBool POWERED = PropertyBool.create("powered");
 
@@ -45,5 +44,5 @@ public interface ITrackPowered extends ITrackInstance {
      * This function is to allow finer control within the spec.
      * Example, for tracks with multiple modes like the Coupler Track.
      */
-    boolean canPropagatePowerTo(ITrackInstance track);
+    boolean canPropagatePowerTo(ITrackKit track);
 }

@@ -11,41 +11,33 @@ import mods.railcraft.api.core.items.IToolCrowbar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 
 /**
- * All ITrackInstances should extend this class. It contains a number of default
+ * All ITrackKits should extend this class. It contains a number of default
  * functions and standard behavior for Tracks that should greatly simplify
- * implementing new Tracks when using this API.
+ * implementing new Track Kits when using this API.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see ITrackInstance
+ * @see ITrackKit
  * @see TrackRegistry
- * @see TrackSpec
+ * @see TrackKitSpec
  */
-public abstract class TrackInstanceBase implements ITrackInstance {
+public abstract class TrackKit implements ITrackKit {
 
     @Nonnull
     private TileEntity tileEntity = new TileEntity() {
@@ -66,18 +58,6 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        return state;
-    }
-
-    @Override
-    public List<ItemStack> getDrops(int fortune) {
-        List<ItemStack> drops = new ArrayList<ItemStack>();
-        drops.add(getTrackSpec().getItem());
-        return drops;
-    }
-
-    @Override
     public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
         return getRailDirection(state);
     }
@@ -95,16 +75,12 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public void onMinecartPass(EntityMinecart cart) {
-    }
-
-    @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (this instanceof ITrackReversible) {
+        if (this instanceof ITrackKitReversible) {
             if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
                 IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
                 if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                    ITrackReversible track = (ITrackReversible) this;
+                    ITrackKitReversible track = (ITrackKitReversible) this;
                     track.setReversed(!track.isReversed());
                     markBlockNeedsUpdate();
                     crowbar.onWhack(player, hand, heldItem, getPos());
@@ -117,17 +93,13 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
-        if (placer != null && this instanceof ITrackReversible) {
+        if (placer != null && this instanceof ITrackKitReversible) {
             int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            ((ITrackReversible) this).setReversed(dir == 0 || dir == 1);
+            ((ITrackKitReversible) this).setReversed(dir == 0 || dir == 1);
         }
         switchTrack(state, true);
         testPower(state);
         markBlockNeedsUpdate();
-    }
-
-    @Override
-    public void onBlockRemoved() {
     }
 
     public void sendUpdateToClient() {
@@ -167,9 +139,9 @@ public abstract class TrackInstanceBase implements ITrackInstance {
             return;
         }
 
-        if (neighborBlock != null && neighborBlock.getDefaultState().canProvidePower()
-                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(world, getPos()) == 3)
-            switchTrack(state, false);
+//        if (neighborBlock != null && neighborBlock.getDefaultState().canProvidePower()
+//                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(world, getPos()) == 3)
+//            switchTrack(state, false);
         testPower(state);
     }
 
@@ -181,11 +153,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     protected final void testPower(IBlockState state) {
-        if (!(this instanceof ITrackPowered))
+        if (!(this instanceof ITrackKitPowered))
             return;
         World world = theWorldAsserted();
-        ITrackPowered r = (ITrackPowered) this;
-        boolean powered = world.isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(world, getPos(), getTrackSpec(), state, r.getPowerPropagation());
+        ITrackKitPowered r = (ITrackKitPowered) this;
+        boolean powered = world.isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(world, getPos(), getTrackKitSpec(), state, r.getPowerPropagation());
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
@@ -199,11 +171,11 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         }
     }
 
-    private boolean testPowerPropagation(World world, BlockPos pos, TrackSpec baseSpec, IBlockState state, int maxDist) {
+    private boolean testPowerPropagation(World world, BlockPos pos, TrackKitSpec baseSpec, IBlockState state, int maxDist) {
         return isConnectedRailPowered(world, pos, baseSpec, state, true, 0, maxDist) || isConnectedRailPowered(world, pos, baseSpec, state, false, 0, maxDist);
     }
 
-    private boolean isConnectedRailPowered(World world, BlockPos pos, TrackSpec baseSpec, IBlockState state, boolean dir, int dist, int maxDist) {
+    private boolean isConnectedRailPowered(World world, BlockPos pos, TrackKitSpec baseSpec, IBlockState state, boolean dir, int dist, int maxDist) {
         if (dist >= maxDist)
             return false;
         boolean powered = true;
@@ -272,66 +244,25 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         return testPowered(world, pos, baseSpec, dir, dist, maxDist, railDirection) || (powered && testPowered(world, pos.down(), baseSpec, dir, dist, maxDist, railDirection));
     }
 
-    private boolean testPowered(World world, BlockPos nextPos, TrackSpec baseSpec, boolean dir, int dist, int maxDist, BlockRailBase.EnumRailDirection prevOrientation) {
+    private boolean testPowered(World world, BlockPos nextPos, TrackKitSpec baseSpec, boolean dir, int dist, int maxDist, BlockRailBase.EnumRailDirection prevOrientation) {
         // System.out.println("Testing Power at <" + nextPos + ">");
         IBlockState nextBlockState = world.getBlockState(nextPos);
         if (nextBlockState.getBlock() == getBlock()) {
             BlockRailBase.EnumRailDirection nextOrientation = nextBlockState.getValue(((BlockRailBase) nextBlockState.getBlock()).getShapeProperty());
             TileEntity nextTile = world.getTileEntity(nextPos);
             if (nextTile instanceof ITrackTile) {
-                ITrackInstance nextTrack = ((ITrackTile) nextTile).getTrackInstance();
-                if (!(nextTrack instanceof ITrackPowered) || nextTrack.getTrackSpec() != baseSpec || !((ITrackPowered) this).canPropagatePowerTo(nextTrack))
+                ITrackKit nextTrack = ((ITrackTile) nextTile).getTrackKit();
+                if (!(nextTrack instanceof ITrackKitPowered) || nextTrack.getTrackKitSpec() != baseSpec || !((ITrackKitPowered) this).canPropagatePowerTo(nextTrack))
                     return false;
                 if (prevOrientation == EAST_WEST && (nextOrientation == NORTH_SOUTH || nextOrientation == ASCENDING_NORTH || nextOrientation == ASCENDING_SOUTH))
                     return false;
                 if (prevOrientation == NORTH_SOUTH && (nextOrientation == EAST_WEST || nextOrientation == ASCENDING_EAST || nextOrientation == ASCENDING_WEST))
                     return false;
-                if (((ITrackPowered) nextTrack).isPowered())
+                if (((ITrackKitPowered) nextTrack).isPowered())
                     return world.isBlockPowered(nextPos) || world.isBlockPowered(nextPos.up()) || isConnectedRailPowered(world, nextPos, baseSpec, nextBlockState, dir, dist + 1, maxDist);
             }
         }
         return false;
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound data) {
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-    }
-
-    @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
-    @Override
-    public void update() {
-    }
-
-    @Override
-    public float getHardness() {
-        return 1.05F;
-    }
-
-    @Override
-    public float getExplosionResistance(Explosion explosion, Entity exploder) {
-        return 3.5f;
-    }
-
-    @Override
-    public void writePacketData(DataOutputStream data) throws IOException {
-    }
-
-    @Override
-    public void readPacketData(DataInputStream data) throws IOException {
-    }
-
-    @Nullable
-    @Override
-    public World theWorld() {
-        return getTile().getWorld();
     }
 
     /**
@@ -345,42 +276,5 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         assert world != null;
 //        if (world == null) throw new NullPointerException("World was null");
         return world;
-    }
-
-    @Override
-    public BlockPos getPos() {
-        return getTile().getPos();
-    }
-
-    /**
-     * Return true if the rail can make corners. Used by placement logic.
-     *
-     * @return true if the rail can make corners.
-     */
-    @Override
-    public boolean isFlexibleRail() {
-        return false;
-    }
-
-    /**
-     * Returns true if the rail can make up and down slopes. Used by placement
-     * logic.
-     *
-     * @return true if the rail can make slopes.
-     */
-    @Override
-    public boolean canMakeSlopes() {
-        return true;
-    }
-
-    /**
-     * Returns the max speed of the rail.
-     *
-     * @param cart The cart on the rail, may be null.
-     * @return The max speed of the current rail.
-     */
-    @Override
-    public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return 0.4f;
     }
 }

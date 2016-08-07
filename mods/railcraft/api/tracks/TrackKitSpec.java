@@ -34,24 +34,21 @@ import java.util.function.Function;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  * @see TrackRegistry
- * @see ITrackInstance
+ * @see ITrackKit
  */
-public final class TrackSpec {
+public final class TrackKitSpec {
 
     public static Block blockTrack;
     @Nonnull
     private final String tag;
-    private final short trackId;
     private final Function<ItemStack, List<String>> tooltipProvider;
     private final ModelResourceLocation iconProvider;
     @Nonnull
-    private final Class<? extends ITrackInstance> instanceClass;
+    private final Class<? extends ITrackKit> instanceClass;
 
     /**
-     * Defines a new track spec.
+     * Defines a new track kit spec.
      *
-     * @param trackId         A unique identifier for the track type. 0-512 are reserved
-     *                        for Railcraft. Capped at Short.MAX_VALUE
      * @param tag             A unique internal string identifier (ex.
      *                        "railcraft:track.speed.transition")
      * @param iconProvider    The provider for Track item icons
@@ -59,8 +56,7 @@ public final class TrackSpec {
      *                        TrackSpec
      * @param tooltipProvider The tool tip for the Track Item
      */
-    public TrackSpec(short trackId, @Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackInstance> instanceClass, @Nullable Function<ItemStack, List<String>> tooltipProvider) {
-        this.trackId = trackId;
+    public TrackKitSpec(@Nonnull String tag, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackKit> instanceClass, @Nullable Function<ItemStack, List<String>> tooltipProvider) {
         this.tag = tag.toLowerCase(Locale.ENGLISH);
         this.iconProvider = iconProvider;
         this.instanceClass = instanceClass;
@@ -70,10 +66,6 @@ public final class TrackSpec {
     @Nonnull
     public String getTrackTag() {
         return tag;
-    }
-
-    public short getTrackId() {
-        return trackId;
     }
 
     /**
@@ -104,9 +96,9 @@ public final class TrackSpec {
     }
 
     @Nonnull
-    public ITrackInstance createInstanceFromSpec() {
+    public ITrackKit createInstanceFromSpec() {
         try {
-            ITrackInstance trackInstance = instanceClass.newInstance();
+            ITrackKit trackInstance = instanceClass.newInstance();
             if (trackInstance == null) throw new NullPointerException("No track constructor found");
             return trackInstance;
         } catch (Exception ex) {
@@ -121,6 +113,10 @@ public final class TrackSpec {
     @Nullable
     public Function<ItemStack, List<String>> getToolTipProvider() {
         return tooltipProvider;
+    }
+
+    public boolean canMakeSlopes() {
+        return false;
     }
 
     @Override

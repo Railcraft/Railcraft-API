@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.tracks;
 
@@ -17,7 +16,7 @@ import net.minecraft.entity.item.EntityMinecart;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackLockdown extends ITrackInstance
+public interface ITrackKitLockdown extends ITrackKit
 {
 
     boolean isCartLockedDown(EntityMinecart cart);

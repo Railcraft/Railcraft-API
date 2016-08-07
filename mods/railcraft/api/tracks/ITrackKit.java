@@ -12,7 +12,6 @@ import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,13 +20,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,24 +45,30 @@ import java.util.List;
  * the client.
  *
  * @author CovertJaguar
- * @see TrackInstanceBase
+ * @see TrackKit
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public interface ITrackInstance extends INetworkedObject<DataInputStream, DataOutputStream> {
+public interface ITrackKit extends INetworkedObject<DataInputStream, DataOutputStream> {
 
     TileEntity getTile();
 
     void setTile(TileEntity tileEntity);
 
-    TrackSpec getTrackSpec();
+    TrackKitSpec getTrackKitSpec();
 
     /**
      * Use this to add properties to the state for rendering information.
      */
-    IBlockState getActualState(IBlockState state);
+    default IBlockState getActualState(IBlockState state) {
+        return state;
+    }
 
-    List<ItemStack> getDrops(int fortune);
+    default List<ItemStack> getDrops(int fortune) {
+        List<ItemStack> drops = new ArrayList<ItemStack>();
+        drops.add(getTrackKitSpec().getItem());
+        return drops;
+    }
 
     /**
      * Return the rail's shape.
@@ -82,47 +87,43 @@ public interface ITrackInstance extends INetworkedObject<DataInputStream, DataOu
      *
      * @param cart The cart on the rail.
      */
-    void onMinecartPass(EntityMinecart cart);
+    default void onMinecartPass(EntityMinecart cart) {
+    }
 
-    void writeToNBT(NBTTagCompound data);
+    default void writeToNBT(NBTTagCompound data) {
+    }
 
-    void readFromNBT(NBTTagCompound data);
+    default void readFromNBT(NBTTagCompound data) {
+    }
 
     /**
      * Return true if this track requires update ticks.
      */
-    boolean canUpdate();
+    default boolean canUpdate() {
+        return false;
+    }
 
-    void update();
+    default void update() {
+    }
 
     boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem);
 
-    void onBlockRemoved();
+    default void onBlockRemoved() {
+    }
 
     void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack);
 
     void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock);
 
-    BlockPos getPos();
+    default BlockPos getPos() {
+        return getTile().getPos();
+    }
 
-    float getHardness();
-
-    float getExplosionResistance(Explosion explosion, Entity exploder);
-
-    /**
-     * Return true if the rail can make corners. Used by placement logic.
-     *
-     * @return true if the rail can make corners.
-     */
-    boolean isFlexibleRail();
-
-    /**
-     * Returns true if the rail can make up and down slopes. Used by placement
-     * logic.
-     *
-     * @return true if the rail can make slopes.
-     */
-    boolean canMakeSlopes();
+    @Nullable
+    @Override
+    default World theWorld() {
+        return getTile().getWorld();
+    }
 
     /**
      * Returns the max speed of the rail.
@@ -130,6 +131,15 @@ public interface ITrackInstance extends INetworkedObject<DataInputStream, DataOu
      * @param cart The cart on the rail, may be null.
      * @return The max speed of the current rail.
      */
-    float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos);
+    default float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        return 0.4F;
+    }
+
+    /**
+     * Returning true here will make the track unbreakable.
+     */
+    default boolean isProtected() {
+        return false;
+    }
 
 }

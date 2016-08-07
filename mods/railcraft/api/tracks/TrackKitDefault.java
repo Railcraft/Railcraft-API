@@ -1,9 +1,9 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
@@ -19,26 +19,21 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackInstanceDefault extends TrackInstanceBase {
+public class TrackKitDefault extends TrackKit {
     private final boolean swapOut;
 
-    public TrackInstanceDefault() {
+    public TrackKitDefault() {
         this(true);
     }
 
-    public TrackInstanceDefault(boolean swapOut) {
+    public TrackKitDefault(boolean swapOut) {
         this.swapOut = swapOut;
     }
 
     @Nonnull
     @Override
-    public TrackSpec getTrackSpec() {
+    public TrackKitSpec getTrackKitSpec() {
         return TrackRegistry.getTrackSpec(RailcraftConstantsAPI.MOD_ID + ":default");
-    }
-
-    @Override
-    public boolean isFlexibleRail() {
-        return true;
     }
 
     @Override
