@@ -16,7 +16,7 @@ import net.minecraft.entity.item.EntityMinecart;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackKitLockdown extends ITrackKit
+public interface ITrackKitLockdown extends ITrackKitInstance
 {
 
     boolean isCartLockedDown(EntityMinecart cart);

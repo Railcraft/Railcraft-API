@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackKitDefault extends TrackKit {
+public class TrackKitDefault extends TrackKitInstance {
     private final boolean swapOut;
 
     public TrackKitDefault() {
@@ -32,8 +32,8 @@ public class TrackKitDefault extends TrackKit {
 
     @Nonnull
     @Override
-    public TrackKitSpec getTrackKitSpec() {
-        return TrackRegistry.getTrackSpec(RailcraftConstantsAPI.MOD_ID + ":default");
+    public TrackKit getTrackKit() {
+        return TrackRegistry.getTrackKit(RailcraftConstantsAPI.MOD_ID + ":default");
     }
 
     @Override

@@ -9,7 +9,7 @@ package mods.railcraft.api.tracks;
 
 import net.minecraft.block.properties.PropertyBool;
 
-public interface ITrackKitSwitch extends ITrackKit {
+public interface ITrackKitSwitch extends ITrackKitInstance {
 
     PropertyBool SWITCHED = PropertyBool.create("switched");
 

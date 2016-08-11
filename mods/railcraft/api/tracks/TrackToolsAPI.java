@@ -112,8 +112,8 @@ public abstract class TrackToolsAPI {
             pos = pos.down();
 
         TileEntity tile = cart.getEntityWorld().getTileEntity(pos);
-        if (tile instanceof ITrackTile) {
-            ITrackKit track = ((ITrackTile) tile).getTrackKit();
+        if (tile instanceof IOutfittedTrackTile) {
+            ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
             return track instanceof ITrackKitLockdown && ((ITrackKitLockdown) track).isCartLockedDown(cart);
         } else if (tile instanceof ITrackKitLockdown)
             return ((ITrackKitLockdown) tile).isCartLockedDown(cart);
@@ -135,11 +135,11 @@ public abstract class TrackToolsAPI {
         return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
 
-    public static Set<ITrackTile> getAdjacentTrackTiles(World world, BlockPos pos) {
-        Set<ITrackTile> tracks = new HashSet<ITrackTile>();
+    public static Set<IOutfittedTrackTile> getAdjacentTrackTiles(World world, BlockPos pos) {
+        Set<IOutfittedTrackTile> tracks = new HashSet<IOutfittedTrackTile>();
 
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            ITrackTile tile = getTrackFuzzyAt(world, pos.offset(side));
+            IOutfittedTrackTile tile = getTrackFuzzyAt(world, pos.offset(side));
             if (tile != null)
                 tracks.add(tile);
         }
@@ -148,16 +148,16 @@ public abstract class TrackToolsAPI {
     }
 
     @Nullable
-    public static ITrackTile getTrackFuzzyAt(World world, BlockPos pos) {
+    public static IOutfittedTrackTile getTrackFuzzyAt(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof ITrackTile)
-            return (ITrackTile) tile;
+        if (tile instanceof IOutfittedTrackTile)
+            return (IOutfittedTrackTile) tile;
         tile = world.getTileEntity(pos.up());
-        if (tile instanceof ITrackTile)
-            return (ITrackTile) tile;
+        if (tile instanceof IOutfittedTrackTile)
+            return (IOutfittedTrackTile) tile;
         tile = world.getTileEntity(pos.down());
-        if (tile instanceof ITrackTile)
-            return (ITrackTile) tile;
+        if (tile instanceof IOutfittedTrackTile)
+            return (IOutfittedTrackTile) tile;
         return null;
     }
 
@@ -195,8 +195,8 @@ public abstract class TrackToolsAPI {
             return null;
         if (type.isInstance(tile))
             return (T) tile;
-        if (tile instanceof ITrackTile) {
-            ITrackKit track = ((ITrackTile) tile).getTrackKit();
+        if (tile instanceof IOutfittedTrackTile) {
+            ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
             if (type.isInstance(track))
                 return (T) track;
         }

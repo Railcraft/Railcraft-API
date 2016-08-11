@@ -7,7 +7,10 @@
 
 package mods.railcraft.api.tracks;
 
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.SortedList;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
@@ -30,15 +33,16 @@ import java.util.*;
  * TrackInstance controls how an individual Track block interact with the world.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see TrackKitSpec
- * @see ITrackKit
  * @see TrackKit
+ * @see ITrackKitInstance
+ * @see TrackKitInstance
  */
 public class TrackRegistry {
 
-    private static final Map<String, TrackKitSpec> trackSpecsFromTag = new HashMap<String, TrackKitSpec>();
+    private static final TreeMap<String, TrackKit> trackKitsFromTag = new TreeMap<String, TrackKit>();
+    private static final SortedList<String> sortedTrackKits = new SortedList<String>(FXCollections.observableArrayList());
     private static final Set<String> invalidSpecTags = new HashSet<String>();
-    private static final TrackKitSpec defaultSpec = new TrackKitSpec("railcraft:default", null, TrackKitDefault.class, null);
+    private static final TrackKit defaultKit = new TrackKit("railcraft:default", null, TrackKitDefault.class);
 
     public static class TrackSpecConflictException extends RuntimeException {
 
@@ -52,42 +56,53 @@ public class TrackRegistry {
     }
 
     static {
-        registerTrackSpec(defaultSpec);
+        defaultKit.setVisible(false);
+        registerTrackKit(defaultKit);
     }
 
     /**
      * Registers a new TrackSpec. This should be called before the Post-Init
      * Phase, during the Init or Pre-Init Phase.
      */
-    public static void registerTrackSpec(TrackKitSpec trackKitSpec) {
-        if (trackSpecsFromTag.put(trackKitSpec.getTrackTag(), trackKitSpec) != null)
-            throw new TrackSpecConflictException("TrackTag conflict detected, please contact the author of the " + trackKitSpec.getTrackTag());
+    public static void registerTrackKit(TrackKit trackKit) {
+        if (trackKitsFromTag.put(trackKit.getName(), trackKit) != null)
+            throw new TrackSpecConflictException("TrackKit conflict detected, please contact the author of the " + trackKit.getName());
     }
 
     /**
      * Returns a cached copy of a TrackSpec object.
      */
     @Nonnull
-    public static TrackKitSpec getTrackSpec(@Nonnull String trackTag) {
-        trackTag = trackTag.toLowerCase(Locale.ENGLISH);
-        TrackKitSpec spec = trackSpecsFromTag.get(trackTag);
+    public static TrackKit getTrackKit(@Nonnull String kitTag) {
+        kitTag = kitTag.toLowerCase(Locale.ROOT);
+        TrackKit spec = trackKitsFromTag.get(kitTag);
         if (spec == null) {
-            if (!invalidSpecTags.contains(trackTag)) {
-                FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Unknown Track Spec Tag(%s), reverting to normal track", trackTag);
+            if (!invalidSpecTags.contains(kitTag)) {
+                FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Unknown TrackKit Tag(%s), reverting to normal track", kitTag);
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 for (int i = 1; i < stackTrace.length && i < 9; i++) {
                     FMLLog.log(Level.DEBUG, stackTrace[i].toString());
                 }
-                invalidSpecTags.add(trackTag);
+                invalidSpecTags.add(kitTag);
             }
-            spec = getDefaultTrackSpec();
+            spec = getDefaultTrackKit();
         }
         return spec;
     }
 
     @Nonnull
-    public static TrackKitSpec getDefaultTrackSpec() {
-        return defaultSpec;
+    public static TrackKit getTrackKit(NBTTagCompound nbt) {
+        return getTrackKit(nbt.getString(TrackKit.NBT_TAG));
+    }
+
+    public static int getTrackKitId(TrackKit trackKit) {
+        String name = trackKit.getName();
+        return trackKitsFromTag.containsKey(name) ? trackKitsFromTag.headMap(name).size() : -1;
+    }
+
+    @Nonnull
+    public static TrackKit getDefaultTrackKit() {
+        return defaultKit;
     }
 
     /**
@@ -95,8 +110,8 @@ public class TrackRegistry {
      *
      * @return list of TrackSpecs
      */
-    public static Map<String, TrackKitSpec> getTrackSpecTags() {
-        return trackSpecsFromTag;
+    public static Map<String, TrackKit> getTrackKits() {
+        return trackKitsFromTag;
     }
 
 }

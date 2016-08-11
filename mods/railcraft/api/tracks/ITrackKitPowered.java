@@ -18,7 +18,7 @@ import net.minecraft.block.properties.PropertyBool;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackKitPowered extends ITrackKit {
+public interface ITrackKitPowered extends ITrackKitInstance {
 
     PropertyBool POWERED = PropertyBool.create("powered");
 
@@ -44,5 +44,5 @@ public interface ITrackKitPowered extends ITrackKit {
      * This function is to allow finer control within the spec.
      * Example, for tracks with multiple modes like the Coupler Track.
      */
-    boolean canPropagatePowerTo(ITrackKit track);
+    boolean canPropagatePowerTo(ITrackKitInstance track);
 }

@@ -13,10 +13,9 @@ package mods.railcraft.api.tracks;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackTile
-{
+public interface IOutfittedTrackTile {
 
-    ITrackKit getTrackKit();
-    
+    ITrackKitInstance getTrackKitInstance();
+
     void sendUpdateToClient();
 }

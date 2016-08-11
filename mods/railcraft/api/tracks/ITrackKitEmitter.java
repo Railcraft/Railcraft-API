@@ -17,7 +17,7 @@ package mods.railcraft.api.tracks;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackKitEmitter extends ITrackKit
+public interface ITrackKitEmitter extends ITrackKitInstance
 {
 
     /**

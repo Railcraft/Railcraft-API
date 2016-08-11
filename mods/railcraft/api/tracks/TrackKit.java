@@ -7,274 +7,175 @@
 
 package mods.railcraft.api.tracks;
 
-import mods.railcraft.api.core.items.IToolCrowbar;
+import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRailBase;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
+import java.util.Locale;
+import java.util.function.Predicate;
 
 /**
- * All ITrackKits should extend this class. It contains a number of default
- * functions and standard behavior for Tracks that should greatly simplify
- * implementing new Track Kits when using this API.
+ * Each type of Track has a single instance of TrackSpec that corresponds with
+ * it. Each Track block in the world has a ITrackInstance that corresponds with
+ * it.
+ *
+ * Take note of the difference (similar to block classes and tile entities
+ * classes).
+ *
+ * TrackSpecs must be registered with the TrackRegistry in either the Pre-Init
+ * or Init Phases.
+ *
+ * Track ItemStacks can be acquired from the TrackSpec, but you are required to
+ * register a proper display name yourself (during Post-Init).
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see ITrackKit
  * @see TrackRegistry
- * @see TrackKitSpec
+ * @see ITrackKitInstance
  */
-public abstract class TrackKit implements ITrackKit {
-
+public final class TrackKit implements IVariantEnum {
+    public static final String NBT_TAG = "kit";
+    public static Block blockTrackOutfitted;
+    public static Item itemKit;
     @Nonnull
-    private TileEntity tileEntity = new TileEntity() {
-    };
+    private final String registryName;
+    private final ModelResourceLocation iconProvider;
+    @Nonnull
+    private final Class<? extends ITrackKitInstance> instanceClass;
+    private Predicate<ITrackType> trackTypeFilter = (t) -> true;
+    private boolean allowedOnSlopes;
+    private boolean visible = true;
 
-    private BlockRailBase getBlock() {
-        return (BlockRailBase) getTile().getBlockType();
+    /**
+     * Defines a new track kit spec.
+     *
+     * @param registryName  A unique internal string identifier (ex.
+     *                      "railcraft:speed.transition")
+     * @param iconProvider  The provider for Track item icons
+     * @param instanceClass The ITrackInstance class that corresponds to this
+     *                      TrackSpec
+     */
+    public TrackKit(@Nonnull String registryName, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
+        this.registryName = registryName.toLowerCase(Locale.ROOT);
+        this.iconProvider = iconProvider;
+        this.instanceClass = instanceClass;
     }
 
     @Override
-    public void setTile(TileEntity tileEntity) {
-        this.tileEntity = tileEntity;
+    @Nonnull
+    public String getName() {
+        return registryName;
     }
 
     @Override
-    public TileEntity getTile() {
-        return tileEntity;
-    }
-
-    @Override
-    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
-        return getRailDirection(state);
-    }
-
-    protected final BlockRailBase.EnumRailDirection getRailDirection() {
-        World world = theWorldAsserted();
-        IBlockState state = world.getBlockState(getPos());
-        return getRailDirection(state);
-    }
-
-    protected static BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
-        if (state.getBlock() instanceof BlockRailBase)
-            return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
-        return NORTH_SOUTH;
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (this instanceof ITrackKitReversible) {
-            if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
-                IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-                if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                    ITrackKitReversible track = (ITrackKitReversible) this;
-                    track.setReversed(!track.isReversed());
-                    markBlockNeedsUpdate();
-                    crowbar.onWhack(player, hand, heldItem, getPos());
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
-        if (placer != null && this instanceof ITrackKitReversible) {
-            int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            ((ITrackKitReversible) this).setReversed(dir == 0 || dir == 1);
-        }
-        switchTrack(state, true);
-        testPower(state);
-        markBlockNeedsUpdate();
-    }
-
-    public void sendUpdateToClient() {
-        ((ITrackTile) getTile()).sendUpdateToClient();
-    }
-
-    public void markBlockNeedsUpdate() {
-        World world = theWorldAsserted();
-        IBlockState state = world.getBlockState(getTile().getPos());
-        world.notifyBlockUpdate(getTile().getPos(), state, state, 3);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    protected boolean isRailValid(World world, BlockPos pos, BlockRailBase.EnumRailDirection dir) {
-        boolean valid = true;
-        if (!world.isSideSolid(pos.down(), EnumFacing.UP))
-            valid = false;
-        if (dir == ASCENDING_EAST && !world.isSideSolid(pos.east(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_WEST && !world.isSideSolid(pos.west(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_NORTH && !world.isSideSolid(pos.north(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_SOUTH && !world.isSideSolid(pos.south(), EnumFacing.UP))
-            valid = false;
-        return valid;
-    }
-
-    @Override
-    public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
-        World world = theWorldAsserted();
-        boolean valid = isRailValid(world, getPos(), state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty()));
-        if (!valid) {
-            Block blockTrack = getBlock();
-            blockTrack.dropBlockAsItem(world, getPos(), state, 0);
-            world.setBlockToAir(getPos());
-            return;
-        }
-
-//        if (neighborBlock != null && neighborBlock.getDefaultState().canProvidePower()
-//                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(world, getPos()) == 3)
-//            switchTrack(state, false);
-        testPower(state);
-    }
-
-    private void switchTrack(IBlockState state, boolean flag) {
-        World world = theWorldAsserted();
-        BlockPos pos = getTile().getPos();
-        BlockRailBase blockTrack = getBlock();
-        blockTrack.new Rail(world, pos, state).place(world.isBlockPowered(pos), flag);
-    }
-
-    protected final void testPower(IBlockState state) {
-        if (!(this instanceof ITrackKitPowered))
-            return;
-        World world = theWorldAsserted();
-        ITrackKitPowered r = (ITrackKitPowered) this;
-        boolean powered = world.isBlockIndirectlyGettingPowered(getPos()) > 0 || testPowerPropagation(world, getPos(), getTrackKitSpec(), state, r.getPowerPropagation());
-        if (powered != r.isPowered()) {
-            r.setPowered(powered);
-            Block blockTrack = getBlock();
-            world.notifyNeighborsOfStateChange(getPos(), blockTrack);
-            world.notifyNeighborsOfStateChange(getPos().down(), blockTrack);
-            BlockRailBase.EnumRailDirection railDirection = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
-            if (railDirection.isAscending())
-                world.notifyNeighborsOfStateChange(getPos().up(), blockTrack);
-            sendUpdateToClient();
-            // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
-        }
-    }
-
-    private boolean testPowerPropagation(World world, BlockPos pos, TrackKitSpec baseSpec, IBlockState state, int maxDist) {
-        return isConnectedRailPowered(world, pos, baseSpec, state, true, 0, maxDist) || isConnectedRailPowered(world, pos, baseSpec, state, false, 0, maxDist);
-    }
-
-    private boolean isConnectedRailPowered(World world, BlockPos pos, TrackKitSpec baseSpec, IBlockState state, boolean dir, int dist, int maxDist) {
-        if (dist >= maxDist)
-            return false;
-        boolean powered = true;
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        BlockRailBase.EnumRailDirection railDirection = state.getValue(getBlock().getShapeProperty());
-        switch (railDirection) {
-            case NORTH_SOUTH: // '\0'
-                if (dir)
-                    z++;
-                else
-                    z--;
-                break;
-
-            case EAST_WEST: // '\001'
-                if (dir)
-                    x--;
-                else
-                    x++;
-                break;
-
-            case ASCENDING_EAST: // '\002'
-                if (dir)
-                    x--;
-                else {
-                    x++;
-                    y++;
-                    powered = false;
-                }
-                railDirection = EAST_WEST;
-                break;
-
-            case ASCENDING_WEST: // '\003'
-                if (dir) {
-                    x--;
-                    y++;
-                    powered = false;
-                } else
-                    x++;
-                railDirection = EAST_WEST;
-                break;
-
-            case ASCENDING_NORTH: // '\004'
-                if (dir)
-                    z++;
-                else {
-                    z--;
-                    y++;
-                    powered = false;
-                }
-                railDirection = NORTH_SOUTH;
-                break;
-
-            case ASCENDING_SOUTH: // '\005'
-                if (dir) {
-                    z++;
-                    y++;
-                    powered = false;
-                } else
-                    z--;
-                railDirection = NORTH_SOUTH;
-                break;
-        }
-        pos = new BlockPos(x, y, z);
-        return testPowered(world, pos, baseSpec, dir, dist, maxDist, railDirection) || (powered && testPowered(world, pos.down(), baseSpec, dir, dist, maxDist, railDirection));
-    }
-
-    private boolean testPowered(World world, BlockPos nextPos, TrackKitSpec baseSpec, boolean dir, int dist, int maxDist, BlockRailBase.EnumRailDirection prevOrientation) {
-        // System.out.println("Testing Power at <" + nextPos + ">");
-        IBlockState nextBlockState = world.getBlockState(nextPos);
-        if (nextBlockState.getBlock() == getBlock()) {
-            BlockRailBase.EnumRailDirection nextOrientation = nextBlockState.getValue(((BlockRailBase) nextBlockState.getBlock()).getShapeProperty());
-            TileEntity nextTile = world.getTileEntity(nextPos);
-            if (nextTile instanceof ITrackTile) {
-                ITrackKit nextTrack = ((ITrackTile) nextTile).getTrackKit();
-                if (!(nextTrack instanceof ITrackKitPowered) || nextTrack.getTrackKitSpec() != baseSpec || !((ITrackKitPowered) this).canPropagatePowerTo(nextTrack))
-                    return false;
-                if (prevOrientation == EAST_WEST && (nextOrientation == NORTH_SOUTH || nextOrientation == ASCENDING_NORTH || nextOrientation == ASCENDING_SOUTH))
-                    return false;
-                if (prevOrientation == NORTH_SOUTH && (nextOrientation == EAST_WEST || nextOrientation == ASCENDING_EAST || nextOrientation == ASCENDING_WEST))
-                    return false;
-                if (((ITrackKitPowered) nextTrack).isPowered())
-                    return world.isBlockPowered(nextPos) || world.isBlockPowered(nextPos.up()) || isConnectedRailPowered(world, nextPos, baseSpec, nextBlockState, dir, dist + 1, maxDist);
-            }
-        }
-        return false;
+    public String getResourcePathSuffix() {
+        return IVariantEnum.super.getResourcePathSuffix().replace(":", ".");
     }
 
     /**
-     * Be careful where you call this function from.
-     * Only call it if you have a reasonable assumption that the world can't be null,
-     * otherwise the game will crash.
+     * This function will only work after the Init Phase.
+     *
+     * @return an ItemStack that can be used to place the track.
      */
+    @Nullable
+    public ItemStack getTrackKitItem() {
+        return getTrackKitItem(1);
+    }
 
-    public World theWorldAsserted() throws NullPointerException {
-        World world = theWorld();
-        assert world != null;
-//        if (world == null) throw new NullPointerException("World was null");
-        return world;
+    /**
+     * This function will only work after the Init Phase.
+     *
+     * @return an ItemStack that can be used to place the track.
+     */
+    @Nullable
+    public ItemStack getTrackKitItem(int qty) {
+        if (itemKit != null) {
+            ItemStack stack = new ItemStack(itemKit, qty);
+            NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
+            nbt.setString(NBT_TAG, registryName);
+            return stack;
+        }
+        return null;
+    }
+
+    /**
+     * This function will only work after the Init Phase.
+     *
+     * @return an ItemStack that can be used to place the track.
+     */
+    @Nullable
+    public ItemStack getOutfittedTrack(ITrackType trackType) {
+        return getOutfittedTrack(trackType, 1);
+    }
+
+    /**
+     * This function will only work after the Init Phase.
+     *
+     * @return an ItemStack that can be used to place the track.
+     */
+    @Nullable
+    public ItemStack getOutfittedTrack(ITrackType trackType, int qty) {
+        if (blockTrackOutfitted != null) {
+            ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
+            NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
+            nbt.setString(ITrackType.NBT_TAG, trackType.getRegistryName());
+            nbt.setString(NBT_TAG, registryName);
+            return stack;
+        }
+        return null;
+    }
+
+    @Nonnull
+    public ITrackKitInstance createInstanceFromSpec() {
+        try {
+            ITrackKitInstance trackInstance = instanceClass.newInstance();
+            if (trackInstance == null) throw new NullPointerException("No track constructor found");
+            return trackInstance;
+        } catch (Exception ex) {
+            throw new RuntimeException("Improper Track Instance Constructor", ex);
+        }
+    }
+
+    public ModelResourceLocation getItemModel() {
+        return iconProvider;
+    }
+
+    public boolean isAllowedOnSlopes() {
+        return allowedOnSlopes;
+    }
+
+    public void setAllowedOnSlopes(boolean allowedOnSlopes) {
+        this.allowedOnSlopes = allowedOnSlopes;
+    }
+
+    public void setTrackTypeFilter(Predicate<ITrackType> filter) {
+        this.trackTypeFilter = filter;
+    }
+
+    public boolean isAllowedTrackType(ITrackType trackType) {
+        return trackTypeFilter.test(trackType);
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    @Override
+    public int ordinal() {
+        return TrackRegistry.getTrackKitId(this);
+    }
+
+    @Override
+    public String toString() {
+        return "TrackKit -> " + getName();
     }
 }

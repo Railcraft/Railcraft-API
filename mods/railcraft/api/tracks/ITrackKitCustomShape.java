@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackKitCustomShape extends ITrackKit {
+public interface ITrackKitCustomShape extends ITrackKitInstance {
 
     @Nullable
     AxisAlignedBB getCollisionBoundingBox(IBlockState state);

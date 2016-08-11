@@ -17,7 +17,7 @@ import net.minecraft.block.properties.PropertyBool;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackKitReversible extends ITrackKit {
+public interface ITrackKitReversible extends ITrackKitInstance {
 
     PropertyBool REVERSED = PropertyBool.create("reversed");
 

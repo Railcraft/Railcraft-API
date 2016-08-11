@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Deprecated
-public interface ITrackKitCustomPlaced extends ITrackKit {
+public interface ITrackKitCustomPlaced extends ITrackKitInstance {
 
     /**
      * Used to override normal track placement.

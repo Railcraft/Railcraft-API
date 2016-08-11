@@ -45,17 +45,17 @@ import java.util.List;
  * the client.
  *
  * @author CovertJaguar
- * @see TrackKit
+ * @see TrackKitInstance
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public interface ITrackKit extends INetworkedObject<DataInputStream, DataOutputStream> {
+public interface ITrackKitInstance extends INetworkedObject<DataInputStream, DataOutputStream> {
 
     TileEntity getTile();
 
     void setTile(TileEntity tileEntity);
 
-    TrackKitSpec getTrackKitSpec();
+    TrackKit getTrackKit();
 
     /**
      * Use this to add properties to the state for rendering information.
@@ -66,7 +66,7 @@ public interface ITrackKit extends INetworkedObject<DataInputStream, DataOutputS
 
     default List<ItemStack> getDrops(int fortune) {
         List<ItemStack> drops = new ArrayList<ItemStack>();
-        drops.add(getTrackKitSpec().getItem());
+        drops.add(getTrackKit().getTrackKitItem());
         return drops;
     }
 
