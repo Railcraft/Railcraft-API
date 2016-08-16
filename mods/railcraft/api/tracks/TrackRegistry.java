@@ -7,8 +7,6 @@
 
 package mods.railcraft.api.tracks;
 
-import javafx.collections.FXCollections;
-import javafx.collections.transformation.SortedList;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLLog;
@@ -40,9 +38,8 @@ import java.util.*;
 public class TrackRegistry {
 
     private static final TreeMap<String, TrackKit> trackKitsFromTag = new TreeMap<String, TrackKit>();
-    private static final SortedList<String> sortedTrackKits = new SortedList<String>(FXCollections.observableArrayList());
     private static final Set<String> invalidSpecTags = new HashSet<String>();
-    private static final TrackKit defaultKit = new TrackKit("railcraft:default", null, TrackKitDefault.class);
+    private static final TrackKit missingKit = new TrackKit("railcraft:missing", null, TrackKitMissing.class);
 
     public static class TrackSpecConflictException extends RuntimeException {
 
@@ -56,8 +53,8 @@ public class TrackRegistry {
     }
 
     static {
-        defaultKit.setVisible(false);
-        registerTrackKit(defaultKit);
+        missingKit.setVisible(false);
+        registerTrackKit(missingKit);
     }
 
     /**
@@ -85,7 +82,7 @@ public class TrackRegistry {
                 }
                 invalidSpecTags.add(kitTag);
             }
-            spec = getDefaultTrackKit();
+            spec = getMissingTrackKit();
         }
         return spec;
     }
@@ -101,8 +98,8 @@ public class TrackRegistry {
     }
 
     @Nonnull
-    public static TrackKit getDefaultTrackKit() {
-        return defaultKit;
+    public static TrackKit getMissingTrackKit() {
+        return missingKit;
     }
 
     /**

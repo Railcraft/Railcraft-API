@@ -19,14 +19,14 @@ import javax.annotation.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackKitDefault extends TrackKitInstance {
+public class TrackKitMissing extends TrackKitInstance {
     private final boolean swapOut;
 
-    public TrackKitDefault() {
+    public TrackKitMissing() {
         this(true);
     }
 
-    public TrackKitDefault(boolean swapOut) {
+    public TrackKitMissing(boolean swapOut) {
         this.swapOut = swapOut;
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +44,7 @@ public final class TrackKit implements IVariantEnum {
     public static Block blockTrackOutfitted;
     public static Item itemKit;
     @Nonnull
-    private final String registryName;
+    private final ResourceLocation registryName;
     private final ModelResourceLocation iconProvider;
     @Nonnull
     private final Class<? extends ITrackKitInstance> instanceClass;
@@ -61,7 +62,7 @@ public final class TrackKit implements IVariantEnum {
      *                      TrackSpec
      */
     public TrackKit(@Nonnull String registryName, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
-        this.registryName = registryName.toLowerCase(Locale.ROOT);
+        this.registryName = new ResourceLocation(registryName.toLowerCase(Locale.ROOT));
         this.iconProvider = iconProvider;
         this.instanceClass = instanceClass;
     }
@@ -69,6 +70,10 @@ public final class TrackKit implements IVariantEnum {
     @Override
     @Nonnull
     public String getName() {
+        return registryName.toString();
+    }
+
+    public ResourceLocation getRegistryName() {
         return registryName;
     }
 
@@ -95,9 +100,9 @@ public final class TrackKit implements IVariantEnum {
     @Nullable
     public ItemStack getTrackKitItem(int qty) {
         if (itemKit != null) {
-            ItemStack stack = new ItemStack(itemKit, qty);
+            ItemStack stack = new ItemStack(itemKit, qty, ordinal());
             NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
-            nbt.setString(NBT_TAG, registryName);
+            nbt.setString(NBT_TAG, getName());
             return stack;
         }
         return null;
@@ -124,7 +129,7 @@ public final class TrackKit implements IVariantEnum {
             ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
             NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
             nbt.setString(ITrackType.NBT_TAG, trackType.getRegistryName());
-            nbt.setString(NBT_TAG, registryName);
+            nbt.setString(NBT_TAG, getName());
             return stack;
         }
         return null;
