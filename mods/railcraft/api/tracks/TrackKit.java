@@ -48,7 +48,7 @@ public final class TrackKit implements IVariantEnum {
     private final ModelResourceLocation iconProvider;
     @Nonnull
     private final Class<? extends ITrackKitInstance> instanceClass;
-    private Predicate<ITrackType> trackTypeFilter = (t) -> true;
+    private Predicate<TrackType> trackTypeFilter = (t) -> true;
     private boolean allowedOnSlopes;
     private boolean visible = true;
 
@@ -114,7 +114,7 @@ public final class TrackKit implements IVariantEnum {
      * @return an ItemStack that can be used to place the track.
      */
     @Nullable
-    public ItemStack getOutfittedTrack(ITrackType trackType) {
+    public ItemStack getOutfittedTrack(TrackType trackType) {
         return getOutfittedTrack(trackType, 1);
     }
 
@@ -124,11 +124,11 @@ public final class TrackKit implements IVariantEnum {
      * @return an ItemStack that can be used to place the track.
      */
     @Nullable
-    public ItemStack getOutfittedTrack(ITrackType trackType, int qty) {
+    public ItemStack getOutfittedTrack(TrackType trackType, int qty) {
         if (blockTrackOutfitted != null) {
             ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
             NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
-            nbt.setString(ITrackType.NBT_TAG, trackType.getRegistryName());
+            nbt.setString(TrackType.NBT_TAG, trackType.getRegistryName());
             nbt.setString(NBT_TAG, getName());
             return stack;
         }
@@ -158,11 +158,11 @@ public final class TrackKit implements IVariantEnum {
         this.allowedOnSlopes = allowedOnSlopes;
     }
 
-    public void setTrackTypeFilter(Predicate<ITrackType> filter) {
+    public void setTrackTypeFilter(Predicate<TrackType> filter) {
         this.trackTypeFilter = filter;
     }
 
-    public boolean isAllowedTrackType(ITrackType trackType) {
+    public boolean isAllowedTrackType(TrackType trackType) {
         return trackTypeFilter.test(trackType);
     }
 
