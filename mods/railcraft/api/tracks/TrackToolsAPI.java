@@ -25,15 +25,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A number of utility functions related to rails.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 public abstract class TrackToolsAPI {
     /**
      * Check if the block at the location is a Track.
@@ -135,72 +133,72 @@ public abstract class TrackToolsAPI {
         return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
 
-    public static Set<IOutfittedTrackTile> getAdjacentTrackTiles(World world, BlockPos pos) {
-        Set<IOutfittedTrackTile> tracks = new HashSet<IOutfittedTrackTile>();
+//    public static Set<IOutfittedTrackTile> getAdjacentTrackTiles(World world, BlockPos pos) {
+//        Set<IOutfittedTrackTile> tracks = new HashSet<IOutfittedTrackTile>();
+//
+//        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+//            IOutfittedTrackTile tile = getTrackFuzzyAt(world, pos.offset(side));
+//            if (tile != null)
+//                tracks.add(tile);
+//        }
+//
+//        return tracks;
+//    }
 
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            IOutfittedTrackTile tile = getTrackFuzzyAt(world, pos.offset(side));
-            if (tile != null)
-                tracks.add(tile);
-        }
+//    @Nullable
+//    public static IOutfittedTrackTile getTrackFuzzyAt(World world, BlockPos pos) {
+//        TileEntity tile = world.getTileEntity(pos);
+//        if (tile instanceof IOutfittedTrackTile)
+//            return (IOutfittedTrackTile) tile;
+//        tile = world.getTileEntity(pos.up());
+//        if (tile instanceof IOutfittedTrackTile)
+//            return (IOutfittedTrackTile) tile;
+//        tile = world.getTileEntity(pos.down());
+//        if (tile instanceof IOutfittedTrackTile)
+//            return (IOutfittedTrackTile) tile;
+//        return null;
+//    }
 
-        return tracks;
-    }
+//    public static <T> Set<T> getAdjacentTrackObjects(World world, BlockPos pos, Class<T> type) {
+//        Set<T> tracks = new HashSet<T>();
+//
+//        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+//            T object = getTrackObjectFuzzyAt(world, pos.offset(side), type);
+//            if (object != null)
+//                tracks.add(object);
+//        }
+//
+//        return tracks;
+//    }
 
-    @Nullable
-    public static IOutfittedTrackTile getTrackFuzzyAt(World world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof IOutfittedTrackTile)
-            return (IOutfittedTrackTile) tile;
-        tile = world.getTileEntity(pos.up());
-        if (tile instanceof IOutfittedTrackTile)
-            return (IOutfittedTrackTile) tile;
-        tile = world.getTileEntity(pos.down());
-        if (tile instanceof IOutfittedTrackTile)
-            return (IOutfittedTrackTile) tile;
-        return null;
-    }
+//    @Nullable
+//    public static <T> T getTrackObjectFuzzyAt(World world, BlockPos pos, Class<T> type) {
+//        T object = getTrackObjectAt(world, pos, type);
+//        if (object != null)
+//            return object;
+//        object = getTrackObjectAt(world, pos.up(), type);
+//        if (object != null)
+//            return object;
+//        object = getTrackObjectAt(world, pos.down(), type);
+//        if (object != null)
+//            return object;
+//        return null;
+//    }
 
-    public static <T> Set<T> getAdjacentTrackObjects(World world, BlockPos pos, Class<T> type) {
-        Set<T> tracks = new HashSet<T>();
-
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            T object = getTrackObjectFuzzyAt(world, pos.offset(side), type);
-            if (object != null)
-                tracks.add(object);
-        }
-
-        return tracks;
-    }
-
-    @Nullable
-    public static <T> T getTrackObjectFuzzyAt(World world, BlockPos pos, Class<T> type) {
-        T object = getTrackObjectAt(world, pos, type);
-        if (object != null)
-            return object;
-        object = getTrackObjectAt(world, pos.up(), type);
-        if (object != null)
-            return object;
-        object = getTrackObjectAt(world, pos.down(), type);
-        if (object != null)
-            return object;
-        return null;
-    }
-
-    @Nullable
-    @SuppressWarnings("unchecked")
-    public static <T> T getTrackObjectAt(World world, BlockPos pos, Class<T> type) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile == null)
-            return null;
-        if (type.isInstance(tile))
-            return (T) tile;
-        if (tile instanceof IOutfittedTrackTile) {
-            ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
-            if (type.isInstance(track))
-                return (T) track;
-        }
-        return null;
-    }
+//    @Nullable
+//    @SuppressWarnings("unchecked")
+//    public static <T> T getTrackObjectAt(World world, BlockPos pos, Class<T> type) {
+//        TileEntity tile = world.getTileEntity(pos);
+//        if (tile == null)
+//            return null;
+//        if (type.isInstance(tile))
+//            return (T) tile;
+//        if (tile instanceof IOutfittedTrackTile) {
+//            ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
+//            if (type.isInstance(track))
+//                return (T) track;
+//        }
+//        return null;
+//    }
 
 }
