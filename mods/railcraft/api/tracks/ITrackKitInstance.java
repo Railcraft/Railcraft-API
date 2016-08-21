@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -59,8 +60,9 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
 
     /**
      * Use this to add properties to the state for rendering information.
+     * @param state
      */
-    default IBlockState getActualState(IBlockState state) {
+    default IExtendedBlockState getExtendedState(IExtendedBlockState state) {
         return state;
     }
 
