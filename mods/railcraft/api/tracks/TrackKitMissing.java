@@ -10,7 +10,6 @@ import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -57,7 +56,8 @@ public class TrackKitMissing extends TrackKitInstance {
         if (swapOut && world != null && !world.isRemote) {
             IBlockState oldState = world.getBlockState(getPos());
             BlockRailBase oldBlock = (BlockRailBase) oldState.getBlock();
-            BlockRailBase newBlock = (BlockRailBase) Blocks.RAIL;
+            TrackType type = ((IOutfittedTrackTile) getTile()).getTrackType();
+            BlockRailBase newBlock = type.getBaseBlock();
             IBlockState newState = newBlock.getDefaultState().withProperty(newBlock.getShapeProperty(), oldState.getValue(oldBlock.getShapeProperty()));
             world.setBlockState(getPos(), newState);
         }

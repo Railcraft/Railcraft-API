@@ -15,6 +15,8 @@ package mods.railcraft.api.tracks;
  */
 public interface IOutfittedTrackTile {
 
+    TrackType getTrackType();
+
     ITrackKitInstance getTrackKitInstance();
 
     void sendUpdateToClient();

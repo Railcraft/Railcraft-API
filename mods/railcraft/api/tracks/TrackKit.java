@@ -70,7 +70,7 @@ public final class TrackKit implements IVariantEnum {
     @Override
     @Nonnull
     public String getName() {
-        return registryName.toString();
+        return getRegistryName().toString().replaceAll("[.:]", "_");
     }
 
     public ResourceLocation getRegistryName() {
@@ -181,6 +181,6 @@ public final class TrackKit implements IVariantEnum {
 
     @Override
     public String toString() {
-        return "TrackKit -> " + getName();
+        return "TrackKit{" + getName() + "}";
     }
 }

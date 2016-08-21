@@ -7,9 +7,12 @@
 
 package mods.railcraft.api.tracks;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -28,9 +31,11 @@ public class TrackType implements IStringSerializable {
     private final String registryName;
     private float resistance = 3.5F;
     private final ResourceLocation texture;
+    private final ResourceLocation baseBlock;
 
-    public TrackType(String registryName, ResourceLocation texture) {
+    public TrackType(String registryName, ResourceLocation baseBlock, ResourceLocation texture) {
         this.registryName = registryName;
+        this.baseBlock = baseBlock;
         this.texture = texture;
     }
 
@@ -45,6 +50,13 @@ public class TrackType implements IStringSerializable {
 
     public ResourceLocation getTexture() {
         return texture;
+    }
+
+    public BlockRailBase getBaseBlock() {
+        BlockRailBase block = (BlockRailBase) Block.getBlockFromName(baseBlock.toString());
+        if (block == null)
+            return (BlockRailBase) Blocks.RAIL;
+        return block;
     }
 
     public final float getResistance() {
@@ -63,5 +75,10 @@ public class TrackType implements IStringSerializable {
 
     public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         return 0.4f;
+    }
+
+    @Override
+    public String toString() {
+        return "TrackType{" + getName() + "}";
     }
 }
