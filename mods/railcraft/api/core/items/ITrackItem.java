@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.core.items;
 
@@ -13,6 +12,9 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -37,7 +39,9 @@ public interface ITrackItem {
      * @param trackShape The preferred EnumRailDirection. May be null. If the shape is invalid for your track, use your default value.
      * @return true if successful
      */
-    boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable BlockRailBase.EnumRailDirection trackShape);
+    default boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable BlockRailBase.EnumRailDirection trackShape) {
+        return stack.getItem().onItemUse(stack, player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0) == EnumActionResult.SUCCESS;
+    }
 
     /**
      * Return the block of a placed track.

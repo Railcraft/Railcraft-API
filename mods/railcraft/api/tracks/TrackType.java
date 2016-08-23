@@ -26,26 +26,28 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TrackType implements IStringSerializable {
-    public static final String NBT_TAG = "kit";
+    public static final String NBT_TAG = "rail";
 
-    private final String registryName;
-    private float resistance = 3.5F;
+    private final ResourceLocation registryName;
     private final ResourceLocation texture;
     private final ResourceLocation baseBlock;
+    private float resistance = 3.5F;
 
-    public TrackType(String registryName, ResourceLocation baseBlock, ResourceLocation texture) {
+    private int maxSupportDistance;
+
+    public TrackType(ResourceLocation registryName, ResourceLocation baseBlock, ResourceLocation texture) {
         this.registryName = registryName;
         this.baseBlock = baseBlock;
         this.texture = texture;
     }
 
-    public final String getRegistryName() {
+    public final ResourceLocation getRegistryName() {
         return registryName;
     }
 
     @Override
     public final String getName() {
-        return getRegistryName().replaceAll("[.:]", "_");
+        return getRegistryName().toString().replaceAll("[.:]", "_");
     }
 
     public ResourceLocation getTexture() {
@@ -65,6 +67,14 @@ public class TrackType implements IStringSerializable {
 
     public final void setResistance(float resistance) {
         this.resistance = resistance;
+    }
+
+    public int getMaxSupportDistance() {
+        return maxSupportDistance;
+    }
+
+    public void setMaxSupportDistance(int maxSupportDistance) {
+        this.maxSupportDistance = maxSupportDistance;
     }
 
     public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {

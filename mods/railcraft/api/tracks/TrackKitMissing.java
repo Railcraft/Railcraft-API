@@ -6,7 +6,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.tracks;
 
-import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +19,7 @@ import javax.annotation.Nullable;
  */
 public class TrackKitMissing extends TrackKitInstance {
     private final boolean swapOut;
+    private int counter;
 
     public TrackKitMissing() {
         this(true);
@@ -32,7 +32,7 @@ public class TrackKitMissing extends TrackKitInstance {
     @Nonnull
     @Override
     public TrackKit getTrackKit() {
-        return TrackRegistry.getTrackKit(RailcraftConstantsAPI.MOD_ID + ":default");
+        return TrackRegistry.getMissingTrackKit();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class TrackKitMissing extends TrackKitInstance {
 
     private void swapTrack() {
         World world = theWorld();
-        if (swapOut && world != null && !world.isRemote) {
+        if (swapOut && world != null && !world.isRemote && counter > 4) {
             IBlockState oldState = world.getBlockState(getPos());
             BlockRailBase oldBlock = (BlockRailBase) oldState.getBlock();
             TrackType type = ((IOutfittedTrackTile) getTile()).getTrackType();
@@ -61,5 +61,6 @@ public class TrackKitMissing extends TrackKitInstance {
             IBlockState newState = newBlock.getDefaultState().withProperty(newBlock.getShapeProperty(), oldState.getValue(oldBlock.getShapeProperty()));
             world.setBlockState(getPos(), newState);
         }
+        counter++;
     }
 }

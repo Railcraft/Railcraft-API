@@ -60,7 +60,6 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
 
     /**
      * Use this to add properties to the state for rendering information.
-     * @param state
      */
     default IExtendedBlockState getExtendedState(IExtendedBlockState state) {
         return state;

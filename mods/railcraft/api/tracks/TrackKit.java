@@ -10,7 +10,6 @@ package mods.railcraft.api.tracks;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,25 +44,24 @@ public final class TrackKit implements IVariantEnum {
     public static Item itemKit;
     @Nonnull
     private final ResourceLocation registryName;
-    private final ModelResourceLocation iconProvider;
     @Nonnull
     private final Class<? extends ITrackKitInstance> instanceClass;
     private Predicate<TrackType> trackTypeFilter = (t) -> true;
-    private boolean allowedOnSlopes;
+    private boolean allowedOnSlopes = true;
+    private boolean requiresTicks = false;
     private boolean visible = true;
+    private int maxSupportDistance;
 
     /**
      * Defines a new track kit spec.
      *
      * @param registryName  A unique internal string identifier (ex.
      *                      "railcraft:speed.transition")
-     * @param iconProvider  The provider for Track item icons
      * @param instanceClass The ITrackInstance class that corresponds to this
      *                      TrackSpec
      */
-    public TrackKit(@Nonnull String registryName, @Nullable ModelResourceLocation iconProvider, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
+    public TrackKit(@Nonnull String registryName, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
         this.registryName = new ResourceLocation(registryName.toLowerCase(Locale.ROOT));
-        this.iconProvider = iconProvider;
         this.instanceClass = instanceClass;
     }
 
@@ -128,7 +126,7 @@ public final class TrackKit implements IVariantEnum {
         if (blockTrackOutfitted != null) {
             ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
             NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
-            nbt.setString(TrackType.NBT_TAG, trackType.getRegistryName());
+            nbt.setString(TrackType.NBT_TAG, trackType.getName());
             nbt.setString(NBT_TAG, getName());
             return stack;
         }
@@ -136,7 +134,7 @@ public final class TrackKit implements IVariantEnum {
     }
 
     @Nonnull
-    public ITrackKitInstance createInstanceFromSpec() {
+    public ITrackKitInstance createInstance() {
         try {
             ITrackKitInstance trackInstance = instanceClass.newInstance();
             if (trackInstance == null) throw new NullPointerException("No track constructor found");
@@ -146,16 +144,28 @@ public final class TrackKit implements IVariantEnum {
         }
     }
 
-    public ModelResourceLocation getItemModel() {
-        return iconProvider;
-    }
-
     public boolean isAllowedOnSlopes() {
         return allowedOnSlopes;
     }
 
     public void setAllowedOnSlopes(boolean allowedOnSlopes) {
         this.allowedOnSlopes = allowedOnSlopes;
+    }
+
+    public int getMaxSupportDistance() {
+        return maxSupportDistance;
+    }
+
+    public void setMaxSupportDistance(int maxSupportDistance) {
+        this.maxSupportDistance = maxSupportDistance;
+    }
+
+    public boolean requiresTicks() {
+        return requiresTicks;
+    }
+
+    public void setRequiresTicks(boolean requiresTicks) {
+        this.requiresTicks = requiresTicks;
     }
 
     public void setTrackTypeFilter(Predicate<TrackType> filter) {
@@ -176,7 +186,7 @@ public final class TrackKit implements IVariantEnum {
 
     @Override
     public int ordinal() {
-        return TrackRegistry.getTrackKitId(this);
+        return TrackRegistry.TRACK_KIT.getId(this);
     }
 
     @Override
