@@ -10,9 +10,11 @@ package mods.railcraft.api.tracks;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.core.RailcraftCore;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
@@ -32,6 +34,10 @@ import java.util.*;
  * The TrackKit contains basic constant information about the TrackKit, while the
  * {@link ITrackKitInstance} controls how the TrackKit interacts with the world.
  *
+ * Due to some stupidity in the way that Minecraft handles model registration,
+ * TrackTypes and TrackKits must be registered during the PRE-INIT phase of a {@link mods.railcraft.api.core.RailcraftModule}.
+ * So if you want to add new ones, you'll need to define your own RailcraftModule. Thankfully this isn't too hard.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  * @see TrackKit
  * @see ITrackKitInstance
@@ -41,11 +47,11 @@ public class TrackRegistry<T extends IStringSerializable> {
 
     public static final TrackRegistry<TrackType> TRACK_TYPE = new TrackRegistry<>(TrackType.NBT_TAG, "railcraft_iron");
     public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "railcraft_missing");
-    private static final TrackKit missingKit = new TrackKit("railcraft:missing", TrackKitMissing.class);
+    private static final TrackKit missingKit;
 
     static {
-        missingKit.setVisible(false);
-        TRACK_KIT.register(missingKit);
+        missingKit = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).build();
+        TRACK_KIT.registry.put(missingKit.getName(), missingKit);
     }
 
     private final Map<String, T> registry = new HashMap<>();
@@ -73,9 +79,8 @@ public class TrackRegistry<T extends IStringSerializable> {
      * Do not call this!
      */
     public void finalizeRegistry() {
-        if (!Loader.instance().isInState(LoaderState.POSTINITIALIZATION))
-            throw new TrackRegistryException("Finalize called outside POST");
-
+        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
+            throw new TrackRegistryException("Finalize called outside PRE-INIT");
         List<T> list = new ArrayList<>();
         list.addAll(registry.values());
         list.sort(Comparator.comparing(T::getName));
@@ -87,8 +92,8 @@ public class TrackRegistry<T extends IStringSerializable> {
      * Phase, during the Init or Pre-Init Phase.
      */
     public void register(T variant) {
-        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
-            throw new TrackRegistryException("Track objects must be registered during PRE-INIT");
+        if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId()) || RailcraftCore.getInitStage() != RailcraftCore.InitStage.PRE_INIT)
+            throw new TrackRegistryException("Track objects must be registered during PRE-INIT from a Railcraft Module class");
         if (registry.put(variant.getName(), variant) != null)
             throw new TrackRegistryException("Conflict detected, please contact the author of the " + variant.getName());
     }

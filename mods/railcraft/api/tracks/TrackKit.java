@@ -17,26 +17,24 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Locale;
 import java.util.function.Predicate;
 
 /**
- * Each type of Track has a single instance of TrackSpec that corresponds with
- * it. Each Track block in the world has a ITrackInstance that corresponds with
+ * TrackKits are Items that can be applied to existing tracks to transform them into a more advanced track with special
+ * properties. This class defines the behaviors of those advanced tracks.
+ *
+ * Each track equipped with a TrackKit in the world has a ITrackInstance that corresponds with
  * it.
  *
  * Take note of the difference (similar to block classes and tile entities
  * classes).
  *
- * TrackSpecs must be registered with the TrackRegistry in either the Pre-Init
- * or Init Phases.
- *
- * Track ItemStacks can be acquired from the TrackSpec, but you are required to
- * register a proper display name yourself (during Post-Init).
+ * TrackKits must be registered with the TrackRegistry in the Pre-Init phase of a Railcraft Module.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  * @see TrackRegistry
  * @see ITrackKitInstance
+ * @see mods.railcraft.api.core.RailcraftModule
  */
 public final class TrackKit implements IVariantEnum {
     public static final String NBT_TAG = "kit";
@@ -46,23 +44,85 @@ public final class TrackKit implements IVariantEnum {
     private final ResourceLocation registryName;
     @Nonnull
     private final Class<? extends ITrackKitInstance> instanceClass;
-    private Predicate<TrackType> trackTypeFilter = (t) -> true;
-    private boolean allowedOnSlopes = true;
-    private boolean requiresTicks = false;
-    private boolean visible = true;
-    private int maxSupportDistance;
+    private final Predicate<TrackType> trackTypeFilter = (t) -> true;
+    private final boolean allowedOnSlopes;
+    private final boolean requiresTicks;
+    private final boolean visible;
+    private final int states;
+    private final int maxSupportDistance;
 
-    /**
-     * Defines a new track kit spec.
-     *
-     * @param registryName  A unique internal string identifier (ex.
-     *                      "railcraft:speed.transition")
-     * @param instanceClass The ITrackInstance class that corresponds to this
-     *                      TrackSpec
-     */
-    public TrackKit(@Nonnull String registryName, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
-        this.registryName = new ResourceLocation(registryName.toLowerCase(Locale.ROOT));
+    public TrackKit(@Nonnull ResourceLocation registryName,
+                    @Nonnull Class<? extends ITrackKitInstance> instanceClass,
+                    boolean allowedOnSlopes, boolean requiresTicks,
+                    boolean visible, int states, int maxSupportDistance) {
+        this.registryName = registryName;
         this.instanceClass = instanceClass;
+        this.allowedOnSlopes = allowedOnSlopes;
+        this.requiresTicks = requiresTicks;
+        this.visible = visible;
+        this.states = states;
+        this.maxSupportDistance = maxSupportDistance;
+    }
+
+    public static class TrackKitBuilder {
+        @Nonnull
+        private final ResourceLocation registryName;
+        @Nonnull
+        private final Class<? extends ITrackKitInstance> instanceClass;
+        private Predicate<TrackType> trackTypeFilter = (t) -> true;
+        private boolean allowedOnSlopes = true;
+        private boolean requiresTicks;
+        private boolean visible = true;
+        private int states = 1;
+        private int maxSupportDistance;
+
+        /**
+         * Defines a new track kit spec.
+         *
+         * @param registryName  A unique internal string identifier (ex.
+         *                      "railcraft:one_way")
+         * @param instanceClass The ITrackInstance class that corresponds to this
+         *                      TrackSpec
+         */
+        public TrackKitBuilder(@Nonnull ResourceLocation registryName, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
+            this.registryName = registryName;
+            this.instanceClass = instanceClass;
+        }
+
+        public TrackKit build() {
+            return new TrackKit(registryName, instanceClass, allowedOnSlopes, requiresTicks,
+                    visible, states, maxSupportDistance);
+        }
+
+        public TrackKitBuilder setStates(int states) {
+            this.states = states;
+            return this;
+        }
+
+        public TrackKitBuilder setAllowedOnSlopes(boolean allowedOnSlopes) {
+            this.allowedOnSlopes = allowedOnSlopes;
+            return this;
+        }
+
+        public TrackKitBuilder setMaxSupportDistance(int maxSupportDistance) {
+            this.maxSupportDistance = maxSupportDistance;
+            return this;
+        }
+
+        public TrackKitBuilder setTrackTypeFilter(Predicate<TrackType> filter) {
+            this.trackTypeFilter = filter;
+            return this;
+        }
+
+        public TrackKitBuilder setRequiresTicks(boolean requiresTicks) {
+            this.requiresTicks = requiresTicks;
+            return this;
+        }
+
+        public TrackKitBuilder setVisible(boolean visible) {
+            this.visible = visible;
+            return this;
+        }
     }
 
     @Override
@@ -77,7 +137,7 @@ public final class TrackKit implements IVariantEnum {
 
     @Override
     public String getResourcePathSuffix() {
-        return IVariantEnum.super.getResourcePathSuffix().replace(":", ".");
+        return getName();
     }
 
     /**
@@ -144,32 +204,20 @@ public final class TrackKit implements IVariantEnum {
         }
     }
 
-    public boolean isAllowedOnSlopes() {
-        return allowedOnSlopes;
+    public int getStates() {
+        return states;
     }
 
-    public void setAllowedOnSlopes(boolean allowedOnSlopes) {
-        this.allowedOnSlopes = allowedOnSlopes;
+    public boolean isAllowedOnSlopes() {
+        return allowedOnSlopes;
     }
 
     public int getMaxSupportDistance() {
         return maxSupportDistance;
     }
 
-    public void setMaxSupportDistance(int maxSupportDistance) {
-        this.maxSupportDistance = maxSupportDistance;
-    }
-
     public boolean requiresTicks() {
         return requiresTicks;
-    }
-
-    public void setRequiresTicks(boolean requiresTicks) {
-        this.requiresTicks = requiresTicks;
-    }
-
-    public void setTrackTypeFilter(Predicate<TrackType> filter) {
-        this.trackTypeFilter = filter;
     }
 
     public boolean isAllowedTrackType(TrackType trackType) {
@@ -178,10 +226,6 @@ public final class TrackKit implements IVariantEnum {
 
     public boolean isVisible() {
         return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
     }
 
     @Override
