@@ -107,9 +107,11 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     }
 
     public void markBlockNeedsUpdate() {
-        World world = theWorldAsserted();
-        IBlockState state = world.getBlockState(getTile().getPos());
-        world.notifyBlockUpdate(getTile().getPos(), state, state, 3);
+        World world = theWorld();
+        if (world != null) {
+            IBlockState state = world.getBlockState(getTile().getPos());
+            world.notifyBlockUpdate(getTile().getPos(), state, state, 3);
+        }
     }
 
     @SuppressWarnings("WeakerAccess")

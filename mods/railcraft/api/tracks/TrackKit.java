@@ -48,19 +48,19 @@ public final class TrackKit implements IVariantEnum {
     private final boolean allowedOnSlopes;
     private final boolean requiresTicks;
     private final boolean visible;
-    private final int states;
+    private final int renderStates;
     private final int maxSupportDistance;
 
     public TrackKit(@Nonnull ResourceLocation registryName,
                     @Nonnull Class<? extends ITrackKitInstance> instanceClass,
                     boolean allowedOnSlopes, boolean requiresTicks,
-                    boolean visible, int states, int maxSupportDistance) {
+                    boolean visible, int renderStates, int maxSupportDistance) {
         this.registryName = registryName;
         this.instanceClass = instanceClass;
         this.allowedOnSlopes = allowedOnSlopes;
         this.requiresTicks = requiresTicks;
         this.visible = visible;
-        this.states = states;
+        this.renderStates = renderStates;
         this.maxSupportDistance = maxSupportDistance;
     }
 
@@ -73,7 +73,7 @@ public final class TrackKit implements IVariantEnum {
         private boolean allowedOnSlopes = true;
         private boolean requiresTicks;
         private boolean visible = true;
-        private int states = 1;
+        private int renderStates = 1;
         private int maxSupportDistance;
 
         /**
@@ -91,11 +91,11 @@ public final class TrackKit implements IVariantEnum {
 
         public TrackKit build() {
             return new TrackKit(registryName, instanceClass, allowedOnSlopes, requiresTicks,
-                    visible, states, maxSupportDistance);
+                    visible, renderStates, maxSupportDistance);
         }
 
-        public TrackKitBuilder setStates(int states) {
-            this.states = states;
+        public TrackKitBuilder setRenderStates(int renderStates) {
+            this.renderStates = renderStates;
             return this;
         }
 
@@ -204,8 +204,8 @@ public final class TrackKit implements IVariantEnum {
         }
     }
 
-    public int getStates() {
-        return states;
+    public int getRenderStates() {
+        return renderStates;
     }
 
     public boolean isAllowedOnSlopes() {

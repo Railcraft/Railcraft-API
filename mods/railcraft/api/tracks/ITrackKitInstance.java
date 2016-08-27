@@ -21,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -59,10 +58,11 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
     TrackKit getTrackKit();
 
     /**
-     * Use this to add properties to the state for rendering information.
+     * Return the render state. Ranges from 0 to 15.
+     * Used by the TrackKit blockstate JSON to determine which model/texture to display.
      */
-    default IExtendedBlockState getExtendedState(IExtendedBlockState state) {
-        return state;
+    default int getRenderState() {
+        return 0;
     }
 
     default List<ItemStack> getDrops(int fortune) {
