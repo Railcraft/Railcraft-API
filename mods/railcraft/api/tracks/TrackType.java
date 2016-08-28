@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.ILocalizedObject;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -25,7 +26,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackType implements IStringSerializable {
+public class TrackType implements IStringSerializable, ILocalizedObject {
     public static final String NBT_TAG = "rail";
 
     private final ResourceLocation registryName;
@@ -48,6 +49,11 @@ public class TrackType implements IStringSerializable {
     @Override
     public final String getName() {
         return getRegistryName().toString().replaceAll("[.:]", "_");
+    }
+
+    @Override
+    public String getLocalizationTag() {
+        return "track_type.railcraft." + getName() + ".name";
     }
 
     public ResourceLocation getTexture() {

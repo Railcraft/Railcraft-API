@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.ILocalizedObject;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.block.Block;
@@ -36,7 +37,7 @@ import java.util.function.Predicate;
  * @see ITrackKitInstance
  * @see mods.railcraft.api.core.RailcraftModule
  */
-public final class TrackKit implements IVariantEnum {
+public final class TrackKit implements IVariantEnum, ILocalizedObject {
     public static final String NBT_TAG = "kit";
     public static Block blockTrackOutfitted;
     public static Item itemKit;
@@ -138,6 +139,11 @@ public final class TrackKit implements IVariantEnum {
     @Override
     public String getResourcePathSuffix() {
         return getName();
+    }
+
+    @Override
+    public String getLocalizationTag() {
+        return "track_kit.railcraft." + getName() + ".name";
     }
 
     /**
