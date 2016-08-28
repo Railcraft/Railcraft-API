@@ -40,8 +40,24 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 public abstract class TrackKitInstance implements ITrackKitInstance {
 
     @Nonnull
-    private TileEntity tileEntity = new TileEntity() {
-    };
+    private TileEntity tileEntity = new DummyTileEntity();
+
+    private class DummyTileEntity extends TileEntity implements IOutfittedTrackTile {
+        @Override
+        public TrackType getTrackType() {
+            return TrackRegistry.TRACK_TYPE.getFallback();
+        }
+
+        @Override
+        public ITrackKitInstance getTrackKitInstance() {
+            return new TrackKitMissing(false);
+        }
+
+        @Override
+        public void sendUpdateToClient() {
+            throw new RuntimeException();
+        }
+    }
 
     private BlockRailBase getBlock() {
         return (BlockRailBase) getTile().getBlockType();
