@@ -36,11 +36,6 @@ public class TrackKitMissing extends TrackKitInstance {
     }
 
     @Override
-    public boolean canUpdate() {
-        return swapOut;
-    }
-
-    @Override
     public void update() {
         swapTrack();
     }

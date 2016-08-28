@@ -50,7 +50,7 @@ public class TrackRegistry<T extends IStringSerializable> {
     private static final TrackKit missingKit;
 
     static {
-        missingKit = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).build();
+        missingKit = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
         TRACK_KIT.registry.put(missingKit.getName(), missingKit);
     }
 

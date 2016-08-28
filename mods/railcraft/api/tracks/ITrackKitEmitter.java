@@ -26,4 +26,6 @@ public interface ITrackKitEmitter extends ITrackKitInstance
      * @return true if powered
      */
     int getPowerOutput();
+
+    int getComparatorInputOverride();
 }

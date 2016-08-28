@@ -97,13 +97,6 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
     default void readFromNBT(NBTTagCompound data) {
     }
 
-    /**
-     * Return true if this track requires update ticks.
-     */
-    default boolean canUpdate() {
-        return false;
-    }
-
     default void update() {
     }
 
