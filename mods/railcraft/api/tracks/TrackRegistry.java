@@ -9,12 +9,14 @@ package mods.railcraft.api.tracks;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableSet;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftCore;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
@@ -48,6 +50,7 @@ public class TrackRegistry<T extends IStringSerializable> {
     public static final TrackRegistry<TrackType> TRACK_TYPE = new TrackRegistry<>(TrackType.NBT_TAG, "railcraft_iron");
     public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "railcraft_missing");
     private static final TrackKit missingKit;
+    private static ImmutableSet<Tuple<TrackType, TrackKit>> combinations = ImmutableSet.of();
 
     static {
         missingKit = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
@@ -75,6 +78,10 @@ public class TrackRegistry<T extends IStringSerializable> {
         return missingKit;
     }
 
+    public static ImmutableSet<Tuple<TrackType, TrackKit>> getCombinations() {
+        return combinations;
+    }
+
     /**
      * Do not call this!
      */
@@ -85,6 +92,18 @@ public class TrackRegistry<T extends IStringSerializable> {
         list.addAll(registry.values());
         list.sort(Comparator.comparing(T::getName));
         populateIndexedLookupTable(idMap, list);
+        if (combinations.isEmpty()) {
+            ImmutableSet.Builder<Tuple<TrackType, TrackKit>> builder = ImmutableSet.builder();
+            for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
+                if (!trackKit.isVisible())
+                    continue;
+                for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
+                    if (trackKit.isAllowedTrackType(trackType))
+                        builder.add(new Tuple<>(trackType, trackKit));
+                }
+            }
+            combinations = builder.build();
+        }
     }
 
     /**
