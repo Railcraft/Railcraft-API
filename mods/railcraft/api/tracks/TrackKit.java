@@ -45,7 +45,7 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
     private final ResourceLocation registryName;
     @Nonnull
     private final Class<? extends ITrackKitInstance> instanceClass;
-    private final Predicate<TrackType> trackTypeFilter = (t) -> true;
+    private final Predicate<TrackType> trackTypeFilter;
     private final boolean allowedOnSlopes;
     private final boolean requiresTicks;
     private final boolean visible;
@@ -54,10 +54,12 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
 
     public TrackKit(@Nonnull ResourceLocation registryName,
                     @Nonnull Class<? extends ITrackKitInstance> instanceClass,
+                    Predicate<TrackType> trackTypeFilter,
                     boolean allowedOnSlopes, boolean requiresTicks,
                     boolean visible, int renderStates, int maxSupportDistance) {
         this.registryName = registryName;
         this.instanceClass = instanceClass;
+        this.trackTypeFilter = trackTypeFilter;
         this.allowedOnSlopes = allowedOnSlopes;
         this.requiresTicks = requiresTicks;
         this.visible = visible;
@@ -65,7 +67,7 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
         this.maxSupportDistance = maxSupportDistance;
     }
 
-    public static class TrackKitBuilder {
+    public static class Builder {
         @Nonnull
         private final ResourceLocation registryName;
         @Nonnull
@@ -85,42 +87,49 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
          * @param instanceClass The ITrackInstance class that corresponds to this
          *                      TrackSpec
          */
-        public TrackKitBuilder(@Nonnull ResourceLocation registryName, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
+        public Builder(@Nonnull ResourceLocation registryName, @Nonnull Class<? extends ITrackKitInstance> instanceClass) {
             this.registryName = registryName;
             this.instanceClass = instanceClass;
         }
 
         public TrackKit build() {
-            return new TrackKit(registryName, instanceClass, allowedOnSlopes, requiresTicks,
-                    visible, renderStates, maxSupportDistance);
+            return new TrackKit(
+                    registryName,
+                    instanceClass,
+                    trackTypeFilter,
+                    allowedOnSlopes,
+                    requiresTicks,
+                    visible,
+                    renderStates,
+                    maxSupportDistance);
         }
 
-        public TrackKitBuilder setRenderStates(int renderStates) {
+        public Builder setRenderStates(int renderStates) {
             this.renderStates = renderStates;
             return this;
         }
 
-        public TrackKitBuilder setAllowedOnSlopes(boolean allowedOnSlopes) {
+        public Builder setAllowedOnSlopes(boolean allowedOnSlopes) {
             this.allowedOnSlopes = allowedOnSlopes;
             return this;
         }
 
-        public TrackKitBuilder setMaxSupportDistance(int maxSupportDistance) {
+        public Builder setMaxSupportDistance(int maxSupportDistance) {
             this.maxSupportDistance = maxSupportDistance;
             return this;
         }
 
-        public TrackKitBuilder setTrackTypeFilter(Predicate<TrackType> filter) {
+        public Builder setTrackTypeFilter(Predicate<TrackType> filter) {
             this.trackTypeFilter = filter;
             return this;
         }
 
-        public TrackKitBuilder setRequiresTicks(boolean requiresTicks) {
+        public Builder setRequiresTicks(boolean requiresTicks) {
             this.requiresTicks = requiresTicks;
             return this;
         }
 
-        public TrackKitBuilder setVisible(boolean visible) {
+        public Builder setVisible(boolean visible) {
             this.visible = visible;
             return this;
         }

@@ -30,16 +30,87 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
     public static final String NBT_TAG = "rail";
 
     private final ResourceLocation registryName;
-    private final ResourceLocation texture;
     private final ResourceLocation baseBlock;
-    private float resistance = 3.5F;
+    private final float resistance;
+    private final boolean highSpeed;
+    private final boolean electric;
+    private final int maxSupportDistance;
+    private final EventHandler eventHandler;
 
-    private int maxSupportDistance;
+    public static final class Builder {
+        private final ResourceLocation registryName;
+        private final ResourceLocation baseBlock;
+        private float resistance = 3.5F;
+        private boolean highSpeed;
+        private boolean electric;
+        private int maxSupportDistance;
+        private EventHandler eventHandler;
 
-    public TrackType(ResourceLocation registryName, ResourceLocation baseBlock, ResourceLocation texture) {
+        public Builder(ResourceLocation registryName, ResourceLocation baseBlock) {
+            this.registryName = registryName;
+            this.baseBlock = baseBlock;
+        }
+
+        public TrackType build() {
+            if (eventHandler == null)
+                eventHandler = new EventHandler();
+            return new TrackType(registryName, baseBlock, resistance, highSpeed, electric, maxSupportDistance, eventHandler);
+        }
+
+        public final Builder setResistance(float resistance) {
+            this.resistance = resistance;
+            return this;
+        }
+
+        public final Builder setHighSpeed(boolean highSpeed) {
+            this.highSpeed = highSpeed;
+            return this;
+        }
+
+        public final Builder setElectric(boolean electric) {
+            this.electric = electric;
+            return this;
+        }
+
+        public final Builder setMaxSupportDistance(int maxSupportDistance) {
+            this.maxSupportDistance = maxSupportDistance;
+            return this;
+        }
+
+        public final Builder setEventHandler(EventHandler eventHandler) {
+            this.eventHandler = eventHandler;
+            return this;
+        }
+    }
+
+    public static class EventHandler {
+        public void onMinecartPass(World worldIn, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
+        }
+
+        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        }
+
+        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+            return 0.4f;
+        }
+    }
+
+    public TrackType(ResourceLocation registryName, ResourceLocation baseBlock, float resistance, boolean highSpeed, boolean electric, int maxSupportDistance, EventHandler eventHandler) {
         this.registryName = registryName;
         this.baseBlock = baseBlock;
-        this.texture = texture;
+        this.resistance = resistance;
+        this.highSpeed = highSpeed;
+        this.electric = electric;
+        this.maxSupportDistance = maxSupportDistance;
+        this.eventHandler = eventHandler;
+    }
+
+    public boolean isHighSpeed() {
+        return highSpeed;
+    }
+
+    public boolean isElectric() {
+        return electric;
     }
 
     public final ResourceLocation getRegistryName() {
@@ -56,10 +127,6 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
         return "track_type.railcraft." + getName() + ".name";
     }
 
-    public ResourceLocation getTexture() {
-        return texture;
-    }
-
     public BlockRailBase getBaseBlock() {
         BlockRailBase block = (BlockRailBase) Block.getBlockFromName(baseBlock.toString());
         if (block == null)
@@ -71,26 +138,12 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
         return resistance;
     }
 
-    public final void setResistance(float resistance) {
-        this.resistance = resistance;
-    }
-
     public int getMaxSupportDistance() {
         return maxSupportDistance;
     }
 
-    public void setMaxSupportDistance(int maxSupportDistance) {
-        this.maxSupportDistance = maxSupportDistance;
-    }
-
-    public void onMinecartPass(World world, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
-    }
-
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-    }
-
-    public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return 0.4f;
+    public EventHandler getEventHandler() {
+        return eventHandler;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class TrackRegistry<T extends IStringSerializable> {
     private static ImmutableSet<Tuple<TrackType, TrackKit>> combinations = ImmutableSet.of();
 
     static {
-        missingKit = new TrackKit.TrackKitBuilder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
+        missingKit = new TrackKit.Builder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
         TRACK_KIT.registry.put(missingKit.getName(), missingKit);
     }
 

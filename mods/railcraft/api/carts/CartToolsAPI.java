@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -239,15 +240,8 @@ public abstract class CartToolsAPI {
      */
     public static List<EntityMinecart> getMinecartsAt(World world, BlockPos pos, float sensitivity) {
         sensitivity = Math.min(sensitivity, 0.49f);
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(pos.getX() + sensitivity, pos.getY() + sensitivity, pos.getZ() + sensitivity,
-                pos.getX() + 1 - sensitivity, pos.getY() + 1 - sensitivity, pos.getZ() + 1 - sensitivity));
-        List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
-        for (Object o : entities) {
-            EntityMinecart cart = (EntityMinecart) o;
-            if (!cart.isDead)
-                carts.add((EntityMinecart) o);
-        }
-        return carts;
+        return world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(pos.getX() + sensitivity, pos.getY(), pos.getZ() + sensitivity,
+                pos.getX() + 1 - sensitivity, pos.getY() + 1 - sensitivity, pos.getZ() + 1 - sensitivity), EntitySelectors.IS_ALIVE);
     }
 
     public static List<EntityMinecart> getMinecartsIn(World world, BlockPos p1, BlockPos p2) {
