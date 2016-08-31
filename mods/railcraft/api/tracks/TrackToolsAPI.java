@@ -64,9 +64,9 @@ public abstract class TrackToolsAPI {
      * @return true if successful
      * @see ITrackItem
      */
-    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos, BlockRailBase.EnumRailDirection trackShape) {
+    public static boolean placeRailAt(ItemStack stack, WorldServer world, BlockPos pos, BlockRailBase.EnumRailDirection trackShape) {
         if (stack.getItem() instanceof ITrackItem)
-            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), RailcraftFakePlayer.get((WorldServer) world, pos.offset(EnumFacing.UP)), world, pos, trackShape);
+            return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), RailcraftFakePlayer.get(world, pos.offset(EnumFacing.UP)), world, pos, trackShape);
         if (stack.getItem() instanceof ItemBlock) {
             Block block = ((ItemBlock) stack.getItem()).getBlock();
             if (block instanceof BlockRailBase) {
@@ -80,7 +80,7 @@ public abstract class TrackToolsAPI {
         return false;
     }
 
-    public static boolean placeRailAt(ItemStack stack, World world, BlockPos pos) {
+    public static boolean placeRailAt(ItemStack stack, WorldServer world, BlockPos pos) {
         return placeRailAt(stack, world, pos, BlockRailBase.EnumRailDirection.NORTH_SOUTH);
     }
 
