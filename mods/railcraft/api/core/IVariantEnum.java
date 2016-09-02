@@ -31,4 +31,7 @@ public interface IVariantEnum extends IStringSerializable {
         return getOreTag();
     }
 
+    default boolean isEnabled() {
+        return true;
+    }
 }

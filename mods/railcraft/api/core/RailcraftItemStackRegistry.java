@@ -9,6 +9,7 @@ package mods.railcraft.api.core;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -33,8 +34,18 @@ public class RailcraftItemStackRegistry {
     /**
      * This should only be called by Railcraft. It will throw an exception if called during another mod's load sequence.
      */
-    @SuppressWarnings("ConstantConditions")
-    public static void register(String tag, @Nonnull ItemStack stack) {
+    public static void register(IForgeRegistryEntry<?> object, @Nonnull ItemStack stack) {
+        _register(object.getRegistryName().getResourcePath(), stack);
+    }
+
+    /**
+     * This should only be called by Railcraft. It will throw an exception if called during another mod's load sequence.
+     */
+    public static void register(IRailcraftRegistryEntry<?> object, IVariantEnum variant, @Nonnull ItemStack stack) {
+        _register(object.getRegistryName(variant).getResourcePath(), stack);
+    }
+
+    private static void _register(String tag, @Nonnull ItemStack stack) {
         if (stack == null)
             throw new RuntimeException("Tried to register a null stack with the tag: " + tag);
         if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId()))
