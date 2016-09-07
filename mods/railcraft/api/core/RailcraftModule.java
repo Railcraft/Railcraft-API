@@ -1,9 +1,9 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.core;
 
@@ -37,4 +37,14 @@ public @interface RailcraftModule {
      * The classes of any other modules this module depends on.
      */
     Class<? extends IRailcraftModule>[] dependencyClasses() default {};
+
+    /**
+     * The names of any other modules this module loads after.
+     */
+    String[] softDependencies() default {};
+
+    /**
+     * The classes of any other modules this module loads after.
+     */
+    Class<? extends IRailcraftModule>[] softDependencyClasses() default {};
 }

@@ -16,7 +16,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -42,21 +41,10 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     @Nonnull
     private TileEntity tileEntity = new DummyTileEntity();
 
-    private class DummyTileEntity extends TileEntity implements IOutfittedTrackTile {
-        @Override
-        public TrackType getTrackType() {
-            return TrackRegistry.TRACK_TYPE.getFallback();
-        }
-
-        @Override
-        public ITrackKitInstance getTrackKitInstance() {
-            return new TrackKitMissing(false);
-        }
-
-        @Override
-        public void sendUpdateToClient() {
-            throw new RuntimeException();
-        }
+    protected static BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
+        if (state.getBlock() instanceof BlockRailBase)
+            return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
+        return NORTH_SOUTH;
     }
 
     private BlockRailBase getBlock() {
@@ -64,13 +52,13 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     }
 
     @Override
-    public void setTile(TileEntity tileEntity) {
-        this.tileEntity = tileEntity;
+    public TileEntity getTile() {
+        return tileEntity;
     }
 
     @Override
-    public TileEntity getTile() {
-        return tileEntity;
+    public void setTile(TileEntity tileEntity) {
+        this.tileEntity = tileEntity;
     }
 
     @Override
@@ -84,25 +72,24 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         return getRailDirection(state);
     }
 
-    protected static BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
-        if (state.getBlock() instanceof BlockRailBase)
-            return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
-        return NORTH_SOUTH;
-    }
-
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (this instanceof ITrackKitReversible) {
-            if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
-                IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-                if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                    ITrackKitReversible track = (ITrackKitReversible) this;
-                    track.setReversed(!track.isReversed());
-                    markBlockNeedsUpdate();
-                    crowbar.onWhack(player, hand, heldItem, getPos());
-                    return true;
-                }
+        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
+            if (crowbar.canWhack(player, hand, heldItem, getPos()) && onCrowbarWhack(player, hand, heldItem)) {
+                crowbar.onWhack(player, hand, heldItem, getPos());
+                return true;
             }
+        }
+        return false;
+    }
+
+    public boolean onCrowbarWhack(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+        if (this instanceof ITrackKitReversible) {
+            ITrackKitReversible track = (ITrackKitReversible) this;
+            track.setReversed(!track.isReversed());
+            markBlockNeedsUpdate();
+            return true;
         }
         return false;
     }
@@ -130,36 +117,8 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected boolean isRailValid(World world, BlockPos pos, BlockRailBase.EnumRailDirection dir) {
-        boolean valid = true;
-        if (!world.isSideSolid(pos.down(), EnumFacing.UP))
-            valid = false;
-        if (dir == ASCENDING_EAST && !world.isSideSolid(pos.east(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_WEST && !world.isSideSolid(pos.west(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_NORTH && !world.isSideSolid(pos.north(), EnumFacing.UP))
-            valid = false;
-        else if (dir == ASCENDING_SOUTH && !world.isSideSolid(pos.south(), EnumFacing.UP))
-            valid = false;
-        return valid;
-    }
-
     @Override
     public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
-        World world = theWorldAsserted();
-        boolean valid = isRailValid(world, getPos(), state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty()));
-        if (!valid) {
-            Block blockTrack = getBlock();
-            blockTrack.dropBlockAsItem(world, getPos(), state, 0);
-            world.setBlockToAir(getPos());
-            return;
-        }
-
-//        if (neighborBlock != null && neighborBlock.getDefaultState().canProvidePower()
-//                && isFlexibleRail() && TrackToolsAPI.countAdjacentTracks(world, getPos()) == 3)
-//            switchTrack(state, false);
         testPower(state);
     }
 
@@ -294,5 +253,22 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         assert world != null;
 //        if (world == null) throw new NullPointerException("World was null");
         return world;
+    }
+
+    private class DummyTileEntity extends TileEntity implements IOutfittedTrackTile {
+        @Override
+        public TrackType getTrackType() {
+            return TrackRegistry.TRACK_TYPE.getFallback();
+        }
+
+        @Override
+        public ITrackKitInstance getTrackKitInstance() {
+            return new TrackKitMissing(false);
+        }
+
+        @Override
+        public void sendUpdateToClient() {
+            throw new RuntimeException();
+        }
     }
 }

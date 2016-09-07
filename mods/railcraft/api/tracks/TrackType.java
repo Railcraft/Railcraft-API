@@ -8,6 +8,7 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.ILocalizedObject;
+import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -31,78 +32,36 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
 
     private final ResourceLocation registryName;
     private final ResourceLocation baseBlock;
+    private final IRailcraftRecipeIngredient rail;
+
+    private final IRailcraftRecipeIngredient railbed;
     private final float resistance;
     private final boolean highSpeed;
     private final boolean electric;
     private final int maxSupportDistance;
     private final EventHandler eventHandler;
 
-    public static final class Builder {
-        private final ResourceLocation registryName;
-        private final ResourceLocation baseBlock;
-        private float resistance = 3.5F;
-        private boolean highSpeed;
-        private boolean electric;
-        private int maxSupportDistance;
-        private EventHandler eventHandler;
-
-        public Builder(ResourceLocation registryName, ResourceLocation baseBlock) {
-            this.registryName = registryName;
-            this.baseBlock = baseBlock;
-        }
-
-        public TrackType build() {
-            if (eventHandler == null)
-                eventHandler = new EventHandler();
-            return new TrackType(registryName, baseBlock, resistance, highSpeed, electric, maxSupportDistance, eventHandler);
-        }
-
-        public final Builder setResistance(float resistance) {
-            this.resistance = resistance;
-            return this;
-        }
-
-        public final Builder setHighSpeed(boolean highSpeed) {
-            this.highSpeed = highSpeed;
-            return this;
-        }
-
-        public final Builder setElectric(boolean electric) {
-            this.electric = electric;
-            return this;
-        }
-
-        public final Builder setMaxSupportDistance(int maxSupportDistance) {
-            this.maxSupportDistance = maxSupportDistance;
-            return this;
-        }
-
-        public final Builder setEventHandler(EventHandler eventHandler) {
-            this.eventHandler = eventHandler;
-            return this;
-        }
-    }
-
-    public static class EventHandler {
-        public void onMinecartPass(World worldIn, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
-        }
-
-        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-        }
-
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-            return 0.4f;
-        }
-    }
-
-    public TrackType(ResourceLocation registryName, ResourceLocation baseBlock, float resistance, boolean highSpeed, boolean electric, int maxSupportDistance, EventHandler eventHandler) {
+    public TrackType(ResourceLocation registryName, ResourceLocation baseBlock,
+                     IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed,
+                     float resistance, boolean highSpeed, boolean electric, int maxSupportDistance,
+                     EventHandler eventHandler) {
         this.registryName = registryName;
         this.baseBlock = baseBlock;
+        this.rail = rail;
+        this.railbed = railbed;
         this.resistance = resistance;
         this.highSpeed = highSpeed;
         this.electric = electric;
         this.maxSupportDistance = maxSupportDistance;
         this.eventHandler = eventHandler;
+    }
+
+    public IRailcraftRecipeIngredient getRail() {
+        return rail;
+    }
+
+    public IRailcraftRecipeIngredient getRailbed() {
+        return railbed;
     }
 
     public boolean isHighSpeed() {
@@ -149,5 +108,68 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
     @Override
     public String toString() {
         return "TrackType{" + getName() + "}";
+    }
+
+    public static final class Builder {
+        private final ResourceLocation registryName;
+        private final ResourceLocation baseBlock;
+        private final IRailcraftRecipeIngredient rail;
+        private final IRailcraftRecipeIngredient railbed;
+        private float resistance = 3.5F;
+        private boolean highSpeed;
+        private boolean electric;
+        private int maxSupportDistance;
+        private EventHandler eventHandler;
+
+        public Builder(ResourceLocation registryName, ResourceLocation baseBlock, IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed) {
+            this.registryName = registryName;
+            this.baseBlock = baseBlock;
+            this.rail = rail;
+            this.railbed = railbed;
+        }
+
+        public TrackType build() {
+            if (eventHandler == null)
+                eventHandler = new EventHandler();
+            return new TrackType(registryName, baseBlock, rail, railbed,
+                    resistance, highSpeed, electric, maxSupportDistance, eventHandler);
+        }
+
+        public final Builder setResistance(float resistance) {
+            this.resistance = resistance;
+            return this;
+        }
+
+        public final Builder setHighSpeed(boolean highSpeed) {
+            this.highSpeed = highSpeed;
+            return this;
+        }
+
+        public final Builder setElectric(boolean electric) {
+            this.electric = electric;
+            return this;
+        }
+
+        public final Builder setMaxSupportDistance(int maxSupportDistance) {
+            this.maxSupportDistance = maxSupportDistance;
+            return this;
+        }
+
+        public final Builder setEventHandler(EventHandler eventHandler) {
+            this.eventHandler = eventHandler;
+            return this;
+        }
+    }
+
+    public static class EventHandler {
+        public void onMinecartPass(World worldIn, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
+        }
+
+        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        }
+
+        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+            return 0.4f;
+        }
     }
 }
