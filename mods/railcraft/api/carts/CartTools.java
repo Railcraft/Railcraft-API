@@ -8,11 +8,8 @@
 package mods.railcraft.api.carts;
 
 import com.mojang.authlib.GameProfile;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import mods.railcraft.api.core.items.IMinecartItem;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
@@ -20,14 +17,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import mods.railcraft.api.core.items.IMinecartItem;
-import net.minecraft.block.BlockRailBase;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public abstract class CartTools {
-    private static final GameProfile railcraftProfile = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
+    public static final GameProfile RAILCRAFT_PROFILE = new GameProfile(UUID.nameUUIDFromBytes("[Railcraft]".getBytes()), "[Railcraft]");
     public static ILinkageManager linkageManager;
     public static ITrainTransferHelper transferHelper;
 
@@ -83,13 +82,16 @@ public abstract class CartTools {
      */
     public static GameProfile getCartOwner(EntityMinecart cart) {
         NBTTagCompound data = cart.getEntityData();
-        String ownerName = "[Unknown]";
+        String ownerName = null;
         if (data.hasKey("owner"))
             ownerName = data.getString("owner");
 
         UUID ownerId = null;
         if (data.hasKey("ownerId"))
             ownerId = UUID.fromString(data.getString("ownerId"));
+        if (ownerId == null || ownerName == null) {
+            return RAILCRAFT_PROFILE;
+        }
         return new GameProfile(ownerId, ownerName);
     }
 
@@ -133,7 +135,7 @@ public abstract class CartTools {
             return mi.placeCart(owner, cart, world, x, y, z);
         } else if (cart.getItem() instanceof ItemMinecart)
             try {
-                boolean placed = cart.getItem().onItemUse(cart, FakePlayerFactory.get(world, railcraftProfile), world, x, y, z
+                boolean placed = cart.getItem().onItemUse(cart, FakePlayerFactory.get(world, RAILCRAFT_PROFILE), world, x, y, z
                         , 0, 0, 0, 0);
                 if (placed) {
                     List<EntityMinecart> carts = getMinecartsAt(world, x, y, z, 0.3f);
