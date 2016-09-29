@@ -9,6 +9,7 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -18,6 +19,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,6 +63,15 @@ public abstract class RailTools {
             return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, i, j, k);
         if (stack.getItem() instanceof ItemBlock) {
             Block block = ((ItemBlock) stack.getItem()).field_150939_a;
+            Block placedAgainst = world.getBlock(i, j - 1, k);
+            BlockEvent.PlaceEvent placeEvent = new BlockEvent.PlaceEvent(
+                    new BlockSnapshot(world, i, j, k, block, 0), placedAgainst,
+                    PlayerPlugin.getFakePlayer((WorldServer) world, i, j, k)
+            );
+            MinecraftForge.EVENT_BUS.post(placeEvent);
+            if (placeEvent.isCanceled()) {
+                return false;
+            }
             if (BlockRailBase.func_150051_a(block)) {
                 boolean success = world.setBlock(i, j, k, block);
                 if (success)
