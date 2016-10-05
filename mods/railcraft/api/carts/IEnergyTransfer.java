@@ -1,14 +1,11 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.carts;
-
-import mods.railcraft.api.electricity.IElectricMinecart;
 
 /**
  * This interface is implemented by the Energy Cart
@@ -16,12 +13,11 @@ import mods.railcraft.api.electricity.IElectricMinecart;
  * It is roughly equivalent to the IItemTransfer interface
  * and based on ElectricItem and IElectricItem.
  *
- * This interface has been superseded by the IElectricMinecart
+ * This interface has been superseded by the CapabilityCartCharge
  * interface for general use. It remains in use solely for the
  * IC2 based Energy Loaders.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see IElectricMinecart
  */
 public interface IEnergyTransfer {
 
