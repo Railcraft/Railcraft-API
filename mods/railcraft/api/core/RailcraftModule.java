@@ -28,6 +28,8 @@ public @interface RailcraftModule {
      */
     String value();
 
+    String description() default "";
+
     /**
      * The names of any other modules this module depends on.
      */
