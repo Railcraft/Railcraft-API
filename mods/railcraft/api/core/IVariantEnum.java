@@ -18,7 +18,7 @@ public interface IVariantEnum extends IStringSerializable {
     int ordinal();
 
     default String getResourcePathSuffix() {
-        return getName().replace("_", ".");
+        return getName().replace(".", "_");
     }
 
     @Nullable
@@ -27,7 +27,7 @@ public interface IVariantEnum extends IStringSerializable {
     }
 
     @Nullable
-    default Object getAlternate(String objectTag) {
+    default Object getAlternate(IRailcraftRecipeIngredient container) {
         return getOreTag();
     }
 
