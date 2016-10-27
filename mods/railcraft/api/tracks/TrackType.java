@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -163,6 +164,11 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
 
     public static class EventHandler {
         public void onMinecartPass(World worldIn, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
+        }
+
+        @Nullable
+        public BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+            return null;
         }
 
         public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
