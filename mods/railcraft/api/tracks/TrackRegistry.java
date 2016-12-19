@@ -142,7 +142,7 @@ public class TrackRegistry<T extends IStringSerializable> {
     }
 
     public T get(ItemStack stack) {
-        NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, false);
+        NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID);
         if (nbt != null)
             return get(nbt);
         return getFallback();

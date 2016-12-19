@@ -64,7 +64,7 @@ public class RailcraftItemStackRegistry {
         ItemStack stack = stacks.get(tag);
         if (stack != null) {
             stack = stack.copy();
-            stack.stackSize = Math.min(qty, stack.getMaxStackSize());
+            stack.setCount(Math.min(qty, stack.getMaxStackSize()));
         }
         return Optional.ofNullable(stack);
     }

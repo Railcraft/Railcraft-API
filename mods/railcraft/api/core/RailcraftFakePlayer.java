@@ -9,6 +9,9 @@ package mods.railcraft.api.core;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -26,17 +29,31 @@ public class RailcraftFakePlayer {
 
     public static final GameProfile RAILCRAFT_USER_PROFILE = new GameProfile(UUID.nameUUIDFromBytes(RailcraftConstantsAPI.RAILCRAFT_PLAYER.getBytes()), RailcraftConstantsAPI.RAILCRAFT_PLAYER);
 
-    public static EntityPlayer get(final WorldServer world, final double x, final double y, final double z) {
-        EntityPlayer player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
+    public static EntityPlayerMP get(final WorldServer world, final double x, final double y, final double z) {
+        EntityPlayerMP player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
         assert player != null;
         player.setPosition(x, y, z);
         return player;
     }
 
-    public static EntityPlayer get(final WorldServer world, final BlockPos pos) {
-        EntityPlayer player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
+    public static EntityPlayerMP get(final WorldServer world, final double x, final double y, final double z, final ItemStack stack) {
+        EntityPlayerMP player = get(world, x, y, z);
+        player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
+        player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, stack);
+        return player;
+    }
+
+    public static EntityPlayerMP get(final WorldServer world, final BlockPos pos) {
+        EntityPlayerMP player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
         assert player != null;
         player.setPosition(pos.getX(), pos.getY(), pos.getZ());
+        return player;
+    }
+
+    public static EntityPlayerMP get(final WorldServer world, final BlockPos pos, final ItemStack stack) {
+        EntityPlayerMP player = get(world, pos);
+        player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
+        player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, stack);
         return player;
     }
 }
