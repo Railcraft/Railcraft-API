@@ -7,6 +7,7 @@
 package mods.railcraft.api.carts;
 
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
@@ -78,7 +79,7 @@ public abstract class CartToolsAPI {
      */
     public static GameProfile getCartOwner(EntityMinecart cart) {
         NBTTagCompound data = cart.getEntityData();
-        String ownerName = "[unknown]";
+        String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
         if (data.hasKey("owner"))
             ownerName = data.getString("owner");
 
