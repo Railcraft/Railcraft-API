@@ -38,6 +38,11 @@ import java.util.function.Predicate;
  * @see mods.railcraft.api.core.RailcraftModule
  */
 public final class TrackKit implements IVariantEnum, ILocalizedObject {
+    public enum Renderer {
+        COMPOSITE,
+        UNIFIED
+    }
+
     public static final String NBT_TAG = "kit";
     public static Block blockTrackOutfitted;
     public static Item itemKit;
@@ -51,15 +56,18 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
     private final boolean visible;
     private final int renderStates;
     private final int maxSupportDistance;
+    private final Renderer renderer;
 
     public TrackKit(@Nonnull ResourceLocation registryName,
                     @Nonnull Class<? extends ITrackKitInstance> instanceClass,
                     Predicate<TrackType> trackTypeFilter,
+                    Renderer renderer,
                     boolean allowedOnSlopes, boolean requiresTicks,
                     boolean visible, int renderStates, int maxSupportDistance) {
         this.registryName = registryName;
         this.instanceClass = instanceClass;
         this.trackTypeFilter = trackTypeFilter;
+        this.renderer = renderer;
         this.allowedOnSlopes = allowedOnSlopes;
         this.requiresTicks = requiresTicks;
         this.visible = visible;
@@ -76,6 +84,7 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
         private boolean allowedOnSlopes = true;
         private boolean requiresTicks;
         private boolean visible = true;
+        private Renderer renderer = Renderer.COMPOSITE;
         private int renderStates = 1;
         private int maxSupportDistance;
 
@@ -97,11 +106,17 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
                     registryName,
                     instanceClass,
                     trackTypeFilter,
+                    renderer,
                     allowedOnSlopes,
                     requiresTicks,
                     visible,
                     renderStates,
                     maxSupportDistance);
+        }
+
+        public Builder setRenderer(Renderer renderer) {
+            this.renderer = renderer;
+            return this;
         }
 
         public Builder setRenderStates(int renderStates) {
@@ -217,6 +232,10 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
         } catch (Exception ex) {
             throw new RuntimeException("Improper Track Instance Constructor", ex);
         }
+    }
+
+    public Renderer getRenderer() {
+        return renderer;
     }
 
     public int getRenderStates() {
