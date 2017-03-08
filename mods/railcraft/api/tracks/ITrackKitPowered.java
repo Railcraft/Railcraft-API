@@ -18,8 +18,6 @@ package mods.railcraft.api.tracks;
  */
 public interface ITrackKitPowered extends ITrackKitInstance {
 
-//    IUnlistedProperty<Boolean> POWERED = Properties.toUnlisted(PropertyBool.create("powered"));
-
     /**
      * Getter for a simple boolean variable for caching the power state.
      */

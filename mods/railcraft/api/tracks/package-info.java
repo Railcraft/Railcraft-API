@@ -1,12 +1,11 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2016
 
-@API(apiVersion = "3.0.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|tracks")
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
+@API(apiVersion = "3.0.1", owner = "RailcraftAPI|core", provides = "RailcraftAPI|tracks")
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 package mods.railcraft.api.tracks;

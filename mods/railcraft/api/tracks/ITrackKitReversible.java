@@ -17,8 +17,6 @@ package mods.railcraft.api.tracks;
  */
 public interface ITrackKitReversible extends ITrackKitInstance {
 
-//    PropertyBool REVERSED = PropertyBool.create("reversed");
-
     boolean isReversed();
 
     void setReversed(boolean reversed);
