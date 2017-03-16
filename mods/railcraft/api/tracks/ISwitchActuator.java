@@ -8,34 +8,43 @@
 package mods.railcraft.api.tracks;
 
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.util.IStringSerializable;
 
-public interface ISwitchDevice {
+import javax.annotation.Nullable;
+import java.util.Locale;
+
+public interface ISwitchActuator {
     /**
-     * This method is used by the <code>switchTrack</code> to ask the switch
+     * This method is used by the switch track to ask the actuator
      * device whether it thinks the track should be switched or not. Ultimately,
      * the track itself will decide whether it will be switched, however the
      * track will usually try to honor results of this method when possible.
      *
-     * @param switchTrack The switch track that is asking
      * @param cart        The cart that the switch may use to determine switch status.
      *                    Implementations should expect null values.
-     * @return true if the switch would like the track switched
+     * @return true if the actuator would like the track switched
      * @see ITrackKitSwitch
      */
-    boolean shouldSwitch(ITrackKitSwitch switchTrack, EntityMinecart cart);
+    boolean shouldSwitch(@Nullable EntityMinecart cart);
 
     /**
-     * Announces track state changes to the device.
+     * Announces track state changes to the actuator.
      * Server side only.
      */
     void onSwitch(boolean isSwitched);
 
     /**
-     * Tell the switch device to refresh its arrows directions.
+     * Tell the actuator to refresh its arrows directions.
      */
     void updateArrows();
 
-    enum ArrowDirection {
-        NORTH, SOUTH, EAST, WEST, NORTH_SOUTH, EAST_WEST
+    enum ArrowDirection implements IStringSerializable {
+        NORTH, SOUTH, EAST, WEST, NORTH_SOUTH, EAST_WEST;
+        public static ArrowDirection[] VALUES = values();
+
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
     }
 }

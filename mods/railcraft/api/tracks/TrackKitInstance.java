@@ -41,7 +41,7 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     @Nonnull
     private TileEntity tileEntity = new DummyTileEntity();
 
-    protected static BlockRailBase.EnumRailDirection getRailDirection(IBlockState state) {
+    protected static BlockRailBase.EnumRailDirection getRailDirectionRaw(IBlockState state) {
         if (state.getBlock() instanceof BlockRailBase)
             return state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
         return NORTH_SOUTH;
@@ -63,13 +63,13 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
 
     @Override
     public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
-        return getRailDirection(state);
+        return getRailDirectionRaw(state);
     }
 
-    protected final BlockRailBase.EnumRailDirection getRailDirection() {
+    public final BlockRailBase.EnumRailDirection getRailDirectionRaw() {
         World world = theWorldAsserted();
         IBlockState state = world.getBlockState(getPos());
-        return getRailDirection(state);
+        return getRailDirectionRaw(state);
     }
 
     @Override
