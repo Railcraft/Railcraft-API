@@ -8,19 +8,13 @@
 package mods.railcraft.api.tracks;
 
 /**
- * Tracks that can emit a redstone signal should implement
+ * Tracks that can interface with Comparators should implement
  * this interface.
  *
  * For example a detector track.
  *
- * A track cannot implement both ITrackPowered and ITrackEmitter.
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITrackKitEmitter extends ITrackKitInstance {
-
-    /**
-     * Return the redstone output of the track.
-     */
-    int getPowerOutput();
+public interface ITrackKitComparator extends ITrackKitInstance {
+    int getComparatorInputOverride();
 }
