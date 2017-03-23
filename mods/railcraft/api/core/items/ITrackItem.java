@@ -40,7 +40,7 @@ public interface ITrackItem {
      * @return true if successful
      */
     default boolean placeTrack(ItemStack stack, @Nullable EntityPlayer player, World world, BlockPos pos, @Nullable BlockRailBase.EnumRailDirection trackShape) {
-        return stack.getItem().onItemUse(stack, player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0) == EnumActionResult.SUCCESS;
+        return stack.getItem().onItemUse(player, world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0) == EnumActionResult.SUCCESS;
     }
 
     /**

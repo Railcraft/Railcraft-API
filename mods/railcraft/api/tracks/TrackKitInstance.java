@@ -97,7 +97,7 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer != null && this instanceof ITrackKitReversible) {
-            int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+            int dir = MathHelper.floor((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             ((ITrackKitReversible) this).setReversed(dir == 0 || dir == 1);
         }
         switchTrack(state, true);
@@ -138,11 +138,11 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
-            world.notifyNeighborsOfStateChange(getPos(), blockTrack);
-            world.notifyNeighborsOfStateChange(getPos().down(), blockTrack);
+            world.notifyNeighborsOfStateChange(getPos(), blockTrack, true);
+            world.notifyNeighborsOfStateChange(getPos().down(), blockTrack, true);
             BlockRailBase.EnumRailDirection railDirection = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
             if (railDirection.isAscending())
-                world.notifyNeighborsOfStateChange(getPos().up(), blockTrack);
+                world.notifyNeighborsOfStateChange(getPos().up(), blockTrack, true);
             sendUpdateToClient();
             // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
         }

@@ -271,8 +271,8 @@ public abstract class SignalBlock extends AbstractPair {
 //        System.out.println("carts = " + carts.size());
         SignalAspect newAspect = SignalAspect.GREEN;
         for (EntityMinecart cart : carts) {
-            int cartX = MathHelper.floor_double(cart.posX);
-            int cartZ = MathHelper.floor_double(cart.posZ);
+            int cartX = MathHelper.floor(cart.posX);
+            int cartZ = MathHelper.floor(cart.posZ);
             if (Math.abs(cart.motionX) < 0.08 && Math.abs(cart.motionZ) < 0.08)
                 return SignalAspect.RED;
             else if (zAxis)

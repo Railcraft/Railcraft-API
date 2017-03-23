@@ -189,7 +189,7 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
     public ItemStack getTrackKitItem(int qty) {
         if (itemKit != null) {
             ItemStack stack = new ItemStack(itemKit, qty, ordinal());
-            NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
+            NBTTagCompound nbt = stack.getOrCreateSubCompound(RailcraftConstantsAPI.MOD_ID);
             nbt.setString(NBT_TAG, getName());
             return stack;
         }
@@ -215,7 +215,7 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
     public ItemStack getOutfittedTrack(TrackType trackType, int qty) {
         if (blockTrackOutfitted != null) {
             ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
-            NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
+            NBTTagCompound nbt = stack.getOrCreateSubCompound(RailcraftConstantsAPI.MOD_ID);
             nbt.setString(TrackType.NBT_TAG, trackType.getName());
             nbt.setString(NBT_TAG, getName());
             return stack;
