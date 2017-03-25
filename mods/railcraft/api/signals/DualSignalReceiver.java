@@ -1,15 +1,14 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -29,7 +28,7 @@ public class DualSignalReceiver extends SignalReceiver {
 
     @Override
     public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
-        WorldCoordinate coord = pairings.peekFirst();
+        BlockPos coord = pairings.peekFirst();
         if (coord == null) {
             return;
         }

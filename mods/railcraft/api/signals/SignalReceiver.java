@@ -1,14 +1,13 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +23,7 @@ public abstract class SignalReceiver extends AbstractPair {
     }
 
     @Nullable
-    public SignalController getControllerAt(WorldCoordinate coord) {
+    public SignalController getControllerAt(BlockPos coord) {
         TileEntity con = getPairAt(coord);
         if (con != null) {
             return ((IControllerTile) con).getController();
@@ -34,7 +33,7 @@ public abstract class SignalReceiver extends AbstractPair {
 
     @Override
     public void informPairsOfNameChange() {
-        for (WorldCoordinate coord : getPairs()) {
+        for (BlockPos coord : getPairs()) {
             SignalController ctrl = getControllerAt(coord);
             if (ctrl != null) {
                 ctrl.onPairNameChange(getCoords(), getName());
@@ -48,7 +47,7 @@ public abstract class SignalReceiver extends AbstractPair {
     }
 
     @Override
-    public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
+    public boolean isValidPair(BlockPos otherCoord, TileEntity otherTile) {
         if (otherTile instanceof IControllerTile) {
             SignalController controller = ((IControllerTile) otherTile).getController();
             return controller.isPairedWith(getCoords());
@@ -69,7 +68,7 @@ public abstract class SignalReceiver extends AbstractPair {
         super.tickServer();
         if (needsInit) {
             needsInit = false;
-            for (WorldCoordinate pair : getPairs()) {
+            for (BlockPos pair : getPairs()) {
                 SignalController controller = getControllerAt(pair);
                 if (controller != null) {
                     onControllerAspectChange(controller, controller.getAspectFor(getCoords()));

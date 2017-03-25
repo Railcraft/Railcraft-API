@@ -1,16 +1,16 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class SignalBlockRelay extends SignalBlock {
 
-    private final Map<WorldCoordinate, SignalAspect> aspects = new HashMap<WorldCoordinate, SignalAspect>();
+    private final Map<BlockPos, SignalAspect> aspects = new HashMap<>();
 
     public SignalBlockRelay(String locTag, TileEntity tile) {
         super(locTag, tile, 2);
@@ -29,7 +29,7 @@ public class SignalBlockRelay extends SignalBlock {
     @Override
     protected void updateSignalAspect() {
         aspects.keySet().retainAll(getPairs());
-        for (WorldCoordinate otherCoord : getPairs()) {
+        for (BlockPos otherCoord : getPairs()) {
             aspects.put(otherCoord, determineAspect(otherCoord));
         }
     }
@@ -43,16 +43,16 @@ public class SignalBlockRelay extends SignalBlock {
             return SignalAspect.BLINK_RED;
         }
         SignalAspect aspect = SignalAspect.GREEN;
-        for (WorldCoordinate otherCoord : getPairs()) {
+        for (BlockPos otherCoord : getPairs()) {
             aspect = SignalAspect.mostRestrictive(aspect, aspects.get(otherCoord));
         }
         return aspect;
     }
 
     @Override
-    protected SignalAspect getSignalAspectForPair(WorldCoordinate otherCoord) {
+    protected SignalAspect getSignalAspectForPair(BlockPos otherCoord) {
         SignalAspect aspect = SignalAspect.GREEN;
-        for (Map.Entry<WorldCoordinate, SignalAspect> entry : aspects.entrySet()) {
+        for (Map.Entry<BlockPos, SignalAspect> entry : aspects.entrySet()) {
             if (entry.getKey().equals(otherCoord)) {
                 continue;
             }
@@ -67,7 +67,7 @@ public class SignalBlockRelay extends SignalBlock {
         NBTTagList tagList = data.getTagList("aspects", 10);
         for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound nbt = tagList.getCompoundTagAt(i);
-            WorldCoordinate coord = WorldCoordinate.readFromNBT(nbt, "coord");
+            BlockPos coord = SignalTools.readFromNBT(nbt, "coord");
             SignalAspect aspect = SignalAspect.readFromNBT(nbt, "aspect");
             aspects.put(coord, aspect);
         }
@@ -77,10 +77,10 @@ public class SignalBlockRelay extends SignalBlock {
     protected void loadNBT(NBTTagCompound data) {
         super.loadNBT(data);
         NBTTagList tagList = new NBTTagList();
-        for (Map.Entry<WorldCoordinate, SignalAspect> entry : aspects.entrySet()) {
+        for (Map.Entry<BlockPos, SignalAspect> entry : aspects.entrySet()) {
             NBTTagCompound nbt = new NBTTagCompound();
             if (entry.getKey() != null && entry.getValue() != null) {
-                entry.getKey().writeToNBT(nbt, "coord");
+                SignalTools.writeToNBT(nbt, "coord", entry.getKey());
                 entry.getValue().writeToNBT(nbt, "aspect");
                 tagList.appendTag(nbt);
             }

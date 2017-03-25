@@ -1,14 +1,14 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -38,7 +38,7 @@ public class SimpleSignalController extends SignalController {
     }
 
     @Override
-    public SignalAspect getAspectFor(WorldCoordinate receiver) {
+    public SignalAspect getAspectFor(BlockPos receiver) {
         return aspect;
     }
 
@@ -52,7 +52,7 @@ public class SimpleSignalController extends SignalController {
     }
 
     private void updateReceiver() {
-        for (WorldCoordinate recv : getPairs()) {
+        for (BlockPos recv : getPairs()) {
             SignalReceiver receiver = getReceiverAt(recv);
             if (receiver != null) {
                 receiver.onControllerAspectChange(this, aspect);

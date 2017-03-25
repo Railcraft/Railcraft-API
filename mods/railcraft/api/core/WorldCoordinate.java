@@ -1,16 +1,15 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.core;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,11 +20,13 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class WorldCoordinate extends BlockPos {
+public class WorldCoordinate {
     /**
      * The dimension
      */
     private final int dimension;
+
+    private final BlockPos pos;
 
     /**
      * Creates a new WorldCoordinate
@@ -36,8 +37,8 @@ public class WorldCoordinate extends BlockPos {
      * @param z         World Coordinate
      */
     public WorldCoordinate(int dimension, int x, int y, int z) {
-        super(x, y, z);
         this.dimension = dimension;
+        this.pos = new BlockPos(x, y, z);
     }
 
     /**
@@ -46,14 +47,13 @@ public class WorldCoordinate extends BlockPos {
      * @param dimension Dimension ID
      * @param pos       World Coordinates
      */
-    public WorldCoordinate(int dimension, Vec3i pos) {
-        super(pos);
+    public WorldCoordinate(int dimension, BlockPos pos) {
         this.dimension = dimension;
+        this.pos = pos;
     }
 
     public WorldCoordinate(TileEntity tile) {
-        super(tile.getPos());
-        this.dimension = tile.getWorld().provider != null ? tile.getWorld().provider.getDimension() : 0;
+        this(tile.getWorld().provider != null ? tile.getWorld().provider.getDimension() : 0, tile.getPos());
     }
 
     @Nullable
@@ -88,6 +88,10 @@ public class WorldCoordinate extends BlockPos {
         return getX() == p.getX() && getY() == p.getY() && getZ() == p.getZ() && dimension == dim;
     }
 
+    public boolean isEqual(WorldCoordinate p) {
+        return getX() == p.getX() && getY() == p.getY() && getZ() == p.getZ() && getDim() == p.getDim();
+    }
+
 //    public int compareTo(@Nonnull WorldCoordinate o) {
 //        if (dimension != o.dimension)
 //            return dimension - o.dimension;
@@ -101,19 +105,19 @@ public class WorldCoordinate extends BlockPos {
 //    }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final WorldCoordinate other = (WorldCoordinate) obj;
-        return isEqual(other.dimension, other);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WorldCoordinate that = (WorldCoordinate) o;
+
+        return dimension == that.dimension && pos.equals(that.pos);
     }
 
     @Override
     public int hashCode() {
         int result = dimension;
-        result = 31 * result + super.hashCode();
+        result = 31 * result + pos.hashCode();
         return result;
     }
 
@@ -125,6 +129,26 @@ public class WorldCoordinate extends BlockPos {
 
     public int getDim() {
         return dimension;
+    }
+
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    public int getX() {
+        return pos.getX();
+    }
+
+    public int getY() {
+        return pos.getY();
+    }
+
+    public int getZ() {
+        return pos.getZ();
+    }
+
+    public Vec3d getVec3d() {
+        return new Vec3d(getPos());
     }
 
     public boolean isBelowWorld() {

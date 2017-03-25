@@ -1,14 +1,13 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,7 +21,7 @@ public abstract class SignalController extends AbstractPair {
     }
 
     @Nullable
-    public SignalReceiver getReceiverAt(WorldCoordinate coord) {
+    public SignalReceiver getReceiverAt(BlockPos coord) {
         TileEntity recv = getPairAt(coord);
         if (recv != null) {
             return ((IReceiverTile) recv).getReceiver();
@@ -31,11 +30,11 @@ public abstract class SignalController extends AbstractPair {
     }
 
     @Nonnull
-    public abstract SignalAspect getAspectFor(WorldCoordinate receiver);
+    public abstract SignalAspect getAspectFor(BlockPos receiver);
 
     @Override
     public void informPairsOfNameChange() {
-        for (WorldCoordinate coord : getPairs()) {
+        for (BlockPos coord : getPairs()) {
             SignalReceiver recv = getReceiverAt(coord);
             if (recv != null) {
                 recv.onPairNameChange(getCoords(), getName());
@@ -49,7 +48,7 @@ public abstract class SignalController extends AbstractPair {
     }
 
     @Override
-    public boolean isValidPair(WorldCoordinate otherCoord, TileEntity otherTile) {
+    public boolean isValidPair(BlockPos otherCoord, TileEntity otherTile) {
         if (otherTile instanceof IReceiverTile) {
             SignalReceiver receiver = ((IReceiverTile) otherTile).getReceiver();
             return receiver.isPairedWith(getCoords());
@@ -57,13 +56,8 @@ public abstract class SignalController extends AbstractPair {
         return false;
     }
 
-    @Deprecated
-    public void registerLegacyReceiver(int x, int y, int z) {
-        pairings.add(new WorldCoordinate(0, x, y, z));
-    }
-
     public void registerReceiver(SignalReceiver receiver) {
-        WorldCoordinate coords = receiver.getCoords();
+        BlockPos coords = receiver.getCoords();
         addPairing(coords);
         receiver.registerController(this);
         receiver.onControllerAspectChange(this, getAspectFor(coords));
@@ -73,7 +67,7 @@ public abstract class SignalController extends AbstractPair {
     public void tickClient() {
         super.tickClient();
         if (SignalTools.effectManager != null && SignalTools.effectManager.isTuningAuraActive()) {
-            for (WorldCoordinate coord : getPairs()) {
+            for (BlockPos coord : getPairs()) {
                 SignalReceiver receiver = getReceiverAt(coord);
                 if (receiver != null) {
                     SignalTools.effectManager.tuningEffect(getTile(), receiver.getTile());
