@@ -1,9 +1,9 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.signals;
 
@@ -21,28 +21,28 @@ public enum SignalAspect {
     /**
      * The All Clear.
      */
-    GREEN(0, 5, "railcraft.gui.aspect.green.name"),
+    GREEN(0, 5, "gui.railcraft.aspect.green.name"),
     /**
      * Typically means pairing in progress.
      */
-    BLINK_YELLOW(1, 3, "railcraft.gui.aspect.blink.yellow.name"),
+    BLINK_YELLOW(1, 3, "gui.railcraft.aspect.blink.yellow.name"),
     /**
      * Caution, cart heading away.
      */
-    YELLOW(1, 5, "railcraft.gui.aspect.yellow.name"),
+    YELLOW(1, 5, "gui.railcraft.aspect.yellow.name"),
     /**
      * Maintenance warning, the signal is malfunctioning.
      */
-    BLINK_RED(2, 3, "railcraft.gui.aspect.blink.red.name"),
+    BLINK_RED(2, 3, "gui.railcraft.aspect.blink.red.name"),
     /**
      * Stop!
      */
-    RED(2, 5, "railcraft.gui.aspect.red.name"),
+    RED(2, 5, "gui.railcraft.aspect.red.name"),
     /**
      * Can't happen, really it can't (or shouldn't). Only used when rendering
      * blink states (for the texture offset).
      */
-    OFF(3, 0, "railcraft.gui.aspect.off.name");
+    OFF(3, 0, "gui.railcraft.aspect.off.name");
     private final int textureIndex;
     private final int lightValue;
     private final String localizationTag;
