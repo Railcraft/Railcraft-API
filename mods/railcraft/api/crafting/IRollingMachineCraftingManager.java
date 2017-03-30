@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -51,6 +51,7 @@ public interface IRollingMachineCraftingManager {
      * @param world             the world
      * @return the resulting ItemStack
      */
+    @Nullable
     ItemStack findMatchingRecipe(InventoryCrafting inventoryCrafting, World world);
 
     /**
