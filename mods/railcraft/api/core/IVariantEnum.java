@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -33,5 +33,9 @@ public interface IVariantEnum extends IStringSerializable {
 
     default boolean isEnabled() {
         return true;
+    }
+
+    default boolean isDeprecated() {
+        return false;
     }
 }
