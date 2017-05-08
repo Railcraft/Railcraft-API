@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -9,6 +9,7 @@ package mods.railcraft.api.carts;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -60,6 +61,8 @@ public interface ITrainTransferHelper {
      * @param stack     the ItemStack to be offered
      */
     void offerOrDropItem(EntityMinecart requester, ItemStack stack);
+
+    IItemHandler getTrainItemHandler(EntityMinecart cart);
 
 
     // ***************************************************************************************************************************
