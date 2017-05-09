@@ -9,6 +9,7 @@ package mods.railcraft.api.carts;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -62,6 +63,12 @@ public interface ITrainTransferHelper {
      */
     void offerOrDropItem(EntityMinecart requester, ItemStack stack);
 
+    /**
+     * Returns an IItemHandler with represents the entire train.
+     *
+     * @param cart a cart in the train
+     * @return IItemHandler
+     */
     IItemHandler getTrainItemHandler(EntityMinecart cart);
 
 
@@ -90,4 +97,12 @@ public interface ITrainTransferHelper {
      */
     @Nullable
     FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack);
+
+    /**
+     * Returns an IFluidHandler with represents the entire train.
+     *
+     * @param cart a cart in the train
+     * @return IFluidHandler
+     */
+    IFluidHandler getTrainFluidHandler(EntityMinecart cart);
 }
