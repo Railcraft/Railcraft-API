@@ -69,6 +69,7 @@ public interface ITrainTransferHelper {
      * @param cart a cart in the train
      * @return IItemHandler
      */
+    @Nullable
     IItemHandler getTrainItemHandler(EntityMinecart cart);
 
 
@@ -104,5 +105,6 @@ public interface ITrainTransferHelper {
      * @param cart a cart in the train
      * @return IFluidHandler
      */
+    @Nullable
     IFluidHandler getTrainFluidHandler(EntityMinecart cart);
 }
