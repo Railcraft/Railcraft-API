@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -115,19 +115,10 @@ public interface ILinkageManager {
     Iterable<EntityMinecart> trainIterator(EntityMinecart cart);
 
     /**
-     * Given a persistent Entity UUID, it will return a matching minecart,
-     * assuming one is loaded in the world.
-     * <p/>
-     * The Mapping is stored in a Map<UUID, EntityMinecart> so its fairly fast.
-     * <p/>
-     * This would probably be better in CartTools, but
-     * Railcraft really only uses it for linking and this was the
-     * easiest way to expose it.
-     *
-     * @param id Persistent Entity UUID
-     * @return A Minecart
+     * Replaced with WorldServer#getEntityFromUuid.
      */
     @Nullable
+    @Deprecated
     EntityMinecart getCartFromUUID(UUID id);
 
 }
