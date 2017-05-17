@@ -5,7 +5,7 @@
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
-@API(apiVersion = "4.0.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|tracks")
+@API(apiVersion = "4.1.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|tracks")
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 package mods.railcraft.api.tracks;
