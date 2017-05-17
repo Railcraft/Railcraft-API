@@ -206,21 +206,6 @@ public final class TrackToolsAPI {
 //        return null;
 //    }
 
-    public static TrackType getTypeForTrackKitInstance(ITrackKitInstance instance) {
-        TileEntity tile = instance.getTile();
-        return trackTypeFunction == null ? TrackRegistry.TRACK_TYPE.getFallback() : trackTypeFunction.apply(tile);
-    }
-
-    private static Function<TileEntity, TrackType> trackTypeFunction;
-
-    /**
-     * Other mods don't use this!
-     */
-    @Deprecated
-    public static void setTrackTypeFunction(Function<TileEntity, TrackType> function) {
-        trackTypeFunction = function;
-    }
-
     private TrackToolsAPI() {}
 
 }
