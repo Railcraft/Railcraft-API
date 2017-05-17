@@ -8,7 +8,6 @@
 package mods.railcraft.api.tracks;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftCore;
@@ -24,9 +23,7 @@ import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import net.minecraftforge.fml.common.registry.RegistryBuilder;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -65,9 +62,11 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
     public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "missing", TrackKit.class);
     private static final TrackKit missingKit;
     private static ImmutableSet<Tuple<TrackType, TrackKit>> combinations = ImmutableSet.of();
+    private static int pass = 0;
 
     static {
-        missingKit = new TrackKit.Builder(RailcraftConstantsAPI.locationOf("missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
+        missingKit =
+            new TrackKit.Builder(RailcraftConstantsAPI.locationOf("missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
         TRACK_KIT.register(missingKit);
     }
 
@@ -83,7 +82,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
         builder.setType(type);
         builder.setIDRange(0, 255);
         ReflectionHelper.<RegistryBuilder, ResourceLocation>setPrivateValue(RegistryBuilder.class, builder,
-            RailcraftConstantsAPI.locationOf(fallback), 2);
+            RailcraftConstantsAPI.locationOf(fallback), 2); //Forge - #3806
         registry = builder.create();
     }
 
@@ -114,9 +113,8 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
         if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId())) {
             throw new TrackRegistryException("Finalize called by non-railcraft mods!");
         }
-        List<T> list = Lists.newArrayList(iterator());
-        list.sort(Comparator.comparing(T::getName));
-        if (combinations.isEmpty()) {
+        pass++; // Prevent building when not all track types or track kits are registered.
+        if (pass == 2) {
             ImmutableSet.Builder<Tuple<TrackType, TrackKit>> builder = ImmutableSet.builder();
             for (TrackKit trackKit : TrackRegistry.TRACK_KIT) {
                 if (!trackKit.isVisible()) {
@@ -155,8 +153,9 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      */
     public T get(String tag) {
         String[] tags = tag.split("_", 2);
-        if (tags.length == 2)
+        if (tags.length == 2) {
             return registry.getValue(new ResourceLocation(tags[0], tags[1]));
+        }
         return registry.getValue(new ResourceLocation(tag));
     }
 
