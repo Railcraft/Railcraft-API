@@ -125,8 +125,8 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
      * @param cart The cart on the rail, may be null.
      * @return The max speed of the current rail.
      */
-    default float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
-        return 0.4F;
+    default float getRailMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos, TrackType type) {
+        return type.getEventHandler().getMaxSpeed(world, cart, pos);
     }
 
     /**
@@ -134,6 +134,13 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
      */
     default boolean isProtected() {
         return false;
+    }
+
+    /**
+     * Returns the track type of this track.
+     */
+    default TrackType getTrackType() {
+        return TrackToolsAPI.getTypeForTrackKitInstance(this);
     }
 
 }

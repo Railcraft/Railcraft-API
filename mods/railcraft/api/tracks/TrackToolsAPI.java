@@ -7,6 +7,8 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.core.RailcraftCore;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
@@ -23,6 +25,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.Loader;
+
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +37,7 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings({"WeakerAccess"})
-public abstract class TrackToolsAPI {
+public final class TrackToolsAPI {
     /**
      * Check if the block at the location is a Track.
      */
@@ -200,5 +205,22 @@ public abstract class TrackToolsAPI {
 //        }
 //        return null;
 //    }
+
+    public static TrackType getTypeForTrackKitInstance(ITrackKitInstance instance) {
+        TileEntity tile = instance.getTile();
+        return trackTypeFunction == null ? TrackRegistry.TRACK_TYPE.getFallback() : trackTypeFunction.apply(tile);
+    }
+
+    private static Function<TileEntity, TrackType> trackTypeFunction;
+
+    /**
+     * Other mods don't use this!
+     */
+    @Deprecated
+    public static void setTrackTypeFunction(Function<TileEntity, TrackType> function) {
+        trackTypeFunction = function;
+    }
+
+    private TrackToolsAPI() {}
 
 }
