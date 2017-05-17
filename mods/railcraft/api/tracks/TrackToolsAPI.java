@@ -7,8 +7,6 @@
 
 package mods.railcraft.api.tracks;
 
-import mods.railcraft.api.core.RailcraftConstantsAPI;
-import mods.railcraft.api.core.RailcraftCore;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.Block;
@@ -25,9 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.Loader;
-
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
