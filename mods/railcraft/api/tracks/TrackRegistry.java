@@ -7,9 +7,8 @@
 
 package mods.railcraft.api.tracks;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableSet;
+import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftCore;
 import net.minecraft.item.ItemStack;
@@ -17,16 +16,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.LoaderState;
-import org.apache.logging.log4j.Level;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.fml.common.registry.RegistryBuilder;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The TrackRegistry is part of a system that allows 3rd party addon to simply,
- * quickly, and easily define new {@link TrackType}s and {@link TrackKit}s with unique behaviors.
+ * quickly, and easily define new {@link TrackType track types} and {@link TrackKit track kits} with unique behaviors.
  *
  * To define a new TrackType, you need to create a new TrackType object.
  *
@@ -37,69 +40,90 @@ import java.util.*;
  * {@link ITrackKitInstance} controls how the TrackKit interacts with the world.
  *
  * Due to some stupidity in the way that Minecraft handles model registration,
- * TrackTypes and TrackKits must be registered during the PRE-INIT phase of a {@link mods.railcraft.api.core.RailcraftModule}.
- * So if you want to add new ones, you'll need to define your own RailcraftModule. Thankfully this isn't too hard.
+ * TrackTypes and TrackKits must be registered during the PRE-INIT phase of a {@link mods.railcraft.api.core.RailcraftModule
+ * railcraft module}. So if you want to add new ones, you'll need to define your own RailcraftModule.
+ * Thankfully this isn't too hard.
  *
  * @author CovertJaguar <http://www.railcraft.info>
+ * @see TrackType
  * @see TrackKit
  * @see ITrackKitInstance
  * @see TrackKitInstance
  */
-public class TrackRegistry<T extends IStringSerializable> {
+public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T>> implements Iterable<T> {
 
-    public static final TrackRegistry<TrackType> TRACK_TYPE = new TrackRegistry<>(TrackType.NBT_TAG, "railcraft_iron");
-    public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "railcraft_missing");
+    /**
+     * The registry for {@link TrackType track types}.
+     */
+    public static final TrackRegistry<TrackType> TRACK_TYPE = new TrackRegistry<>(TrackType.NBT_TAG, "iron", TrackType.class);
+    /**
+     * The registry for {@link TrackKit track kits}.
+     */
+    public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "missing", TrackKit.class);
     private static final TrackKit missingKit;
     private static ImmutableSet<Tuple<TrackType, TrackKit>> combinations = ImmutableSet.of();
+    private static int pass = 0;
 
     static {
-        missingKit = new TrackKit.Builder(new ResourceLocation(RailcraftConstantsAPI.MOD_ID, "missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
-        TRACK_KIT.registry.put(missingKit.getName(), missingKit);
+        missingKit =
+            new TrackKit.Builder(RailcraftConstantsAPI.locationOf("missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
+        TRACK_KIT.register(missingKit);
     }
 
-    private final Map<String, T> registry = new HashMap<>();
-    private final BiMap<Integer, T> idMap = HashBiMap.create();
-    private final Set<String> invalidTags = new HashSet<>();
     private final String nbtTag;
     private final String fallback;
+    private final IForgeRegistry<T> registry;
 
-    private TrackRegistry(String nbtTag, String fallback) {
+    private TrackRegistry(String nbtTag, String fallback, Class<T> type) {
         this.nbtTag = nbtTag;
         this.fallback = fallback;
+        RegistryBuilder<T> builder = new RegistryBuilder<>();
+        builder.setName(RailcraftConstantsAPI.locationOf(nbtTag));
+        builder.setType(type);
+        builder.setIDRange(0, 255);
+        ReflectionHelper.<RegistryBuilder, ResourceLocation>setPrivateValue(RegistryBuilder.class, builder,
+            RailcraftConstantsAPI.locationOf(fallback), 2); //Forge - #3806
+        registry = builder.create();
     }
 
-    private static <T> void populateIndexedLookupTable(BiMap<Integer, T> table, List<T> elements) {
-        for (int i = 0; i < elements.size(); i++) {
-            table.put(i, elements.get(i));
-        }
-    }
-
+    /**
+     * Equivalent of the fallback entry of {@link #TRACK_KIT track kit registry}.
+     *
+     * @return The missing track kit
+     */
     public static TrackKit getMissingTrackKit() {
         return missingKit;
     }
 
+    /**
+     * Gets all possible combinations available for an outfitted track. It is immutable.
+     *
+     * @return An immutable set containing the combinations
+     */
     public static ImmutableSet<Tuple<TrackType, TrackKit>> getCombinations() {
         return combinations;
     }
 
     /**
-     * Do not call this!
+     * Do not call this! An error will be thrown if you call.
+     *
+     * @throws TrackRegistryException If outside mods call this method
      */
     public void finalizeRegistry() {
-        if (!Loader.instance().isInState(LoaderState.PREINITIALIZATION))
-            throw new TrackRegistryException("Finalize called outside PRE-INIT");
-        List<T> list = new ArrayList<>();
-        list.addAll(registry.values());
-        list.sort(Comparator.comparing(T::getName));
-        populateIndexedLookupTable(idMap, list);
-        if (combinations.isEmpty()) {
+        if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId())) {
+            throw new TrackRegistryException("Finalize called by non-railcraft mods!");
+        }
+        pass++; // Prevent building when not all track types or track kits are registered.
+        if (pass == 2) {
             ImmutableSet.Builder<Tuple<TrackType, TrackKit>> builder = ImmutableSet.builder();
-            for (TrackKit trackKit : TrackRegistry.TRACK_KIT.getVariants().values()) {
-                if (!trackKit.isVisible())
+            for (TrackKit trackKit : TrackRegistry.TRACK_KIT) {
+                if (!trackKit.isVisible()) {
                     continue;
-                for (TrackType trackType : TrackRegistry.TRACK_TYPE.getVariants().values()) {
-                    if (trackKit.isAllowedTrackType(trackType))
+                }
+                for (TrackType trackType : TrackRegistry.TRACK_TYPE) {
+                    if (trackKit.isAllowedTrackType(trackType)) {
                         builder.add(new Tuple<>(trackType, trackKit));
+                    }
                 }
             }
             combinations = builder.build();
@@ -107,72 +131,133 @@ public class TrackRegistry<T extends IStringSerializable> {
     }
 
     /**
-     * Registers a new variant. This should be called before the Post-Init
-     * Phase, during the Init or Pre-Init Phase.
+     * Registers a new variant. This must be called in {@link IRailcraftModule.ModuleEventHandler#preInit() Pre-Init Stage}.
+     *
+     * @param variant The new variant to register
      */
     public void register(T variant) {
-        if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId()) || RailcraftCore.getInitStage() != RailcraftCore.InitStage.PRE_INIT)
+        if ((!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId())
+            || RailcraftCore.getInitStage() != RailcraftCore.InitStage.PRE_INIT) && // default ones can register earlier
+            (!variant.getRegistryName().equals(RailcraftConstantsAPI.locationOf(fallback)))) {
             throw new TrackRegistryException("Track objects must be registered during PRE-INIT from a Railcraft Module class");
-        if (registry.put(variant.getName(), variant) != null)
-            throw new TrackRegistryException("Conflict detected, please contact the author of the " + variant.getName());
+        }
+        registry.register(variant);
     }
 
     /**
-     * Returns a TrackKit object.
+     * Returns an object in the track registry, looking up by a {@link String} tag.
+     * Fallbacks to the default object if not available.
+     *
+     * @param tag The string to look up
+     * @return The {@link IForgeRegistryEntry object}
      */
     public T get(String tag) {
-        tag = tag.toLowerCase(Locale.ROOT).replaceAll("[.:]", "_");
-        T variant = registry.get(tag);
-        if (variant == null) {
-            if (!invalidTags.contains(tag)) {
-                FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, "Track Registry: Unknown variant tag(%s)", tag);
-                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-                for (int i = 1; i < stackTrace.length && i < 9; i++) {
-                    FMLLog.log(Level.DEBUG, stackTrace[i].toString());
-                }
-                invalidTags.add(tag);
-            }
-            variant = getFallback();
+        String[] tags = tag.split("_", 2);
+        if (tags.length == 2) {
+            return registry.getValue(new ResourceLocation(tags[0], tags[1]));
         }
-        return variant;
+        return registry.getValue(new ResourceLocation(tag));
     }
 
+    /**
+     * Returns an object in the track registry, looking up by its {@link ResourceLocation identifier}.
+     * Fallbacks to the default object if not available.
+     *
+     * @param name The identifier
+     * @return The {@link IForgeRegistryEntry object}
+     */
+    public T get(ResourceLocation name) {
+        return registry.getValue(name);
+    }
+
+    /**
+     * Returns an object in the track registry, looking up by the {@link String string} tag contained
+     * in the {@link NBTTagCompound nbt data}. Fallbacks to the default object if not available.
+     *
+     * @param nbt The nbt data
+     * @return The {@link IForgeRegistryEntry object}
+     */
     public T get(NBTTagCompound nbt) {
         return get(nbt.getString(nbtTag));
     }
 
+    /**
+     * Returns an object in the track registry, looking up by info contained in the {@link NBTTagCompound nbt}
+     * data of the item stack. Fallbacks to the default object if not available.
+     *
+     * @param stack The item stack
+     * @return The {@link IForgeRegistryEntry object}
+     */
     public T get(ItemStack stack) {
         NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, false);
-        if (nbt != null)
+        if (nbt != null) {
             return get(nbt);
+        }
         return getFallback();
     }
 
+    /**
+     * Gets the track registry entry associated with the integer identifier provided.
+     * Mainly used for serialization in packets.
+     *
+     * @param id The integer identifier
+     * @return The {@link IForgeRegistryEntry registry entry}
+     */
+    @SuppressWarnings("unchecked")
     public T get(int id) {
-        return idMap.get(id);
-    }
-
-    public T getFallback() {
-        return get(fallback);
-    }
-
-    public int getId(T variant) {
-        if (idMap.isEmpty())
-            return 0;
-        return idMap.inverse().get(variant);
+        return ((FMLControlledNamespacedRegistry<T>) registry).getObjectById(id);
     }
 
     /**
-     * Returns all registered variants.
+     * Gets the default entries for the track registry.
      *
-     * @return list of variants
+     * @return The default entry
      */
-    public Map<String, T> getVariants() {
-        return registry;
+    public T getFallback() {
+        return registry.getValue(RailcraftConstantsAPI.locationOf(fallback));
     }
 
+    /**
+     * Gets the integer identifier associated with a specific track registry entry.
+     * Mainly used for serialization in packets.
+     *
+     * @param variant The {@link IForgeRegistryEntry registry entry}
+     * @return The int id
+     */
+    @SuppressWarnings("unchecked")
+    public int getId(T variant) {
+        return ((FMLControlledNamespacedRegistry<T>) registry).getId(variant);
+    }
+
+    /**
+     * Return all registered variants in an iterator.
+     *
+     * @return An iterator of variants
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return registry.iterator();
+    }
+
+    /**
+     * Utility method for creating a stream.
+     *
+     * @return A stream
+     */
+    public Stream<T> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
+
+    /**
+     * Exceptions related to track registry.
+     */
     public static class TrackRegistryException extends RuntimeException {
 
+        /**
+         * The constructor.
+         *
+         * @param msg Message
+         */
         public TrackRegistryException(String msg) {
             super(msg);
         }

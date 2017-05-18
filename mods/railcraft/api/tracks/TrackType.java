@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
@@ -28,10 +29,9 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackType implements IStringSerializable, ILocalizedObject {
+public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IStringSerializable, ILocalizedObject {
     public static final String NBT_TAG = "rail";
 
-    private final ResourceLocation registryName;
     private final ResourceLocation baseBlock;
     private final IRailcraftRecipeIngredient rail;
 
@@ -46,7 +46,7 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
                      IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed,
                      float resistance, boolean highSpeed, boolean electric, int maxSupportDistance,
                      EventHandler eventHandler) {
-        this.registryName = registryName;
+        setRegistryName(registryName);
         this.baseBlock = baseBlock;
         this.rail = rail;
         this.railbed = railbed;
@@ -71,10 +71,6 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
 
     public boolean isElectric() {
         return electric;
-    }
-
-    public final ResourceLocation getRegistryName() {
-        return registryName;
     }
 
     @Override

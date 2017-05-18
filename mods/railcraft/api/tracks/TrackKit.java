@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,7 +38,7 @@ import java.util.function.Predicate;
  * @see ITrackKitInstance
  * @see mods.railcraft.api.core.RailcraftModule
  */
-public final class TrackKit implements IVariantEnum, ILocalizedObject {
+public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implements IVariantEnum, ILocalizedObject {
     public enum Renderer {
         COMPOSITE,
         UNIFIED
@@ -46,8 +47,6 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
     public static final String NBT_TAG = "kit";
     public static Block blockTrackOutfitted;
     public static Item itemKit;
-    @Nonnull
-    private final ResourceLocation registryName;
     @Nonnull
     private final Class<? extends ITrackKitInstance> instanceClass;
     private final Predicate<TrackType> trackTypeFilter;
@@ -64,7 +63,7 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
                     Renderer renderer,
                     boolean allowedOnSlopes, boolean requiresTicks,
                     boolean visible, int renderStates, int maxSupportDistance) {
-        this.registryName = registryName;
+        setRegistryName(registryName);
         this.instanceClass = instanceClass;
         this.trackTypeFilter = trackTypeFilter;
         this.renderer = renderer;
@@ -154,10 +153,6 @@ public final class TrackKit implements IVariantEnum, ILocalizedObject {
     @Nonnull
     public String getName() {
         return getRegistryName().toString().replaceAll("[.:]", "_");
-    }
-
-    public ResourceLocation getRegistryName() {
-        return registryName;
     }
 
     @Override
