@@ -174,7 +174,7 @@ public class TrackType implements IStringSerializable, ILocalizedObject {
         public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         }
 
-        public float getMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
+        public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
             return 0.4f;
         }
     }

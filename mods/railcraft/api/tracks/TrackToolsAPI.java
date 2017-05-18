@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings({"WeakerAccess"})
-public abstract class TrackToolsAPI {
+public final class TrackToolsAPI {
     /**
      * Check if the block at the location is a Track.
      */
@@ -200,5 +200,7 @@ public abstract class TrackToolsAPI {
 //        }
 //        return null;
 //    }
+
+    private TrackToolsAPI() {}
 
 }
