@@ -5,12 +5,16 @@
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
-@API(apiVersion = "5.1.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|tracks")
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 package mods.railcraft.api.tracks;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraftforge.fml.common.API;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * Created by CovertJaguar on 8/11/2016 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface IBlockTrack {
+    TrackType getTrackType(IBlockAccess world, BlockPos pos);
+}

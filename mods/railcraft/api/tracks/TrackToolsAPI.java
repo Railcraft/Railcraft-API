@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
  */
 @SuppressWarnings({"WeakerAccess"})
 public final class TrackToolsAPI {
+    public static IBlockTrackOutfitted blockTrackOutfitted = null;
+
     /**
      * Check if the block at the location is a Track.
      */
