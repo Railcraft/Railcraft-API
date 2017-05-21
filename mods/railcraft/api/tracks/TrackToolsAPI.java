@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,27 @@ import javax.annotation.Nullable;
  */
 @SuppressWarnings({"WeakerAccess"})
 public final class TrackToolsAPI {
-    public static IBlockTrackOutfitted blockTrackOutfitted = null;
+    /**
+     * This variable is replaced with an instance of BlockTrackOutfitted at runtime,
+     * assuming it is enabled. Avoid relying on the return values of these functions unless you've checked that the
+     * block in the world is indeed an instance of IBlockTrackOutfitted.
+     */
+    public static IBlockTrackOutfitted blockTrackOutfitted = new IBlockTrackOutfitted() {
+        @Override
+        public TrackKit getTrackKit(IBlockAccess world, BlockPos pos) {
+            return TrackRegistry.TRACK_KIT.getFallback();
+        }
+
+        @Override
+        public boolean place(World world, BlockPos pos, EntityLivingBase placer, BlockRailBase.EnumRailDirection shape, TrackType trackType, TrackKit trackKit) {
+            return false;
+        }
+
+        @Override
+        public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
+            return TrackRegistry.TRACK_TYPE.getFallback();
+        }
+    };
 
     /**
      * Check if the block at the location is a Track.
@@ -203,6 +224,7 @@ public final class TrackToolsAPI {
 //        return null;
 //    }
 
-    private TrackToolsAPI() {}
+    private TrackToolsAPI() {
+    }
 
 }
