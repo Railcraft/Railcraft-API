@@ -4,12 +4,19 @@
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
-@API(apiVersion = "2.3.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|items")
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
+
 package mods.railcraft.api.core.items;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraftforge.fml.common.API;
+import net.minecraft.item.ItemStack;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * Created by CovertJaguar on 5/26/2017 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface IFilterItem {
+
+    default boolean matches(ItemStack matcher, ItemStack target) {
+        return false;
+    }
+}
