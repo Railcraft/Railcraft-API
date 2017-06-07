@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -30,7 +30,7 @@ public class RailcraftCore {
     }
 
     public static void setInitStage(String stage) {
-        RailcraftCore.initStage = InitStage.valueOf(stage);
+        initStage = InitStage.valueOf(stage);
     }
 
     private static InitStage initStage = LOADING;
