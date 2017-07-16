@@ -20,10 +20,16 @@ import java.util.EnumMap;
  */
 public class DualSignalReceiver extends SignalReceiver {
 
-    private EnumMap<DualLamp, SignalAspect> aspects = new EnumMap<DualLamp, SignalAspect>(DualLamp.class);
+    private EnumMap<DualLamp, SignalAspect> aspects = new EnumMap<>(DualLamp.class);
 
     public DualSignalReceiver(String locTag, TileEntity tile) {
         super(locTag, tile, 2);
+    }
+
+    {
+        for (DualLamp lamp : DualLamp.values()) {
+            aspects.put(lamp, SignalAspect.BLINK_RED);
+        }
     }
 
     @Override
