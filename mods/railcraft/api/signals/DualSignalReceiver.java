@@ -26,6 +26,12 @@ public class DualSignalReceiver extends SignalReceiver {
         super(locTag, tile, 2);
     }
 
+    {
+        for (DualLamp lamp : DualLamp.values()) {
+            aspects.put(lamp, SignalAspect.BLINK_RED);
+        }
+    }
+
     @Override
     public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
         BlockPos coord = pairings.peekFirst();
