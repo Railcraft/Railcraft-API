@@ -8,6 +8,7 @@
 package mods.railcraft.api.charge;
 
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -54,4 +55,14 @@ public interface ICartBattery extends IChargeBattery {
     void tick(EntityMinecart owner);
 
     void tickOnTrack(EntityMinecart owner, BlockPos pos);
+
+    static NBTTagCompound readFromNBT(ICartBattery battery, NBTTagCompound compound) {
+        battery.setCharge(compound.getDouble("charge"));
+        return compound;
+    }
+
+    static NBTTagCompound writeToNBT(ICartBattery battery, NBTTagCompound compound) {
+        compound.setDouble("charge", battery.getCharge());
+        return compound;
+    }
 }
