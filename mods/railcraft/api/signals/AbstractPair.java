@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class AbstractPair {
+public abstract class AbstractPair implements IPair {
     protected static final Random rand = new Random();
     private static final boolean IS_BUKKIT;
 
@@ -99,6 +99,7 @@ public abstract class AbstractPair {
         invalidPairings.add(other);
     }
 
+    @Override
     public void endPairing() {
         isBeingPaired = false;
     }
@@ -241,6 +242,7 @@ public abstract class AbstractPair {
         return tile;
     }
 
+    @Override
     public void startPairing() {
         isBeingPaired = true;
     }

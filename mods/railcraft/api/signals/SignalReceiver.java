@@ -59,6 +59,15 @@ public abstract class SignalReceiver extends AbstractPair {
         ((IReceiverTile) tile).onControllerAspectChange(con, aspect);
     }
 
+    @Override
+    public boolean createPair(TileEntity other) {
+        if (tile instanceof IControllerTile) {
+            registerController(((IControllerTile) other).getController());
+            return true;
+        }
+        return false;
+    }
+
     protected void registerController(SignalController controller) {
         addPairing(controller.getCoords());
     }

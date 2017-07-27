@@ -56,7 +56,16 @@ public abstract class SignalController extends AbstractPair {
         return false;
     }
 
-    public void registerReceiver(SignalReceiver receiver) {
+    @Override
+    public boolean createPair(TileEntity other) {
+        if (tile instanceof IReceiverTile) {
+            registerReceiver(((IReceiverTile) other).getReceiver());
+            return true;
+        }
+        return false;
+    }
+
+    protected void registerReceiver(SignalReceiver receiver) {
         BlockPos coords = receiver.getCoords();
         addPairing(coords);
         receiver.registerController(this);

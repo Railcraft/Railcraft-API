@@ -9,7 +9,6 @@ package mods.railcraft.api.signals;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.TrackScanner;
-import mods.railcraft.api.tracks.TrackToolsAPI;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,13 +16,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 
 import javax.annotation.Nullable;
 import java.util.*;
+
+import static mods.railcraft.api.signals.TrackLocator.Status;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -35,25 +35,29 @@ public abstract class SignalBlock extends AbstractPair {
     private final Map<BlockPos, BlockPos> trackCache = new HashMap<>();
     private final Map<BlockPos, TrackScanner.ScanResult> trackScans = new HashMap<>();
     private final Set<BlockPos> waitingForRetest = new HashSet<>();
-    @Nullable
-    private BlockPos trackLocation;
+    private final TrackLocator trackLocator;
     private int update = rand.nextInt();
     //    private UUID uuid = UUID.randomUUID();
     private boolean changedAspect;
 
     protected SignalBlock(String locTag, TileEntity tile, int numPairs) {
         super(locTag, tile, numPairs);
+        this.trackLocator = new TrackLocator(tile);
     }
 
     @Nullable
     private SignalBlock getSignalAt(BlockPos coord) {
         TileEntity recv = getPairAt(coord);
         if (recv != null)
-            return ((ISignalBlockTile) recv).getSignalBlock();
+            return ((ISignalTileBlock) recv).getSignalBlock();
         return null;
     }
 
     public abstract SignalAspect getSignalAspect();
+
+    public TrackLocator getTrackLocator() {
+        return trackLocator;
+    }
 
     public void log(Level level, String msg, Object... args) {
         LogManager.getLogger("railcraft").log(level, new MessageFormatMessage(msg, args));
@@ -175,8 +179,8 @@ public abstract class SignalBlock extends AbstractPair {
 
     @Override
     public boolean isValidPair(BlockPos otherCoord, TileEntity otherTile) {
-        if (otherTile instanceof ISignalBlockTile) {
-            SignalBlock signalBlock = ((ISignalBlockTile) otherTile).getSignalBlock();
+        if (otherTile instanceof ISignalTileBlock) {
+            SignalBlock signalBlock = ((ISignalTileBlock) otherTile).getSignalBlock();
             return signalBlock.isPairedWith(getCoords());
         }
         return false;
@@ -194,33 +198,39 @@ public abstract class SignalBlock extends AbstractPair {
 //        clearSignalBlockPairing("Signal Block pairing cleared in preparation to start a new pairing.  [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
 //        super.startPairing();
 //    }
-    public boolean createSignalBlock(SignalBlock other) {
-        if (other == this) {
-            printDebugPair("Signal Block creation was aborted, cannot pair with self.", other.tile);
+    @Override
+    public boolean createPair(TileEntity other) {
+        if (!(other instanceof ISignalTileBlock)) {
             return false;
         }
-        printDebugPair("Signal Block creation being attempted.", other.tile);
-        Status myTrackStatus = getTrackStatus();
-        Status otherTrackStatus = other.getTrackStatus();
+        ISignalTileBlock otherTile = (ISignalTileBlock) other;
+        SignalBlock otherSignal = otherTile.getSignalBlock();
+        if (otherSignal == this) {
+            printDebugPair("Signal Block creation was aborted, cannot pair with self.", otherSignal.getTile());
+            return false;
+        }
+        printDebugPair("Signal Block creation being attempted.", otherSignal.getTile());
+        Status myTrackStatus = trackLocator.getTrackStatus();
+        Status otherTrackStatus = otherSignal.getTrackLocator().getTrackStatus();
         if (myTrackStatus == Status.INVALID || otherTrackStatus == Status.INVALID) {
-            printDebugPair("Signal Block creation failed, could not find Track.", other.tile);
+            printDebugPair("Signal Block creation failed, could not find Track.", otherSignal.getTile());
             return false;
         }
-        BlockPos myTrack = getTrackLocation();
-        BlockPos otherTrack = other.getTrackLocation();
+        BlockPos myTrack = trackLocator.getTrackLocation();
+        BlockPos otherTrack = otherSignal.getTrackLocator().getTrackLocation();
         assert myTrack != null;
         assert otherTrack != null;
         TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack, otherTrack);
         if (!scan.areConnected) {
-            printDebugPair("Signal Block creation failed, could not find Path.", other.tile);
+            printDebugPair("Signal Block creation failed, could not find Path.", otherSignal.getTile());
             return false;
         }
-        addPairing(other.getCoords());
-        other.addPairing(getCoords());
+        addPairing(otherSignal.getCoords());
+        otherSignal.addPairing(getCoords());
         endPairing();
-        other.endPairing();
+        otherSignal.endPairing();
         trackScans.put(otherTrack, scan);
-        printDebugPair("Signal Block created successfully.", other.tile);
+        printDebugPair("Signal Block created successfully.", otherSignal.getTile());
         return true;
     }
 
@@ -242,7 +252,7 @@ public abstract class SignalBlock extends AbstractPair {
     }
 
     private SignalAspect determineMyAspect(BlockPos otherCoord) {
-        BlockPos myTrack = getTrackLocation();
+        BlockPos myTrack = trackLocator.getTrackLocation();
         if (myTrack == null)
             return SignalAspect.RED;
         BlockPos otherTrack = getOtherTrackLocation(otherCoord);
@@ -295,7 +305,7 @@ public abstract class SignalBlock extends AbstractPair {
     private TrackScanner.ScanResult getOrCreateTrackScan(BlockPos otherTrack) {
         TrackScanner.ScanResult scan = trackScans.get(otherTrack);
         if (scan == null) {
-            BlockPos myTrack = getTrackLocation();
+            BlockPos myTrack = trackLocator.getTrackLocation();
             if (myTrack != null) {
                 scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack, otherTrack);
                 trackScans.put(otherTrack, scan);
@@ -308,7 +318,7 @@ public abstract class SignalBlock extends AbstractPair {
     private BlockPos getOtherTrackLocation(BlockPos otherCoord) {
         SignalBlock other = getSignalAt(otherCoord);
         if (other != null) {
-            BlockPos track = other.getTrackLocation();
+            BlockPos track = other.trackLocator.getTrackLocation();
             if (track != null)
                 trackCache.put(otherCoord, track);
             return track;
@@ -322,10 +332,10 @@ public abstract class SignalBlock extends AbstractPair {
         SignalBlock otherSignalBlock = getSignalAt(other);
         if (otherSignalBlock == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_SIGNAL_NULL");
-        Status trackStatus = getTrackStatus();
+        Status trackStatus = trackLocator.getTrackStatus();
         if (trackStatus == Status.INVALID)
             return new TrackValidationStatus(false, "INVALID_MY_TRACK_NULL");
-        Status otherTrackStatus = otherSignalBlock.getTrackStatus();
+        Status otherTrackStatus = otherSignalBlock.trackLocator.getTrackStatus();
         if (otherTrackStatus == Status.INVALID)
             return new TrackValidationStatus(false, "INVALID_OTHER_TRACK_INVALID");
         BlockPos otherTrack = trackCache.get(other);
@@ -333,13 +343,13 @@ public abstract class SignalBlock extends AbstractPair {
             if (otherTrack == null)
                 return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_UNKNOWN");
         } else {
-            otherTrack = otherSignalBlock.getTrackLocation();
+            otherTrack = otherSignalBlock.trackLocator.getTrackLocation();
             if (otherTrack != null)
                 trackCache.put(other, otherTrack);
         }
         if (otherTrack == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_NULL");
-        BlockPos myTrack = getTrackLocation();
+        BlockPos myTrack = trackLocator.getTrackLocation();
         if (myTrack == null)
             return new TrackValidationStatus(true, "INVALID_MY_TRACK_NULL");
         TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack, otherTrack);
@@ -370,7 +380,7 @@ public abstract class SignalBlock extends AbstractPair {
                 printDebug("Signal Block changed aspect to BLINK_RED: source:[{0}] pairs: {1}", tile.getPos(), pairings);
         }
         if (update % VALIDATION_CHECK_INTERVAL == 0) {
-            Status trackStatus = getTrackStatus();
+            Status trackStatus = trackLocator.getTrackStatus();
             switch (trackStatus) {
                 case INVALID:
                     clearSignalBlockPairing(null, "Signal Block dropped because no track was found near Signal. [{0}]", tile.getPos());
@@ -398,78 +408,6 @@ public abstract class SignalBlock extends AbstractPair {
     @Override
     protected String getTagName() {
         return "SignalBlock";
-    }
-
-    @Nullable
-    public BlockPos getTrackLocation() {
-        if (trackLocation == null)
-            locateTrack();
-        return trackLocation;
-    }
-
-    public Status getTrackStatus() {
-        if (trackLocation == null)
-            return locateTrack();
-        if (!tile.getWorld().isBlockLoaded(trackLocation))
-            return Status.UNKNOWN;
-        if (!TrackToolsAPI.isRailBlockAt(tile.getWorld(), trackLocation)) {
-            trackLocation = null;
-            return locateTrack();
-        }
-        return Status.VALID;
-    }
-
-    private Status locateTrack() {
-        int x = tile.getPos().getX();
-        int y = tile.getPos().getY();
-        int z = tile.getPos().getZ();
-        Status status = testForTrack(x, y, z);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x - 1, y, z);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x + 1, y, z);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x, y, z - 1);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x, y, z + 1);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x - 2, y, z);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x + 2, y, z);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x, y, z - 2);
-        if (status != Status.INVALID)
-            return status;
-        status = testForTrack(x, y, z + 2);
-        if (status != Status.INVALID)
-            return status;
-        return Status.INVALID;
-    }
-
-    private Status testForTrack(int x, int y, int z) {
-        World world = tile.getWorld();
-        for (int jj = -2; jj < 4; jj++) {
-            BlockPos pos = new BlockPos(x, y - jj, z);
-            if (!world.isBlockLoaded(pos))
-                return Status.UNKNOWN;
-            if (TrackToolsAPI.isRailBlockAt(world, pos)) {
-                trackLocation = pos;
-                return Status.VALID;
-            }
-        }
-        return Status.INVALID;
-    }
-
-    public enum Status {
-
-        VALID, INVALID, UNKNOWN
     }
 
     private static class TrackValidationStatus {
