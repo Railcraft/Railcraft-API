@@ -1,12 +1,12 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2017
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
+import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -23,6 +23,18 @@ public class SimpleSignalReceiver extends SignalReceiver {
 
     public SimpleSignalReceiver(String locTag, TileEntity tile) {
         super(locTag, tile, 1);
+    }
+
+    @Override
+    public void tickServer() {
+        super.tickServer();
+        SignalAspect prevAspect = getAspect();
+        if (!isPaired()) {
+            setAspect(SignalAspect.BLINK_RED);
+        }
+        if (prevAspect != getAspect()) {
+            ((INetworkedObject) getTile()).sendUpdateToClient();
+        }
     }
 
     public SignalAspect getAspect() {

@@ -58,7 +58,7 @@ public abstract class SignalController extends AbstractPair {
 
     @Override
     public boolean createPair(TileEntity other) {
-        if (tile instanceof IReceiverTile) {
+        if (other instanceof IReceiverTile) {
             registerReceiver(((IReceiverTile) other).getReceiver());
             return true;
         }

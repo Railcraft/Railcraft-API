@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2017
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -105,6 +105,7 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         markBlockNeedsUpdate();
     }
 
+    @Override
     public void sendUpdateToClient() {
         ((IOutfittedTrackTile) getTile()).sendUpdateToClient();
     }
