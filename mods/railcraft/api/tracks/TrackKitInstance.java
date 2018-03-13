@@ -97,7 +97,7 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer != null && this instanceof ITrackKitReversible) {
-            int dir = MathHelper.floor_double((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+            int dir = MathHelper.floor((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             ((ITrackKitReversible) this).setReversed(dir == 0 || dir == 1);
         }
         switchTrack(state, true);
