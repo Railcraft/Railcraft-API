@@ -17,15 +17,16 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
-import net.minecraftforge.fml.common.registry.RegistryBuilder;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryBuilder;
 
 import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The TrackRegistry is part of a system that allows 3rd party addon to simply,
@@ -66,7 +67,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
 
     static {
         missingKit =
-            new TrackKit.Builder(RailcraftConstantsAPI.locationOf("missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
+                new TrackKit.Builder(RailcraftConstantsAPI.locationOf("missing"), TrackKitMissing.class).setVisible(false).setRequiresTicks(true).build();
         TRACK_KIT.register(missingKit);
     }
 
@@ -81,8 +82,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
         builder.setName(RailcraftConstantsAPI.locationOf(nbtTag));
         builder.setType(type);
         builder.setIDRange(0, 255);
-        ReflectionHelper.<RegistryBuilder, ResourceLocation>setPrivateValue(RegistryBuilder.class, builder,
-            RailcraftConstantsAPI.locationOf(fallback), 2); //Forge - #3806
+        builder.setDefaultKey(RailcraftConstantsAPI.locationOf(fallback));
         registry = builder.create();
     }
 
@@ -110,7 +110,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      * @throws TrackRegistryException If outside mods call this method
      */
     public void finalizeRegistry() {
-        if (!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId())) {
+        if (!RailcraftConstantsAPI.MOD_ID.equals(checkNotNull(Loader.instance().activeModContainer()).getModId())) {
             throw new TrackRegistryException("Finalize called by non-railcraft mods!");
         }
         pass++; // Prevent building when not all track types or track kits are registered.
@@ -136,9 +136,9 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      * @param variant The new variant to register
      */
     public void register(T variant) {
-        if ((!RailcraftConstantsAPI.MOD_ID.equals(Loader.instance().activeModContainer().getModId())
-            || RailcraftCore.getInitStage() != RailcraftCore.InitStage.PRE_INIT) && // default ones can register earlier
-            (!variant.getRegistryName().equals(RailcraftConstantsAPI.locationOf(fallback)))) {
+        if ((!RailcraftConstantsAPI.MOD_ID.equals(checkNotNull(Loader.instance().activeModContainer()).getModId())
+                || RailcraftCore.getInitStage() != RailcraftCore.InitStage.PRE_INIT) && // default ones can register earlier
+                (!checkNotNull(variant.getRegistryName()).equals(RailcraftConstantsAPI.locationOf(fallback)))) {
             throw new TrackRegistryException("Track objects must be registered during PRE-INIT from a Railcraft Module class");
         }
         registry.register(variant);
@@ -154,9 +154,9 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
     public T get(String tag) {
         String[] tags = tag.split("_", 2);
         if (tags.length == 2) {
-            return registry.getValue(new ResourceLocation(tags[0], tags[1]));
+            return checkNotNull(registry.getValue(new ResourceLocation(tags[0], tags[1])));
         }
-        return registry.getValue(new ResourceLocation(tag));
+        return checkNotNull(registry.getValue(new ResourceLocation(tag)));
     }
 
     /**
@@ -167,7 +167,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      * @return The {@link IForgeRegistryEntry object}
      */
     public T get(ResourceLocation name) {
-        return registry.getValue(name);
+        return checkNotNull(registry.getValue(name));
     }
 
     /**
@@ -189,7 +189,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      * @return The {@link IForgeRegistryEntry object}
      */
     public T get(ItemStack stack) {
-        NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, false);
+        NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID);
         if (nbt != null) {
             return get(nbt);
         }
@@ -205,7 +205,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      */
     @SuppressWarnings("unchecked")
     public T get(int id) {
-        return ((FMLControlledNamespacedRegistry<T>) registry).getObjectById(id);
+        return ((ForgeRegistry<T>) registry).getValue(id);
     }
 
     /**
@@ -214,7 +214,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      * @return The default entry
      */
     public T getFallback() {
-        return registry.getValue(RailcraftConstantsAPI.locationOf(fallback));
+        return checkNotNull(registry.getValue(RailcraftConstantsAPI.locationOf(fallback)));
     }
 
     /**
@@ -226,7 +226,7 @@ public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T
      */
     @SuppressWarnings("unchecked")
     public int getId(T variant) {
-        return ((FMLControlledNamespacedRegistry<T>) registry).getId(variant);
+        return ((ForgeRegistry<T>) registry).getID(variant);
     }
 
     /**

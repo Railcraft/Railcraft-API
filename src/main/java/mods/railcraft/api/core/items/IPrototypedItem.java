@@ -35,11 +35,10 @@ public interface IPrototypedItem {
         return filter;
     }
 
-    @Nullable
     default ItemStack getPrototype(ItemStack stack) {
         NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "prototype");
         if (nbt != null) {
-            return ItemStack.loadItemStackFromNBT(nbt);
+            return new ItemStack(nbt);
         }
         return InvToolsAPI.emptyStack();
     }

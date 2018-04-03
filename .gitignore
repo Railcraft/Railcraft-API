@@ -1,12 +1,29 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+build/
+eclipse/
+CREDITS-fml.txt
+LICENSE-fml.txt
+MinecraftForge-Credits.txt
+MinecraftForge-License.txt
+README.txt
+.gradle/
+.nb-gradle/
+.nb-gradle-properties
+.settings/
+.classpath
+.project
+/gradle.properties
+push/
+.idea/
+*.iml
+run/
+private/
+*.ipr
+*.iws
+out/
+bin/
+classes/
+.settings
+.metadata
+.project
+*.launch
+/libs/

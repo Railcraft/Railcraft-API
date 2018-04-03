@@ -19,26 +19,25 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InvToolsAPI {
+public final class InvToolsAPI {
     private InvToolsAPI() {
     }
 
     @Contract("null -> true; !null -> _;")
     public static boolean isEmpty(@Nullable ItemStack stack) {
-        return stack == null || stack.stackSize <= 0 || stack.getItem() == null;
+        return stack == null || stack.isEmpty();
     }
 
-    @Nullable
     public static ItemStack emptyStack() {
-        return null;
+        return ItemStack.EMPTY;
     }
 
-    @Contract("null, _ -> null; !null, true -> !null; !null, false -> _")
+    @Contract("null, _ -> null; !null, false -> _; _, true -> !null")
     @Nullable
     public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, boolean create) {
         if (isEmpty(stack))
-            return null;
-        return stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, create);
+            return create ? new NBTTagCompound() : null;
+        return create ? stack.getOrCreateSubCompound(RailcraftConstantsAPI.MOD_ID) : stack.getSubCompound(RailcraftConstantsAPI.MOD_ID);
     }
 
     public static void clearItemDataRailcraft(ItemStack stack, String tag) {
@@ -59,9 +58,7 @@ public class InvToolsAPI {
 
     @Contract("null, _, _ -> null; !null, _, true -> !null; !null, _, false -> _")
     @Nullable
-    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag, boolean create) {
-        if (isEmpty(stack))
-            return null;
+    public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, String tag, boolean create) {
         NBTTagCompound nbt = getItemDataRailcraft(stack, create);
         if (nbt != null && (create || nbt.hasKey(tag))) {
             NBTTagCompound subNBT = nbt.getCompoundTag(tag);

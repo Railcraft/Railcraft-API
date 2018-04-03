@@ -100,7 +100,7 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
     default void update() {
     }
 
-    boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem);
+    boolean blockActivated(EntityPlayer player, EnumHand hand);
 
     default void onBlockRemoved() {
     }

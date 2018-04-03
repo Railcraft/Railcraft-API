@@ -51,7 +51,6 @@ public interface IRollingMachineCraftingManager {
      * @param world             the world
      * @return the resulting ItemStack
      */
-    @Nullable
     ItemStack findMatchingRecipe(InventoryCrafting inventoryCrafting, World world);
 
     /**

@@ -9,7 +9,7 @@ package mods.railcraft.api.core;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -64,7 +64,7 @@ public class RailcraftItemStackRegistry {
         ItemStack stack = stacks.get(tag);
         if (stack != null) {
             stack = stack.copy();
-            stack.stackSize = Math.min(qty, stack.getMaxStackSize());
+            stack.setCount(Math.min(qty, stack.getMaxStackSize()));
         }
         return Optional.ofNullable(stack);
     }

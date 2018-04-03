@@ -8,14 +8,17 @@
 package mods.railcraft.api.core;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 9/1/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IRailcraftRegistryEntry<T> extends IForgeRegistryEntry<T> {
+public interface IRailcraftRegistryEntry<T extends IForgeRegistryEntry<T>> extends IForgeRegistryEntry<T> {
     default ResourceLocation getRegistryName(IVariantEnum variant) {
         return new ResourceLocation(getRegistryName().getResourceDomain(),
                 getRegistryName().getResourcePath() + "." + variant.getResourcePathSuffix());

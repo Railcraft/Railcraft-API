@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -184,7 +184,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
     public ItemStack getTrackKitItem(int qty) {
         if (itemKit != null) {
             ItemStack stack = new ItemStack(itemKit, qty, ordinal());
-            NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
+            NBTTagCompound nbt = stack.getOrCreateSubCompound(RailcraftConstantsAPI.MOD_ID);
             nbt.setString(NBT_TAG, getName());
             return stack;
         }
@@ -210,7 +210,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
     public ItemStack getOutfittedTrack(TrackType trackType, int qty) {
         if (blockTrackOutfitted != null) {
             ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
-            NBTTagCompound nbt = stack.getSubCompound(RailcraftConstantsAPI.MOD_ID, true);
+            NBTTagCompound nbt = stack.getOrCreateSubCompound(RailcraftConstantsAPI.MOD_ID);
             nbt.setString(TrackType.NBT_TAG, trackType.getName());
             nbt.setString(NBT_TAG, getName());
             return stack;

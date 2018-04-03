@@ -73,8 +73,9 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
-        if (heldItem != null && heldItem.getItem() instanceof IToolCrowbar) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand) {
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos()) && onCrowbarWhack(player, hand, heldItem)) {
                 crowbar.onWhack(player, hand, heldItem, getPos());
@@ -139,11 +140,11 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
-            world.notifyNeighborsOfStateChange(getPos(), blockTrack);
-            world.notifyNeighborsOfStateChange(getPos().down(), blockTrack);
+            world.notifyNeighborsOfStateChange(getPos(), blockTrack, true);
+            world.notifyNeighborsOfStateChange(getPos().down(), blockTrack, true);
             BlockRailBase.EnumRailDirection railDirection = state.getValue(((BlockRailBase) state.getBlock()).getShapeProperty());
             if (railDirection.isAscending())
-                world.notifyNeighborsOfStateChange(getPos().up(), blockTrack);
+                world.notifyNeighborsOfStateChange(getPos().up(), blockTrack, true);
             sendUpdateToClient();
             // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
         }

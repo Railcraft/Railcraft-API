@@ -25,5 +25,5 @@ public interface IBlastFurnaceRecipe {
 
     int getOutputStackSize();
 
-    boolean isRoomForOutput(@Nullable ItemStack outputSlot);
+    boolean isRoomForOutput(ItemStack outputSlot);
 }

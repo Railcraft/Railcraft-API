@@ -122,7 +122,8 @@ public abstract class CartToolsAPI {
             return mi.placeCart(owner, cart, world, pos);
         } else if (cart.getItem() instanceof ItemMinecart)
             try {
-                EnumActionResult placed = cart.getItem().onItemUse(cart, RailcraftFakePlayer.get(world, pos), world, pos, EnumHand.MAIN_HAND, EnumFacing.DOWN, 0, 0, 0);
+                EnumActionResult placed = cart.getItem().onItemUse(RailcraftFakePlayer.get(world, pos), world, pos, EnumHand.MAIN_HAND, EnumFacing.DOWN, 0, 0, 0);
+                //TODO fix fakeplayer
                 if (placed == EnumActionResult.SUCCESS) {
                     List<EntityMinecart> carts = getMinecartsAt(world, pos, 0.3f);
                     if (carts.size() > 0) {
