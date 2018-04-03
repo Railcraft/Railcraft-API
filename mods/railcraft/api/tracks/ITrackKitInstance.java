@@ -143,4 +143,10 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
         return ((IOutfittedTrackTile) getTile()).getTrackType();
     }
 
+    /**
+     * Requests for saving the data of the track kit.
+     */
+    default void markDirty() {
+        getTile().markDirty();
+    }
 }
