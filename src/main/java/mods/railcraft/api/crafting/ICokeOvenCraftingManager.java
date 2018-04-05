@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface ICokeOvenCraftingManager {
 
-    void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, ItemStack output, FluidStack liquidOutput, int cookTime);
+    void addRecipe(ItemStack input, boolean matchDamage, boolean matchNBT, ItemStack output, @Nullable FluidStack liquidOutput, int cookTime);
 
     @Nullable
     ICokeOvenRecipe getRecipe(ItemStack stack);
