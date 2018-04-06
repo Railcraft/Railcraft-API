@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@Deprecated
 public interface IRailcraftRecipeIngredient {
     @Nullable
     Object getRecipeObject();

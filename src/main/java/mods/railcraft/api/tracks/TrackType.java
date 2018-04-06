@@ -132,27 +132,27 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
                     resistance, highSpeed, electric, maxSupportDistance, eventHandler);
         }
 
-        public final Builder setResistance(float resistance) {
+        public Builder setResistance(float resistance) {
             this.resistance = resistance;
             return this;
         }
 
-        public final Builder setHighSpeed(boolean highSpeed) {
+        public Builder setHighSpeed(boolean highSpeed) {
             this.highSpeed = highSpeed;
             return this;
         }
 
-        public final Builder setElectric(boolean electric) {
+        public Builder setElectric(boolean electric) {
             this.electric = electric;
             return this;
         }
 
-        public final Builder setMaxSupportDistance(int maxSupportDistance) {
+        public Builder setMaxSupportDistance(int maxSupportDistance) {
             this.maxSupportDistance = maxSupportDistance;
             return this;
         }
 
-        public final Builder setEventHandler(EventHandler eventHandler) {
+        public Builder setEventHandler(EventHandler eventHandler) {
             this.eventHandler = eventHandler;
             return this;
         }
