@@ -19,21 +19,20 @@ public interface IRailcraftModule {
 
     void checkPrerequisites() throws MissingPrerequisiteException;
 
-    @Nonnull
     ModuleEventHandler getModuleEventHandler(boolean enabled);
 
-    class ModuleEventHandler {
+    interface ModuleEventHandler {
 
-        public void construction() {
+        default void construction() {
         }
 
-        public void preInit() {
+        default void preInit() {
         }
 
-        public void init() {
+        default void init() {
         }
 
-        public void postInit() {
+        default void postInit() {
         }
 
 //        @SuppressWarnings("UnusedParameters")
