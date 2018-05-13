@@ -5,7 +5,7 @@ import net.minecraft.item.crafting.Ingredient;
 import javax.annotation.Nullable;
 
 /**
- * An interface for containers that can extract recipes.
+ * An interface for containers that can extract getRecipes.
  */
 public interface IIngredientSource {
 

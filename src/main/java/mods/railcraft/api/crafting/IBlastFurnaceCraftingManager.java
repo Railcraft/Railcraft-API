@@ -9,33 +9,36 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-/**
- * @author CovertJaguar <http://www.railcraft.info>
- */
 public interface IBlastFurnaceCraftingManager {
 
-    /**
-     * Adds a new Blast Furnace Recipe.
-     *
-     * If either the input or output are null, the recipe will not be registered.
-     *
-     * @param input       the input, if null the function will silently abort
-     * @param matchDamage if true, it will compare item damage, if false, just
-     *                    the item ID
-     * @param matchNBT    if true, it will compare nbt
-     * @param cookTime    the time it takes to cook the recipe
-     * @param output      the output
-     */
-    void addRecipe(@Nullable ItemStack input, boolean matchDamage, boolean matchNBT, int cookTime,@Nullable  ItemStack output);
+    IBlastFurnaceFuel createFuel(Ingredient matcher, int cookTime);
 
-    List<ItemStack> getFuels();
+    IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output);
+
+    void addRecipe(IBlastFurnaceRecipe recipe);
+
+    void addFuel(IBlastFurnaceFuel fuel);
+
+    default void addRecipe(Ingredient input, int cookTime, ItemStack output) {
+        addRecipe(createRecipe(input, cookTime, output));
+    }
+
+    default void addFuel(Ingredient input, int cookTime) {
+        addFuel(createFuel(input, cookTime));
+    }
+
+    List<@NonNull IBlastFurnaceFuel> getFuels();
+
+    int getCookTime(ItemStack stack);
 
     @Nullable
     IBlastFurnaceRecipe getRecipe(ItemStack stack);
 
-    List<? extends IBlastFurnaceRecipe> getRecipes();
+    List<@NonNull IBlastFurnaceRecipe> getRecipes();
 }

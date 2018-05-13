@@ -12,22 +12,33 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = rootProject.version
-group = rootProject.group
-archivesBaseName = rootProject.archivesBaseName + "-api"
+group = "com.headlamp-games"
+archivesBaseName = "Railcraft_" + project.version_minecraft + "-api"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
+configurations {
+    embed
+    compile.extendsFrom embed
+}
+
 dependencies {
     provided "org.jetbrains:annotations:15.0"
+    embed 'org.checkerframework:checker-qual:2.4.0'
 }
 
 minecraft {
-    version = rootProject.version_minecraft + "-" + rootProject.version_forge
-    runDir = rootProject.minecraft.runDir
+    version = project.version_minecraft + "-" + project.version_forge
+    runDir = "run"
 
-    mappings = rootProject.version_mcp.replace("-", "_")
+    mappings = project.version_mcp.replace("-", "_")
 
-    replace '@VERSION@', rootProject.version
+    replace '@VERSION@', project.version
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+}
+
+jar {
+    from configurations.embed.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }
 }

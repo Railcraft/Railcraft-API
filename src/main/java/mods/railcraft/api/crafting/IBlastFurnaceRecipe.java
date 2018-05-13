@@ -9,21 +9,36 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
+import net.minecraft.item.crafting.Ingredient;
 
 /**
- * @author CovertJaguar <http://www.railcraft.info>
+ * Represents a blast furnace recipe.
+ *
+ * <p>Call {@link IBlastFurnaceCraftingManager#createRecipe(
+ *Ingredient, int, ItemStack)}</p>
+ * to create one such recipe.
  */
 public interface IBlastFurnaceRecipe {
 
+    /**
+     * Gets the input for this recipe.
+     *
+     * @return The input for this recipe
+     */
+    Ingredient getInput();
+
+    /**
+     * Gets the cooking time for this recipe.
+     *
+     * @return The cooking time
+     */
     int getCookTime();
 
-    ItemStack getInput();
-
+    /**
+     * Gets the output for this recipe.
+     *
+     * @return The output, safe to modify
+     */
     ItemStack getOutput();
 
-    int getOutputStackSize();
-
-    boolean isRoomForOutput(ItemStack outputSlot);
 }

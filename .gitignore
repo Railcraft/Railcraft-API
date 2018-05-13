@@ -11,7 +11,6 @@ README.txt
 .settings/
 .classpath
 .project
-/gradle.properties
 push/
 .idea/
 *.iml
@@ -24,6 +23,5 @@ bin/
 classes/
 .settings
 .metadata
-.project
 *.launch
 /libs/
