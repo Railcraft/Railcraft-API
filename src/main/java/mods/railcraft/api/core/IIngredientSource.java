@@ -24,7 +24,6 @@ public interface IIngredientSource {
      * @return The ingredient
      * @deprecated Variants are to be removed
      */
-    @Deprecated
     default Ingredient getIngredient(@Nullable IVariantEnum variant) {
         return getIngredient();
     }
