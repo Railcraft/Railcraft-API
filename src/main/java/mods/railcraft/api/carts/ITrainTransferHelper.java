@@ -52,7 +52,6 @@ public interface ITrainTransferHelper {
      * @return the ItemStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IItemCart
      */
-    @Nullable
     ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter);
 
     /**
