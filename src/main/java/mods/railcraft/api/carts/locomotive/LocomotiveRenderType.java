@@ -10,6 +10,7 @@ package mods.railcraft.api.carts.locomotive;
 import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -73,6 +74,7 @@ public enum LocomotiveRenderType {
      * saved in the NBT. Use it to create a recipe for your skin.
      */
     @Nullable
+    @Contract("_, null -> null; _, !null -> !null")
     public ItemStack getItemWithRenderer(String rendererTag, @Nullable ItemStack stack) {
         if (stack == null)
             return null;
