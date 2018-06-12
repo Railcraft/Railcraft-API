@@ -8,7 +8,6 @@
 
 package mods.railcraft.api.crafting;
 
-import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
@@ -19,14 +18,6 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ICrusherCraftingManager {
-    /**
-     * Creates a new ICrusherRecipe object.
-     * Accepts a Predicate object to be used for determining if a given input matches.
-     *
-     * @see Predicate
-     */
-    @Deprecated
-    ICrusherRecipe createRecipe(Ingredient inputMatcher);
 
     ICrusherRecipeBuilder createRecipeBuilder();
 
