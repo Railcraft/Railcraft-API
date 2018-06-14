@@ -51,9 +51,9 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public interface ITrackKitInstance extends INetworkedObject<DataInputStream, DataOutputStream> {
 
-    TileEntity getTile();
+    <T extends TileEntity & IOutfittedTrackTile> T getTile();
 
-    void setTile(TileEntity tileEntity);
+    <T extends TileEntity & IOutfittedTrackTile> void setTile(T tileEntity);
 
     TrackKit getTrackKit();
 
@@ -66,7 +66,7 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
     }
 
     default List<ItemStack> getDrops(int fortune) {
-        List<ItemStack> drops = new ArrayList<ItemStack>();
+        List<ItemStack> drops = new ArrayList<>();
         drops.add(getTrackKit().getTrackKitItem());
         return drops;
     }
@@ -140,7 +140,7 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
      * Returns the track type of this track.
      */
     default TrackType getTrackType() {
-        return ((IOutfittedTrackTile) getTile()).getTrackType();
+        return getTile().getTrackType();
     }
 
 }

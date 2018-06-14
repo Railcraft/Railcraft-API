@@ -51,13 +51,14 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         return (BlockRailBase) getTile().getBlockType();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public TileEntity getTile() {
-        return tileEntity;
+    public <T extends TileEntity & IOutfittedTrackTile> T getTile() {
+        return (T) tileEntity;
     }
 
     @Override
-    public void setTile(TileEntity tileEntity) {
+    public <T extends TileEntity & IOutfittedTrackTile> void setTile(T tileEntity) {
         this.tileEntity = tileEntity;
     }
 
