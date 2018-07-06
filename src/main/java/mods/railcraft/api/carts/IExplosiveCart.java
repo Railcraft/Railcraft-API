@@ -8,8 +8,7 @@
 
 package mods.railcraft.api.carts;
 
-public interface IExplosiveCart
-{
+public interface IExplosiveCart {
 
     /**
      * If set to true the cart should explode after
@@ -58,7 +57,6 @@ public interface IExplosiveCart
 
     /**
      * Causes the cart to explode immediately.
-     *
      */
     void explode();
 }

@@ -8,7 +8,7 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackScanner {
+public final class TrackScanner {
 
     /**
      * Verifies that two rails are connected to each other along a straight line
@@ -107,7 +107,10 @@ public class TrackScanner {
         return new ScanResult(ScanResult.Verdict.VALID, minY, maxY);
     }
 
-    public static class ScanResult {
+    private TrackScanner() {
+    }
+
+    public static final class ScanResult {
         public final Verdict verdict;
         public final boolean areConnected;
         public final int minY, maxY;

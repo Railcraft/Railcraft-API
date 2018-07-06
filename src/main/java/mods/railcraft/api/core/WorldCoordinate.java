@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class WorldCoordinate {
+public final class WorldCoordinate {
     /**
      * The dimension
      */
@@ -52,8 +52,8 @@ public class WorldCoordinate {
         this.pos = pos;
     }
 
-    public WorldCoordinate(TileEntity tile) {
-        this(tile.getWorld().provider != null ? tile.getWorld().provider.getDimension() : 0, tile.getPos());
+    public static WorldCoordinate from(TileEntity tile) {
+        return new WorldCoordinate(tile.getWorld().provider != null ? tile.getWorld().provider.getDimension() : 0, tile.getPos());
     }
 
     @Nullable

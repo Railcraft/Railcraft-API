@@ -7,7 +7,6 @@
 
 package mods.railcraft.api.carts.locomotive;
 
-import mods.railcraft.api.core.RailcraftItemStackRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Contract;
@@ -57,16 +56,6 @@ public enum LocomotiveRenderType {
         if (renderer == null)
             renderer = renderers.get("railcraft:default");
         return renderer;
-    }
-
-    /**
-     * This function will return a Locomotive item with the skin identifier
-     * saved in the NBT. Use it to create a recipe for your skin.
-     */
-    @Nullable
-    public ItemStack getItemWithRenderer(String rendererTag) {
-        // TODO: Test this!
-        return getItemWithRenderer(rendererTag, RailcraftItemStackRegistry.getStack(cartTag, 1).orElse(null));
     }
 
     /**

@@ -4,7 +4,7 @@
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.items;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;

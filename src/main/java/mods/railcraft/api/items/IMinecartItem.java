@@ -6,7 +6,7 @@
  * ***************************************************************************
  */
 
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.items;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.item.EntityMinecart;

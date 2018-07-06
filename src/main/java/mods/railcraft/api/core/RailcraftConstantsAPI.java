@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RailcraftConstantsAPI {
+public final class RailcraftConstantsAPI {
     public static final String MOD_ID = "railcraft";
     public static final String API_ID = "railcraft:API|";
     public static final String RAILCRAFT_PLAYER = "[" + MOD_ID + "]";
@@ -22,5 +22,8 @@ public class RailcraftConstantsAPI {
 
     public static ResourceLocation locationOf(String name) {
         return new ResourceLocation(MOD_ID, name);
+    }
+
+    private RailcraftConstantsAPI() {
     }
 }

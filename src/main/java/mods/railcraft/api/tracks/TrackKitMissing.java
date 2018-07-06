@@ -51,7 +51,7 @@ public class TrackKitMissing extends TrackKitInstance {
         if (swapOut && world != null && !world.isRemote && counter > 4) {
             IBlockState oldState = world.getBlockState(getPos());
             BlockRailBase oldBlock = (BlockRailBase) oldState.getBlock();
-            TrackType type = ((IOutfittedTrackTile) getTile()).getTrackType();
+            TrackType type = getTile().getTrackType();
             BlockRailBase newBlock = type.getBaseBlock();
             IBlockState newState = newBlock.getDefaultState().withProperty(newBlock.getShapeProperty(), oldState.getValue(oldBlock.getShapeProperty()));
             world.setBlockState(getPos(), newState);

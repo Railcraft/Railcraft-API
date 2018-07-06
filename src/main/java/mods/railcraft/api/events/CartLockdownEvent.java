@@ -20,7 +20,7 @@ public abstract class CartLockdownEvent extends Event {
     public final EntityMinecart cart;
     public final BlockPos pos;
 
-    private CartLockdownEvent(EntityMinecart cart, BlockPos pos) {
+    CartLockdownEvent(EntityMinecart cart, BlockPos pos) {
         this.cart = cart;
         this.pos = pos;
     }
@@ -29,7 +29,7 @@ public abstract class CartLockdownEvent extends Event {
      * This event is posted every tick that a LockType Track (Lockdown, Holding,
      * Boarding) is holding onto a minecart.
      */
-    public static class Lock extends CartLockdownEvent {
+    public static final class Lock extends CartLockdownEvent {
 
         public Lock(EntityMinecart cart, BlockPos pos) {
             super(cart, pos);
@@ -40,7 +40,7 @@ public abstract class CartLockdownEvent extends Event {
      * This event is posted every tick that a LockType Track (Lockdown, Holding,
      * Boarding) is releasing a minecart.
      */
-    public static class Release extends CartLockdownEvent {
+    public static final class Release extends CartLockdownEvent {
 
         public Release(EntityMinecart cart, BlockPos pos) {
             super(cart, pos);

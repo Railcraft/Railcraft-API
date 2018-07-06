@@ -51,7 +51,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @see ITrackKitInstance
  * @see TrackKitInstance
  */
-public class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T>> implements Iterable<T> {
+//TODO fix registries
+public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryEntry<T>> implements Iterable<T> {
 
     /**
      * The registry for {@link TrackType track types}.

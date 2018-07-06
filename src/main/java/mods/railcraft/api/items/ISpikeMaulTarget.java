@@ -5,7 +5,7 @@
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.items;
 
 import mods.railcraft.api.tracks.IBlockTrackOutfitted;
 import mods.railcraft.api.tracks.TrackKit;

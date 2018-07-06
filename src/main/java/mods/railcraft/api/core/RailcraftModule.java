@@ -24,10 +24,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface RailcraftModule {
     /**
-     * A name for the module
+     * An identifier for the module.
      */
     String value();
 
+    /**
+     * A description for the module, used in configurations.
+     */
     String description() default "";
 
     /**

@@ -8,7 +8,7 @@
 package mods.railcraft.api.tracks;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.api.core.items.ITrackItem;
+import mods.railcraft.api.items.ITrackItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings({"WeakerAccess"})
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class TrackToolsAPI {
     /**
      * This variable is replaced with an instance of BlockTrackOutfitted at runtime,
@@ -96,7 +96,7 @@ public final class TrackToolsAPI {
                 IBlockState blockState = makeTrackState((BlockRailBase) block, trackShape);
                 boolean success = world.setBlockState(pos, blockState);
                 if (success)
-                    world.playSound(null, pos, block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
+                    world.playSound(null, pos, block.getSoundType(blockState, world, pos, null).getPlaceSound(), SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
                 return success;
             }
         }
@@ -155,74 +155,6 @@ public final class TrackToolsAPI {
     public static boolean isTrackFuzzyAt(World world, BlockPos pos) {
         return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
-
-//    public static Set<IOutfittedTrackTile> getAdjacentTrackTiles(World world, BlockPos pos) {
-//        Set<IOutfittedTrackTile> tracks = new HashSet<IOutfittedTrackTile>();
-//
-//        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-//            IOutfittedTrackTile tile = getTrackFuzzyAt(world, pos.offset(side));
-//            if (tile != null)
-//                tracks.add(tile);
-//        }
-//
-//        return tracks;
-//    }
-
-//    @Nullable
-//    public static IOutfittedTrackTile getTrackFuzzyAt(World world, BlockPos pos) {
-//        TileEntity tile = world.getTileEntity(pos);
-//        if (tile instanceof IOutfittedTrackTile)
-//            return (IOutfittedTrackTile) tile;
-//        tile = world.getTileEntity(pos.up());
-//        if (tile instanceof IOutfittedTrackTile)
-//            return (IOutfittedTrackTile) tile;
-//        tile = world.getTileEntity(pos.down());
-//        if (tile instanceof IOutfittedTrackTile)
-//            return (IOutfittedTrackTile) tile;
-//        return null;
-//    }
-
-//    public static <T> Set<T> getAdjacentTrackObjects(World world, BlockPos pos, Class<T> type) {
-//        Set<T> tracks = new HashSet<T>();
-//
-//        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-//            T object = getTrackObjectFuzzyAt(world, pos.offset(side), type);
-//            if (object != null)
-//                tracks.add(object);
-//        }
-//
-//        return tracks;
-//    }
-
-//    @Nullable
-//    public static <T> T getTrackObjectFuzzyAt(World world, BlockPos pos, Class<T> type) {
-//        T object = getTrackObjectAt(world, pos, type);
-//        if (object != null)
-//            return object;
-//        object = getTrackObjectAt(world, pos.up(), type);
-//        if (object != null)
-//            return object;
-//        object = getTrackObjectAt(world, pos.down(), type);
-//        if (object != null)
-//            return object;
-//        return null;
-//    }
-
-//    @Nullable
-//    @SuppressWarnings("unchecked")
-//    public static <T> T getTrackObjectAt(World world, BlockPos pos, Class<T> type) {
-//        TileEntity tile = world.getTileEntity(pos);
-//        if (tile == null)
-//            return null;
-//        if (type.isInstance(tile))
-//            return (T) tile;
-//        if (tile instanceof IOutfittedTrackTile) {
-//            ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
-//            if (type.isInstance(track))
-//                return (T) track;
-//        }
-//        return null;
-//    }
 
     private TrackToolsAPI() {
     }

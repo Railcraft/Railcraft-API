@@ -34,17 +34,6 @@ public interface IRailcraftModule {
 
         default void postInit() {
         }
-
-//        @SuppressWarnings("UnusedParameters")
-//        @SideOnly(Side.CLIENT)
-//        GuiScreen getGuiScreen(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
-//            return null;
-//        }
-//
-//        @SuppressWarnings("UnusedParameters")
-//        Container getGuiContainer(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
-//            return null;
-//        }
     }
 
     class MissingPrerequisiteException extends Exception {

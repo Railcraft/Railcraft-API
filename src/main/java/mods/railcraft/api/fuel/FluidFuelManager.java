@@ -10,44 +10,43 @@ package mods.railcraft.api.fuel;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @SuppressWarnings("WeakerAccess")
-public class FuelManager {
+public final class FluidFuelManager {
 
-    public static final Map<Fluid, Integer> boilerFuel = new HashMap<Fluid, Integer>();
+    private static final Logger logger = LogManager.getLogger(RailcraftConstantsAPI.MOD_ID);
+    public static final Map<Fluid, Integer> boilerFuel = new HashMap<>();
 
     /**
      * Register the amount of heat in a bucket of liquid fuel.
      *
-     * @param fluid the fluid
+     * @param fluid              the fluid
      * @param heatValuePerBucket the amount of "heat" per bucket of fuel
      */
-    public static void addBoilerFuel(Fluid fluid, int heatValuePerBucket) {
+    public static void addFuel(Fluid fluid, int heatValuePerBucket) {
         ModContainer mod = Loader.instance().activeModContainer();
-        String modName = mod != null ? mod.getName() : "An Unknown Mod";
+        String modName = mod != null ? mod.getModId() : "An Unknown Mod";
         if (fluid == null) {
-            FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.WARN, String.format("An error occurred while %s was registering a Boiler fuel source", modName));
+            logger.log(Level.WARN, "An error occurred while {} was registering a Boiler fuel source", modName);
             return;
         }
         boilerFuel.put(fluid, heatValuePerBucket);
-        FMLLog.log(RailcraftConstantsAPI.MOD_ID, Level.DEBUG, String.format("%s registered \"%s\" as a valid Boiler fuel source with %d heat.", modName, fluid.getName(), heatValuePerBucket));
+        logger.log(Level.DEBUG, "{} registered \"{}\" as a valid Boiler fuel source with {} heat.", modName, fluid.getName(), heatValuePerBucket);
     }
 
-    public static int getBoilerFuelValue(Fluid fluid) {
-        Integer value = boilerFuel.get(fluid);
-        if(value != null) return value;
-        else return 0;
+    public static int getFuelValue(Fluid fluid) {
+        return boilerFuel.getOrDefault(fluid, 0);
     }
 
 }

@@ -7,7 +7,7 @@
 @API(apiVersion = "2.4.0", owner = "RailcraftAPI|core", provides = "RailcraftAPI|items")
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.items;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraftforge.fml.common.API;

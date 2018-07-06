@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
@@ -41,7 +42,6 @@ public interface ITrainTransferHelper {
      * @return the ItemStack that remains after any pushed items were removed, or null if it was fully pushed
      * @see mods.railcraft.api.carts.IFluidCart
      */
-    @Nullable
     ItemStack pushStack(EntityMinecart requester, ItemStack stack);
 
     /**
@@ -52,7 +52,7 @@ public interface ITrainTransferHelper {
      * @return the ItemStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IItemCart
      */
-    ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter);
+    ItemStack pullStack(EntityMinecart requester, Predicate<@NotNull ItemStack> filter);
 
     /**
      * Offers an item stack to the Train or drops it if no one wants it.

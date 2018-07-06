@@ -9,7 +9,7 @@ package mods.railcraft.api.carts;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,9 +29,10 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public abstract class CartToolsAPI {
+public final class CartToolsAPI {
     public static ILinkageManager linkageManager;
     public static ITrainTransferHelper transferHelper;
 
@@ -150,7 +151,7 @@ public abstract class CartToolsAPI {
     }
 
     public static boolean isMinecartOnAnySide(World world, BlockPos pos, float sensitivity, @Nullable Class<? extends EntityMinecart> type, boolean subclass) {
-        List<EntityMinecart> list = new ArrayList<EntityMinecart>();
+        List<EntityMinecart> list = new ArrayList<>();
         for (EnumFacing side : EnumFacing.VALUES) {
             list.addAll(getMinecartsOnSide(world, pos, sensitivity, side));
         }
@@ -183,7 +184,7 @@ public abstract class CartToolsAPI {
     }
 
     public static List<EntityMinecart> getMinecartsOnAllSides(World world, BlockPos pos, float sensitivity) {
-        List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
+        List<EntityMinecart> carts = new ArrayList<>();
         for (EnumFacing side : EnumFacing.VALUES) {
             carts.addAll(getMinecartsOnSide(world, pos, sensitivity, side));
         }
@@ -192,8 +193,8 @@ public abstract class CartToolsAPI {
     }
 
     public static List<EntityMinecart> getMinecartsOnAllSides(World world, BlockPos pos, float sensitivity, Class<? extends EntityMinecart> type, boolean subclass) {
-        List<EntityMinecart> list = new ArrayList<EntityMinecart>();
-        List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
+        List<EntityMinecart> list = new ArrayList<>();
+        List<EntityMinecart> carts = new ArrayList<>();
         for (EnumFacing side : EnumFacing.VALUES) {
             list.addAll(getMinecartsOnSide(world, pos, sensitivity, side));
         }
@@ -246,14 +247,8 @@ public abstract class CartToolsAPI {
     }
 
     public static List<EntityMinecart> getMinecartsIn(World world, BlockPos p1, BlockPos p2) {
-        List entities = world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(p1.getX(), p1.getY(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ()));
-        List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
-        for (Object o : entities) {
-            EntityMinecart cart = (EntityMinecart) o;
-            if (!cart.isDead)
-                carts.add((EntityMinecart) o);
-        }
-        return carts;
+        return world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(p1.getX(), p1.getY(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ())).stream()
+                .filter(cart -> !cart.isDead).collect(Collectors.toList());
     }
 
     /**
@@ -270,5 +265,8 @@ public abstract class CartToolsAPI {
 
     public static boolean cartVelocityIsLessThan(EntityMinecart cart, float vel) {
         return Math.abs(cart.motionX) < vel && Math.abs(cart.motionZ) < vel;
+    }
+
+    private CartToolsAPI() {
     }
 }

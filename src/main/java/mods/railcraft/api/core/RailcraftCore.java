@@ -14,7 +14,7 @@ import static mods.railcraft.api.core.RailcraftCore.InitStage.LOADING;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class RailcraftCore {
+public final class RailcraftCore {
     public enum InitStage {
         LOADING,
         DEPENDENCY_CHECKING,
@@ -34,5 +34,8 @@ public class RailcraftCore {
     }
 
     private static InitStage initStage = LOADING;
+
+    private RailcraftCore() {
+    }
 
 }

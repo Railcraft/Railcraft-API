@@ -5,12 +5,10 @@
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.api.core.items;
+package mods.railcraft.api.items;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nullable;
 
 /**
  * This interface marks an item that can have another item "added" to its NBT.
