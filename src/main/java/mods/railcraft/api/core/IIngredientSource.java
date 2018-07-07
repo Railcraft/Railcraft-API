@@ -1,8 +1,7 @@
 package mods.railcraft.api.core;
 
 import net.minecraft.item.crafting.Ingredient;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An interface for containers that can extract getRecipes.
@@ -22,7 +21,6 @@ public interface IIngredientSource {
      *
      * @param variant The specified variant
      * @return The ingredient
-     * @deprecated Variants are to be removed
      */
     default Ingredient getIngredient(@Nullable IVariantEnum variant) {
         return getIngredient();

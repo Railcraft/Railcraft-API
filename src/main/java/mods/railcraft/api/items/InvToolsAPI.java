@@ -11,8 +11,7 @@ import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 6/7/2017 for Railcraft.
