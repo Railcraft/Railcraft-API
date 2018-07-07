@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
  * Created by CovertJaguar on 9/2/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @deprecated Use {@link IIngredientSource} instead
  */
 public interface IRailcraftRecipeIngredient extends IIngredientSource {
     @Nullable
