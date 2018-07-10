@@ -7,8 +7,6 @@
 
 package mods.railcraft.api.core;
 
-import javax.annotation.Nonnull;
-
 /**
  * Defines a Railcraft module. Any class implementing this interface and annotated by {@link RailcraftModule}
  * will be loaded as a Module by Railcraft during its initialization phase.

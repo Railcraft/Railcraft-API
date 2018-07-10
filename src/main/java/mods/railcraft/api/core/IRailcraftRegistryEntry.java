@@ -10,9 +10,6 @@ package mods.railcraft.api.core;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * Created by CovertJaguar on 9/1/2016 for Railcraft.
  *

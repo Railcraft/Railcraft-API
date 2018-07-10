@@ -11,8 +11,8 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,7 +29,7 @@ public class TrackKitMissing extends TrackKitInstance {
         this.swapOut = swapOut;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public TrackKit getTrackKit() {
         return TrackRegistry.getMissingTrackKit();

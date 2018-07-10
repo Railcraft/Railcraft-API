@@ -10,9 +10,9 @@ package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface IBlastFurnaceCraftingManager {
@@ -33,12 +33,12 @@ public interface IBlastFurnaceCraftingManager {
         addFuel(createFuel(input, cookTime));
     }
 
-    List<@NonNull IBlastFurnaceFuel> getFuels();
+    List<@NotNull IBlastFurnaceFuel> getFuels();
 
     int getCookTime(ItemStack stack);
 
     @Nullable
     IBlastFurnaceRecipe getRecipe(ItemStack stack);
 
-    List<@NonNull IBlastFurnaceRecipe> getRecipes();
+    List<@NotNull IBlastFurnaceRecipe> getRecipes();
 }

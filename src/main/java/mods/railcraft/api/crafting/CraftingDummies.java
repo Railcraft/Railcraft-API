@@ -4,9 +4,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -184,7 +184,7 @@ final class CraftingDummies {
 
     static final IRollingMachineRecipe ROLLING_MACHINE_RECIPE = new IRollingMachineRecipe() {
         @Override
-        public boolean test(@NonNull InventoryCrafting inv) {
+        public boolean test(@NotNull InventoryCrafting inv) {
             return false;
         }
 

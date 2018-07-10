@@ -10,7 +10,7 @@ package mods.railcraft.api.tracks;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 public interface ISwitchActuator {

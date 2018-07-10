@@ -9,8 +9,8 @@ package mods.railcraft.api.signals;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,7 +29,7 @@ public abstract class SignalController extends AbstractPair {
         return null;
     }
 
-    @Nonnull
+    @NotNull
     public abstract SignalAspect getAspectFor(BlockPos receiver);
 
     @Override

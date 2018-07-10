@@ -8,7 +8,7 @@ package mods.railcraft.api.core;
 
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

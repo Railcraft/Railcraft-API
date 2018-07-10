@@ -8,9 +8,8 @@ package mods.railcraft.api.signals;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -55,7 +54,7 @@ public abstract class SignalReceiver extends AbstractPair {
         return false;
     }
 
-    public void onControllerAspectChange(SignalController con, @Nonnull SignalAspect aspect) {
+    public void onControllerAspectChange(SignalController con, @NotNull SignalAspect aspect) {
         ((IReceiverTile) tile).onControllerAspectChange(con, aspect);
     }
 
