@@ -41,4 +41,10 @@ public interface IBlastFurnaceRecipe {
      */
     ItemStack getOutput();
 
+    /**
+     * Gets the secondary output for this recipe.
+     *
+     * @return The secondary output, safe to modify
+     */
+    ItemStack getSecondOutput();
 }

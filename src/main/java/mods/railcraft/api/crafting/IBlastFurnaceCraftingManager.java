@@ -19,14 +19,14 @@ public interface IBlastFurnaceCraftingManager {
 
     IBlastFurnaceFuel createFuel(Ingredient matcher, int cookTime);
 
-    IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output);
+    IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondoutput);
 
     void addRecipe(IBlastFurnaceRecipe recipe);
 
     void addFuel(IBlastFurnaceFuel fuel);
 
-    default void addRecipe(Ingredient input, int cookTime, ItemStack output) {
-        addRecipe(createRecipe(input, cookTime, output));
+    default void addRecipe(Ingredient input, int cookTime, ItemStack output, ItemStack secondoutput) {
+        addRecipe(createRecipe(input, cookTime, output, secondoutput));
     }
 
     default void addFuel(Ingredient input, int cookTime) {
