@@ -22,19 +22,19 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface StructureHelper {
 
-    void placeBlastFurnace(World world, BlockPos pos, @Nullable ItemStack input, @Nullable ItemStack output, @Nullable ItemStack fuel);
+    void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel);
 
-    void placeCokeOven(World world, BlockPos pos, int creosote, @Nullable ItemStack input, @Nullable ItemStack output);
+    void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output);
 
     void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable FluidStack fuel);
 
     void placeIronTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid);
 
-    void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output);
+    void placeRockCrusher(World world, BlockPos pos, int patternIndex, List<ItemStack> input, List<ItemStack> output);
 
     void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable List<ItemStack> fuel);
 
-    void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output);
+    void placeSteamOven(World world, BlockPos pos, List<ItemStack> input, List<ItemStack> output);
 
     void placeSteelTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid);
 

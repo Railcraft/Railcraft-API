@@ -26,7 +26,7 @@ public interface IItemCart {
      *
      * @return true if can pass push and pull requests
      */
-    boolean canPassItemRequests();
+    boolean canPassItemRequests(ItemStack stack);
 
     /**
      * This function controls whether a cart will accept a pushed Item.

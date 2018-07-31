@@ -9,7 +9,7 @@
 package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Replaces ILiquidTransfer with a simpler interface for moving Fluids between Minecarts.
@@ -28,7 +28,7 @@ public interface IFluidCart {
      *
      * @return true if can pass push and pull requests
      */
-    boolean canPassFluidRequests(Fluid fluid);
+    boolean canPassFluidRequests(FluidStack fluid);
 
     /**
      * This function controls whether a cart will accept a pushed Fluid.
@@ -40,7 +40,7 @@ public interface IFluidCart {
      * @param fluid     the Fluid
      * @return true if cart will accept the fluid
      */
-    boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid);
+    boolean canAcceptPushedFluid(EntityMinecart requester, FluidStack fluid);
 
     /**
      * This function controls whether a cart will fulfill a pull request for a specific Fluid.
@@ -52,7 +52,7 @@ public interface IFluidCart {
      * @param fluid     the Fluid
      * @return true if the cart can provide the fluid
      */
-    boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid);
+    boolean canProvidePulledFluid(EntityMinecart requester, FluidStack fluid);
 
     /**
      * Set by the Liquid Loader while filling, primarily used for rendering a
@@ -60,5 +60,6 @@ public interface IFluidCart {
      *
      * @param filling true if the cart is being filled from above
      */
-    void setFilling(boolean filling);
+    default void setFilling(boolean filling) {
+    }
 }
