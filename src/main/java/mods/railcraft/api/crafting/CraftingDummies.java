@@ -41,6 +41,80 @@ final class CraftingDummies {
         }
     };
 
+    static final IBlastFurnaceCraftingManager BLAST_FURNACE_CRAFTING_MANAGER = new IBlastFurnaceCraftingManager() {
+        @Override
+        public IBlastFurnaceFuel createFuel(Ingredient matcher, int cookTime) {
+            return BLAST_FURNACE_FUEL;
+        }
+
+        @Override
+        public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondoutput) {
+            return BLAST_FURNACE_RECIPE;
+        }
+
+        @Override
+        public void addRecipe(IBlastFurnaceRecipe recipe) {
+        }
+
+        @Override
+        public void addFuel(IBlastFurnaceFuel fuel) {
+        }
+
+        @Override
+        public List<@NotNull IBlastFurnaceFuel> getFuels() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public int getCookTime(ItemStack stack) {
+            return 0;
+        }
+
+        @Override
+        public @Nullable IBlastFurnaceRecipe getRecipe(ItemStack stack) {
+            return null;
+        }
+
+        @Override
+        public List<@NotNull IBlastFurnaceRecipe> getRecipes() {
+            return Collections.emptyList();
+        }
+    };
+
+    static final IBlastFurnaceRecipe BLAST_FURNACE_RECIPE = new IBlastFurnaceRecipe() {
+        @Override
+        public Ingredient getInput() {
+            return Ingredient.EMPTY;
+        }
+
+        @Override
+        public int getCookTime() {
+            return 0;
+        }
+
+        @Override
+        public ItemStack getOutput() {
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public ItemStack getSecondOutput() {
+            return ItemStack.EMPTY;
+        }
+    };
+
+    static final IBlastFurnaceFuel BLAST_FURNACE_FUEL = new IBlastFurnaceFuel() {
+        @Override
+        public Ingredient getInput() {
+            return Ingredient.EMPTY;
+        }
+
+        @Override
+        public int getCookTime() {
+            return 0;
+        }
+    };
+
     static final IRollingMachineCraftingManager ROLLING_MACHINE_CRAFTING_MANAGER = new IRollingMachineCraftingManager() {
         @Override
         public void addRecipe(IRollingMachineRecipe recipe) {

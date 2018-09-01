@@ -19,19 +19,10 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class RailcraftCraftingManager {
-    @Deprecated
-    public //todo remove public
     static ICokeOvenCraftingManager cokeOven = CraftingDummies.COKE_OVEN_CRAFTING_MANAGER;
-    @Deprecated
-    public //todo remove public
-    static IBlastFurnaceCraftingManager blastFurnace;
-
-    @Deprecated
-    public //todo remove public
+    static IBlastFurnaceCraftingManager blastFurnace = CraftingDummies.BLAST_FURNACE_CRAFTING_MANAGER;
+    //TODO initialize
     static ICrusherCraftingManager rockCrusher;
-
-    @Deprecated
-    public //todo remove public
     static IRollingMachineCraftingManager rollingMachine = CraftingDummies.ROLLING_MACHINE_CRAFTING_MANAGER;
 
     /**

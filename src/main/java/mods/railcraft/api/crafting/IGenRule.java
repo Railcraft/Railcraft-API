@@ -1,6 +1,7 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.util.text.ITextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
@@ -9,7 +10,7 @@ import java.util.function.Predicate;
 /**
  *
  */
-public interface IGenRule extends Predicate<Random> {
+public interface IGenRule extends Predicate<@NotNull Random> {
 
     /**
      * Returns if this rule permits the generation of the output entry.
@@ -20,10 +21,10 @@ public interface IGenRule extends Predicate<Random> {
      * @return True if an output entry can be generated
      */
     @Override
-    boolean test(Random random);
+    boolean test(@NotNull Random random);
 
     /**
      * Returns brief description of the rules for generating this entry.
      */
-    List<ITextComponent> getToolTip();
+    List<@NotNull ITextComponent> getToolTip();
 }

@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +68,11 @@ public final class CartToolsAPI {
     public static void setCartOwner(EntityMinecart cart, GameProfile owner) {
         if (!cart.getEntityWorld().isRemote) {
             NBTTagCompound data = cart.getEntityData();
-            if (owner.getName() != null)
-                data.setString("owner", owner.getName());
-            if (owner.getId() != null)
-                data.setString("ownerId", owner.getId().toString());
+            data.setTag("owner", NBTUtil.writeGameProfile(new NBTTagCompound(), owner));
+//            if (owner.getName() != null)
+//                data.setString("owner", owner.getName());
+//            if (owner.getId() != null)
+//                data.setString("ownerId", owner.getId().toString());
         }
     }
 
@@ -80,8 +83,16 @@ public final class CartToolsAPI {
      */
     public static GameProfile getCartOwner(EntityMinecart cart) {
         NBTTagCompound data = cart.getEntityData();
+
+        if (data.hasKey("owner", NBT.TAG_COMPOUND)) {
+            GameProfile profile = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
+            if (profile != null) {
+                return profile;
+            }
+        }
+
         String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
-        if (data.hasKey("owner"))
+        if (data.hasKey("owner", NBT.TAG_STRING))
             ownerName = data.getString("owner");
 
         UUID ownerId = null;
