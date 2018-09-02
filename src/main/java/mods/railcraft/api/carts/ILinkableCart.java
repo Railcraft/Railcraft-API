@@ -34,7 +34,7 @@ public interface ILinkableCart {
      * @param cart The cart that we are attempting to link with.
      * @return True if we can link with this cart.
      */
-    default boolean canLinkWithCart(EntityMinecart cart) {
+    default boolean canLink(EntityMinecart cart) {
         return true;
     }
 
@@ -42,10 +42,13 @@ public interface ILinkableCart {
      * Returns true if this cart has two links
      * or false if it can only link with one cart.
      *
+     * <p>If {@link #isLinkable()} returns false, this method
+     * must return false, too.</p>
+     *
      * @return True if two links
      */
     default boolean hasTwoLinks() {
-        return true;
+        return isLinkable();
     }
 
     /**

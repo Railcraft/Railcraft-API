@@ -35,6 +35,13 @@ public interface ILinkageManager {
      */
     float OPTIMAL_DISTANCE = 0.78f;
 
+    /**
+     * Allows or disallows the cart to automatically link to the next cart it collides with.
+     *
+     * @param cart The minecart
+     * @param autoLink Whether the auto link feature is enabled
+     * @return True if tries to disable link or enable link while there is any free link
+     */
     boolean setAutoLink(EntityMinecart cart, boolean autoLink);
 
     boolean hasAutoLink(EntityMinecart cart);
@@ -86,7 +93,10 @@ public interface ILinkageManager {
     /**
      * Breaks all links the cart has.
      */
-    void breakLinks(EntityMinecart cart);
+    default void breakLinks(EntityMinecart cart) {
+        breakLinkA(cart);
+        breakLinkB(cart);
+    }
 
     /**
      * Break only link A.
@@ -113,12 +123,5 @@ public interface ILinkageManager {
      * There is no guarantee of order.
      */
     Iterable<EntityMinecart> trainIterator(EntityMinecart cart);
-
-    /**
-     * Replaced with WorldServer#getEntityFromUuid.
-     */
-    @Nullable
-    @Deprecated
-    EntityMinecart getCartFromUUID(UUID id);
 
 }

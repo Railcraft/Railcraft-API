@@ -17,11 +17,6 @@ archivesBaseName = "Railcraft_" + project.version_minecraft + "-api"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-configurations {
-    embed
-    compile.extendsFrom embed
-}
-
 dependencies {
     provided "org.jetbrains:annotations:15.0"
 }
@@ -36,8 +31,6 @@ minecraft {
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-jar {
-    from configurations.embed.collect {
-        it.isDirectory() ? it : zipTree(it)
-    }
+compileJava {
+    options.compilerArgs += '-proc:none'
 }
