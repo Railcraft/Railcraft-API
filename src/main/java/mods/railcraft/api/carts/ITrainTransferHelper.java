@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +49,7 @@ public interface ITrainTransferHelper {
      * Will request an item from the Train.
      *
      * @param requester the source EntityMinecart
-     * @param filter    aPredicate<ItemStack> that defines the requested item
+     * @param filter    a Predicate<ItemStack> that defines the requested item
      * @return the ItemStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IItemCart
      */
@@ -96,7 +97,8 @@ public interface ITrainTransferHelper {
      * @see mods.railcraft.api.carts.IFluidCart
      */
     @Nullable
-    FluidStack pullFluid(EntityMinecart requester, FluidStack fluidStack);
+    @Contract("_, null -> null")
+    FluidStack pullFluid(EntityMinecart requester, @Nullable FluidStack fluidStack);
 
     /**
      * Returns an IFluidHandler with represents the entire train.
