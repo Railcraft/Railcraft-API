@@ -16,7 +16,7 @@ import java.util.UUID;
  * The LinkageManager contains all the functions needed to link and interact
  * with linked carts.
  * <p/>
- * To obtain an instance of this interface, call CartTools.getLinkageManager().
+ * To obtain an instance of this interface, call {@link CartToolsAPI#getLinkageManager()}.
  * <p/>
  * Each cart can up to two links. They are called Link A and Link B. Some carts
  * will have only Link A, for example the Tunnel Bore.

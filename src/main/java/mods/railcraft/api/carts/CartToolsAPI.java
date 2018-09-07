@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class CartToolsAPI {
-    public static ILinkageManager linkageManager;
+    static ILinkageManager linkageManager;
     public static ITrainTransferHelper transferHelper;
 
     /**
@@ -43,11 +43,9 @@ public final class CartToolsAPI {
      * <p/>
      * Will return null if Railcraft is not installed.
      *
-     * @param world The World, may be required in the future
      * @return an instance of ILinkageManager
      */
-    @SuppressWarnings("UnusedParameters")
-    public static ILinkageManager getLinkageManager(World world) {
+    public static ILinkageManager getLinkageManager() {
         return linkageManager;
     }
 
