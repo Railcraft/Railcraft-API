@@ -17,7 +17,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
  */
 public interface IRailcraftRegistryEntry<T extends IForgeRegistryEntry<T>> extends IForgeRegistryEntry<T> {
     default ResourceLocation getRegistryName(IVariantEnum variant) {
-        return new ResourceLocation(getRegistryName().getResourceDomain(),
-                getRegistryName().getResourcePath() + "." + variant.getResourcePathSuffix());
+        return new ResourceLocation(getRegistryName().getNamespace(),
+                getRegistryName().getPath() + "." + variant.getResourcePathSuffix());
     }
 }

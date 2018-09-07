@@ -167,7 +167,7 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
             return null;
         }
 
-        public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         }
 
         public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
