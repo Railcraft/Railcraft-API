@@ -272,6 +272,10 @@ public final class CartToolsAPI {
         return Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
     }
 
+    public static double getCartSpeedUncappedSquared(EntityMinecart cart) {
+        return cart.motionX * cart.motionX + cart.motionZ * cart.motionZ;
+    }
+
     public static boolean cartVelocityIsLessThan(EntityMinecart cart, float vel) {
         return Math.abs(cart.motionX) < vel && Math.abs(cart.motionZ) < vel;
     }

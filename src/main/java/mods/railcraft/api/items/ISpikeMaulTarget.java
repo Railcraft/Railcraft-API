@@ -7,7 +7,6 @@
 
 package mods.railcraft.api.items;
 
-import mods.railcraft.api.tracks.IBlockTrackOutfitted;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
@@ -27,10 +26,33 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ISpikeMaulTarget {
+    /**
+     * A list for registering or changing spike maul targets.
+     */
     List<ISpikeMaulTarget> spikeMaulTargets = new ArrayList<>();
 
+    /**
+     * Returns true when the given state is your resulting state.
+     *
+     * @param world The world
+     * @param pos The position
+     * @param state The block state
+     * @return True if the given state is the target's result
+     */
     boolean matches(World world, BlockPos pos, IBlockState state);
 
+    /**
+     * Returns true when you successfully set another state to your
+     * resulting state. Return false to revert changes.
+     *
+     * @param world The world
+     * @param pos The position
+     * @param state The block state
+     * @param player The player
+     * @param shape The rail direction
+     * @param trackType The track type
+     * @return If operation is successful
+     */
     boolean setToTarget(World world, BlockPos pos, IBlockState state, EntityPlayer player, BlockRailBase.EnumRailDirection shape, TrackType trackType);
 
     class TrackKitTarget implements ISpikeMaulTarget {
@@ -42,8 +64,7 @@ public interface ISpikeMaulTarget {
 
         @Override
         public boolean matches(World world, BlockPos pos, IBlockState state) {
-            return state.getBlock() instanceof IBlockTrackOutfitted
-                    && ((IBlockTrackOutfitted) state.getBlock()).getTrackKit(world, pos) == trackKit.get();
+            return TrackToolsAPI.getTrackKit(world, pos) == trackKit.get();
         }
 
         @Override

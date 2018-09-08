@@ -156,6 +156,20 @@ public final class TrackToolsAPI {
         return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
 
+    @Nullable
+    public static TrackKit getTrackKit(World world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof IOutfittedTrackTile) {
+            return ((IOutfittedTrackTile) te).getTrackKitInstance().getTrackKit();
+        }
+        return null;
+    }
+
+    public static TrackKit getTrackKitSafe(World world, BlockPos pos) {
+        TrackKit ret = getTrackKit(world, pos);
+        return ret == null ? TrackRegistry.getMissingTrackKit() : ret;
+    }
+
     private TrackToolsAPI() {
     }
 

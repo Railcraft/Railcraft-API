@@ -231,6 +231,15 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
     }
 
     /**
+     * Return the forge registry that contain the track kit/type.
+     *
+     * @return The forge registry
+     */
+    public IForgeRegistry<T> getRegistry() {
+        return registry;
+    }
+
+    /**
      * Return all registered variants in an iterator.
      *
      * @return An iterator of variants
