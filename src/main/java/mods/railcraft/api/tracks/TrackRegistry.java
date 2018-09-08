@@ -186,6 +186,8 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
      * Returns an object in the track registry, looking up by info contained in the {@link NBTTagCompound nbt}
      * data of the item stack. Fallbacks to the default object if not available.
      *
+     * <p>Use {@link TrackToolsAPI#getTrackType(ItemStack)} for track types instead! This method does not handle flex tracks.</p>
+     *
      * @param stack The item stack
      * @return The {@link IForgeRegistryEntry object}
      */

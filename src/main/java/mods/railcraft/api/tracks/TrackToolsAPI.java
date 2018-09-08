@@ -170,6 +170,13 @@ public final class TrackToolsAPI {
         return ret == null ? TrackRegistry.getMissingTrackKit() : ret;
     }
 
+    public static TrackType getTrackType(ItemStack stack) {
+        if (stack.getItem() instanceof IItemTrack) {
+            return ((IItemTrack) stack.getItem()).getTrackType(stack);
+        }
+        return TrackRegistry.TRACK_TYPE.get(stack);
+    }
+
     private TrackToolsAPI() {
     }
 
