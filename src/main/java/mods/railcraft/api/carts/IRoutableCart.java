@@ -8,18 +8,16 @@
 
 package mods.railcraft.api.carts;
 
-import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.IOwnable;
 import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IRoutableCart {
+public interface IRoutableCart extends IOwnable {
 
     String getDestination();
 
     boolean setDestination(ItemStack ticket);
-
-    GameProfile getOwner();
 
 }

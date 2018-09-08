@@ -35,8 +35,12 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class CartToolsAPI {
-    static ILinkageManager linkageManager;
-    public static ITrainTransferHelper transferHelper;
+    static ILinkageManager linkageManager = CartDummies.DUMMY_LINKAGE_MANAGER;
+    static ITrainTransferHelper transferHelper = CartDummies.DUMMY_TRANSFER_HELPER;
+
+    public static ITrainTransferHelper getTransferHelper() {
+        return transferHelper;
+    }
 
     /**
      * Returns an instance of ILinkageManager.

@@ -6,7 +6,7 @@
  * ***************************************************************************
  */
 
-package mods.railcraft.api.carts.bore;
+package mods.railcraft.api.carts;
 
 import com.google.common.collect.Sets;
 import net.minecraft.block.state.IBlockState;

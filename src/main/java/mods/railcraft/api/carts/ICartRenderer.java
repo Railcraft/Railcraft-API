@@ -6,7 +6,7 @@
  * ***************************************************************************
  */
 
-package mods.railcraft.api.carts.locomotive;
+package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;

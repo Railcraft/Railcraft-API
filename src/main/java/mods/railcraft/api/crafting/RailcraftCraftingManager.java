@@ -8,10 +8,6 @@
 
 package mods.railcraft.api.crafting;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 /**
  * These variables are defined during the pre-init phase.
  * Do not attempt to access them during pre-init.

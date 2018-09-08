@@ -5,12 +5,17 @@
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
-@API(apiVersion = "5.1.1", owner = "RailcraftAPI|core", provides = "RailcraftAPI|tracks")
+@API(
+        apiVersion = "5.1.1",
+        owner = RailcraftConstantsAPI.CORE_ID,
+        provides = RailcraftConstantsAPI.API_PREFIX + "tracks"
+)
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 package mods.railcraft.api.tracks;
 
 import mcp.MethodsReturnNonnullByDefault;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraftforge.fml.common.API;
 
 import javax.annotation.ParametersAreNonnullByDefault;

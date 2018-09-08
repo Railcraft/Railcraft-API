@@ -31,9 +31,9 @@ public final class InvToolsAPI {
         return ItemStack.EMPTY;
     }
 
-    @Contract("null, _ -> null; !null, false -> _; _, true -> !null")
+    @Contract("_, true -> !null")
     @Nullable
-    public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, boolean create) {
+    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, boolean create) {
         if (isEmpty(stack))
             return create ? new NBTTagCompound() : null;
         return create ? stack.getOrCreateSubCompound(RailcraftConstantsAPI.MOD_ID) : stack.getSubCompound(RailcraftConstantsAPI.MOD_ID);
@@ -46,6 +46,9 @@ public final class InvToolsAPI {
     }
 
     public static void setItemDataRailcraft(ItemStack stack, String tag, NBTTagCompound data) {
+        if (isEmpty(stack)) {
+            return;
+        }
         NBTTagCompound nbt = getItemDataRailcraft(stack, true);
         nbt.setTag(tag, data);
     }
@@ -55,9 +58,9 @@ public final class InvToolsAPI {
         return getItemDataRailcraft(stack, tag, false);
     }
 
-    @Contract("null, _, _ -> null; !null, _, true -> !null; !null, _, false -> _")
+    @Contract("_, _, true -> !null")
     @Nullable
-    public static NBTTagCompound getItemDataRailcraft(@Nullable ItemStack stack, String tag, boolean create) {
+    public static NBTTagCompound getItemDataRailcraft(ItemStack stack, String tag, boolean create) {
         NBTTagCompound nbt = getItemDataRailcraft(stack, create);
         if (nbt != null && (create || nbt.hasKey(tag))) {
             NBTTagCompound subNBT = nbt.getCompoundTag(tag);
