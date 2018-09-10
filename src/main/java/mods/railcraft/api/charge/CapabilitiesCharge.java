@@ -11,11 +11,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 /**
- * Created by CovertJaguar on 10/4/2016 for Railcraft.
- *
- * @author CovertJaguar <http://www.railcraft.info>
+ * Keeps the cart battery capability instance.
  */
-public class CapabilitiesCharge {
+public final class CapabilitiesCharge {
     @CapabilityInject(ICartBattery.class)
     public static Capability<ICartBattery> CART_BATTERY;
+
+    private CapabilitiesCharge() {
+    }
 }
