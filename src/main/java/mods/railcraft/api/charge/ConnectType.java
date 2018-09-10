@@ -85,10 +85,13 @@ public enum ConnectType {
             Map<BlockPos, EnumSet<ConnectType>> positions = new ConnectionMap();
 
             EnumSet<ConnectType> all = EnumSet.allOf(ConnectType.class);
+            EnumSet<ConnectType> notTrack = EnumSet.complementOf(EnumSet.of(ConnectType.TRACK));
 
             for (EnumFacing facing : EnumFacing.VALUES) {
                 positions.put(pos.offset(facing), all);
             }
+
+            positions.put(pos.down(), notTrack);
             return positions;
         }
 
