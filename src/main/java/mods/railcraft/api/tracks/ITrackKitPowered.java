@@ -25,6 +25,8 @@ public interface ITrackKitPowered extends ITrackKitInstance {
 
     /**
      * Setter for a simple boolean variable for caching the power state.
+     *
+     * <p>Note: It is suggested to send update to client if the new powered state is different.</p>
      */
     void setPowered(boolean powered);
 
