@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -170,7 +169,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
      *
      * @return an ItemStack that can be used to place the track.
      */
-    @Nullable
     public ItemStack getTrackKitItem() {
         return getTrackKitItem(1);
     }
@@ -180,7 +178,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
      *
      * @return an ItemStack that can be used to place the track.
      */
-    @Nullable
     public ItemStack getTrackKitItem(int qty) {
         if (itemKit != null) {
             ItemStack stack = new ItemStack(itemKit, qty, ordinal());
@@ -188,7 +185,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
             nbt.setString(NBT_TAG, getName());
             return stack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     /**
@@ -196,7 +193,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
      *
      * @return an ItemStack that can be used to place the track.
      */
-    @Nullable
     public ItemStack getOutfittedTrack(TrackType trackType) {
         return getOutfittedTrack(trackType, 1);
     }
@@ -206,7 +202,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
      *
      * @return an ItemStack that can be used to place the track.
      */
-    @Nullable
     public ItemStack getOutfittedTrack(TrackType trackType, int qty) {
         if (blockTrackOutfitted != null) {
             ItemStack stack = new ItemStack(blockTrackOutfitted, qty);
@@ -215,7 +210,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
             nbt.setString(NBT_TAG, getName());
             return stack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @NotNull
