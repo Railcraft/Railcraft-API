@@ -16,11 +16,10 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,8 +98,8 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer != null && this instanceof ITrackKitReversible) {
-            int dir = MathHelper.floor((double) ((placer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            ((ITrackKitReversible) this).setReversed(dir == 0 || dir == 1);
+            EnumFacing facing = placer.getHorizontalFacing();
+            ((ITrackKitReversible) this).setReversed(facing == EnumFacing.SOUTH || facing == EnumFacing.WEST);
         }
         switchTrack(state, true);
         testPower(state);
