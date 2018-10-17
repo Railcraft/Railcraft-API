@@ -1,9 +1,9 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- *
- * This work (the API) is licensed under the "MIT" License,
- * see LICENSE.md for details.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.core;
 
@@ -28,13 +28,6 @@ public final class RailcraftFakePlayer {
 
     public static final GameProfile RAILCRAFT_USER_PROFILE = new GameProfile(UUID.nameUUIDFromBytes(RailcraftConstantsAPI.RAILCRAFT_PLAYER.getBytes()), RailcraftConstantsAPI.RAILCRAFT_PLAYER);
 
-    public static EntityPlayerMP get(WorldServer world, double x, double y, double z, ItemStack stack, EnumHand hand) {
-        EntityPlayerMP player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
-        player.setPosition(x, y, z);
-        player.setHeldItem(hand, stack);
-        return player;
-    }
-
     public static EntityPlayerMP get(final WorldServer world, final double x, final double y, final double z) {
         EntityPlayerMP player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
         player.setPosition(x, y, z);
@@ -47,9 +40,14 @@ public final class RailcraftFakePlayer {
         return player;
     }
 
+    public static EntityPlayerMP get(WorldServer world, double x, double y, double z, ItemStack stack, EnumHand hand) {
+        EntityPlayerMP player = get(world, x, y, z);
+        player.setHeldItem(hand, stack);
+        return player;
+    }
+
     public static EntityPlayerMP get(WorldServer world, BlockPos pos, ItemStack stack, EnumHand hand) {
-        EntityPlayerMP player = FakePlayerFactory.get(world, RAILCRAFT_USER_PROFILE);
-        player.setPosition(pos.getX(), pos.getY(), pos.getZ());
+        EntityPlayerMP player = get(world, pos);
         player.setHeldItem(hand, stack);
         return player;
     }

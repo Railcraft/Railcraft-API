@@ -1,3 +1,10 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.api.charge;
 
 /**
@@ -31,13 +38,13 @@ public interface IChargeBattery {
     /**
      * Adds some charge to the battery.
      *
-     * <p>The return value indicates that some of the charge offered cannot be accepted;
-     * it is usually caused by the capacity limit.</p>
+     * You are responsible for ensuring that you don't add charge to a full battery.
+     *
+     * Batteries can have slightly more charge than the max capacity for performance reasons.
      *
      * @param charge The charge intended to add
-     * @return The rejected charge amount
      */
-    double addCharge(double charge);
+    void addCharge(double charge);
 
     /**
      * Removes some charge from the battery.
