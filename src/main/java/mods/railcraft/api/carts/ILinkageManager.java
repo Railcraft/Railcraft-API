@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -8,9 +8,9 @@
 package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
-
 import org.jetbrains.annotations.Nullable;
-import java.util.UUID;
+
+import java.util.Collections;
 
 /**
  * The LinkageManager contains all the functions needed to link and interact
@@ -38,15 +38,21 @@ public interface ILinkageManager {
     /**
      * Allows or disallows the cart to automatically link to the next cart it collides with.
      *
-     * @param cart The minecart
+     * @param cart     The minecart
      * @param autoLink Whether the auto link feature is enabled
      * @return True if tries to disable link or enable link while there is any free link
      */
-    boolean setAutoLink(EntityMinecart cart, boolean autoLink);
+    default boolean setAutoLink(EntityMinecart cart, boolean autoLink) {
+        return false;
+    }
 
-    boolean hasAutoLink(EntityMinecart cart);
+    default boolean hasAutoLink(EntityMinecart cart) {
+        return false;
+    }
 
-    boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2);
+    default boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2) {
+        return false;
+    }
 
     /**
      * Creates a link between two carts, but only if there is nothing preventing
@@ -54,9 +60,13 @@ public interface ILinkageManager {
      *
      * @return True if the link succeeded.
      */
-    boolean createLink(EntityMinecart cart1, EntityMinecart cart2);
+    default boolean createLink(EntityMinecart cart1, EntityMinecart cart2) {
+        return false;
+    }
 
-    boolean hasFreeLink(EntityMinecart cart);
+    default boolean hasFreeLink(EntityMinecart cart) {
+        return false;
+    }
 
     /**
      * Returns the cart linked to Link A or null if nothing is currently
@@ -65,8 +75,9 @@ public interface ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    @Nullable
-    EntityMinecart getLinkedCartA(EntityMinecart cart);
+    default @Nullable EntityMinecart getLinkedCartA(EntityMinecart cart) {
+        return null;
+    }
 
     /**
      * Returns the cart linked to Link B or null if nothing is currently
@@ -75,20 +86,24 @@ public interface ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    @Nullable
-    EntityMinecart getLinkedCartB(EntityMinecart cart);
+    default @Nullable EntityMinecart getLinkedCartB(EntityMinecart cart) {
+        return null;
+    }
 
     /**
      * Returns true if the two carts are linked to each other.
      *
      * @return True if linked
      */
-    boolean areLinked(EntityMinecart cart1, EntityMinecart cart2);
+    default boolean areLinked(EntityMinecart cart1, EntityMinecart cart2) {
+        return false;
+    }
 
     /**
      * Breaks a link between two carts, if any link exists.
      */
-    void breakLink(EntityMinecart cart1, EntityMinecart cart2);
+    default void breakLink(EntityMinecart cart1, EntityMinecart cart2) {
+    }
 
     /**
      * Breaks all links the cart has.
@@ -101,12 +116,14 @@ public interface ILinkageManager {
     /**
      * Break only link A.
      */
-    void breakLinkA(EntityMinecart cart);
+    default void breakLinkA(EntityMinecart cart) {
+    }
 
     /**
      * Break only link B.
      */
-    void breakLinkB(EntityMinecart cart);
+    default void breakLinkB(EntityMinecart cart) {
+    }
 
     /**
      * Counts how many carts are in the train.
@@ -115,13 +132,17 @@ public interface ILinkageManager {
      * @return The number of carts in the train
      */
     @SuppressWarnings("unused")
-    int countCartsInTrain(EntityMinecart cart);
+    default int countCartsInTrain(EntityMinecart cart) {
+        return 0;
+    }
 
     /**
      * Returns an iterator which will iterate over every cart in the provided cart's train.
      *
      * There is no guarantee of order.
      */
-    Iterable<EntityMinecart> trainIterator(EntityMinecart cart);
+    default Iterable<EntityMinecart> trainIterator(EntityMinecart cart) {
+        return Collections.emptyList();
+    }
 
 }

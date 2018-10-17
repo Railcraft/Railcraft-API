@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -25,9 +25,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
 import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +35,10 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class CartToolsAPI {
-    static ILinkageManager linkageManager = CartDummies.DUMMY_LINKAGE_MANAGER;
-    static ITrainTransferHelper transferHelper = CartDummies.DUMMY_TRANSFER_HELPER;
+    static ILinkageManager linkageManager = new ILinkageManager() {
+    };
+    static ITrainTransferHelper transferHelper = new ITrainTransferHelper() {
+    };
 
     public static ITrainTransferHelper getTransferHelper() {
         return transferHelper;

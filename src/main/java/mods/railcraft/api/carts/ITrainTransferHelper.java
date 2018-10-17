@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -12,7 +12,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -43,7 +42,9 @@ public interface ITrainTransferHelper {
      * @return the ItemStack that remains after any pushed items were removed, or null if it was fully pushed
      * @see mods.railcraft.api.carts.IFluidCart
      */
-    ItemStack pushStack(EntityMinecart requester, ItemStack stack);
+    default ItemStack pushStack(EntityMinecart requester, ItemStack stack) {
+        return stack;
+    }
 
     /**
      * Will request an item from the Train.
@@ -53,7 +54,9 @@ public interface ITrainTransferHelper {
      * @return the ItemStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IItemCart
      */
-    ItemStack pullStack(EntityMinecart requester, Predicate<@NotNull ItemStack> filter);
+    default ItemStack pullStack(EntityMinecart requester, Predicate<ItemStack> filter) {
+        return ItemStack.EMPTY;
+    }
 
     /**
      * Offers an item stack to the Train or drops it if no one wants it.
@@ -61,7 +64,8 @@ public interface ITrainTransferHelper {
      * @param requester the source EntityMinecart
      * @param stack     the ItemStack to be offered
      */
-    void offerOrDropItem(EntityMinecart requester, ItemStack stack);
+    default void offerOrDropItem(EntityMinecart requester, ItemStack stack) {
+    }
 
     /**
      * Returns an IItemHandler with represents the entire train.
@@ -69,8 +73,9 @@ public interface ITrainTransferHelper {
      * @param cart a cart in the train
      * @return IItemHandler
      */
-    @Nullable
-    IItemHandler getTrainItemHandler(EntityMinecart cart);
+    default @Nullable IItemHandler getTrainItemHandler(EntityMinecart cart) {
+        return null;
+    }
 
 
     // ***************************************************************************************************************************
@@ -85,8 +90,9 @@ public interface ITrainTransferHelper {
      * @return the FluidStack that remains after any pushed Fluid was removed, or null if it was fully pushed
      * @see mods.railcraft.api.carts.IFluidCart
      */
-    @Nullable
-    FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack);
+    default @Nullable FluidStack pushFluid(EntityMinecart requester, FluidStack fluidStack) {
+        return fluidStack;
+    }
 
     /**
      * Will request fluid from the Train.
@@ -96,9 +102,10 @@ public interface ITrainTransferHelper {
      * @return the FluidStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IFluidCart
      */
-    @Nullable
     @Contract("_, null -> null")
-    FluidStack pullFluid(EntityMinecart requester, @Nullable FluidStack fluidStack);
+    default @Nullable FluidStack pullFluid(EntityMinecart requester, @Nullable FluidStack fluidStack) {
+        return null;
+    }
 
     /**
      * Returns an IFluidHandler with represents the entire train.
@@ -106,6 +113,8 @@ public interface ITrainTransferHelper {
      * @param cart a cart in the train
      * @return IFluidHandler
      */
-    @Nullable
-    IFluidHandler getTrainFluidHandler(EntityMinecart cart);
+
+    default @Nullable IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
+        return null;
+    }
 }
