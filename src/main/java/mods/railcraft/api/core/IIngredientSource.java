@@ -1,10 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.api.core;
 
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An interface for containers that can extract getRecipes.
+ * An interface for containers that can provide ingredients.
  */
 public interface IIngredientSource {
 

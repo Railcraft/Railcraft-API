@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -20,7 +20,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
@@ -37,7 +36,6 @@ import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
  */
 public abstract class TrackKitInstance implements ITrackKitInstance {
 
-    @NotNull
     private TileEntity tileEntity = new DummyTileEntity();
 
     protected static BlockRailBase.EnumRailDirection getRailDirectionRaw(IBlockState state) {

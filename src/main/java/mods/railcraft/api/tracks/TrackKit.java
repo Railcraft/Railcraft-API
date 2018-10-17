@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -46,7 +45,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
     public static final String NBT_TAG = "kit";
     public static Block blockTrackOutfitted;
     public static Item itemKit;
-    @NotNull
     private final Class<? extends ITrackKitInstance> instanceClass;
     private final Predicate<TrackType> trackTypeFilter;
     private final boolean allowedOnSlopes;
@@ -56,8 +54,8 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
     private final int maxSupportDistance;
     private final Renderer renderer;
 
-    public TrackKit(@NotNull ResourceLocation registryName,
-                    @NotNull Class<? extends ITrackKitInstance> instanceClass,
+    public TrackKit(ResourceLocation registryName,
+                    Class<? extends ITrackKitInstance> instanceClass,
                     Predicate<TrackType> trackTypeFilter,
                     Renderer renderer,
                     boolean allowedOnSlopes, boolean requiresTicks,
@@ -74,9 +72,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
     }
 
     public static class Builder {
-        @NotNull
         private final ResourceLocation registryName;
-        @NotNull
         private final Class<? extends ITrackKitInstance> instanceClass;
         private Predicate<TrackType> trackTypeFilter = (t) -> true;
         private boolean allowedOnSlopes = true;
@@ -94,7 +90,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
          * @param instanceClass The ITrackInstance class that corresponds to this
          *                      TrackSpec
          */
-        public Builder(@NotNull ResourceLocation registryName, @NotNull Class<? extends ITrackKitInstance> instanceClass) {
+        public Builder(ResourceLocation registryName, Class<? extends ITrackKitInstance> instanceClass) {
             this.registryName = registryName;
             this.instanceClass = instanceClass;
         }
@@ -149,7 +145,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
     }
 
     @Override
-    @NotNull
     public String getName() {
         return getRegistryName().toString().replaceAll("[.:]", "_");
     }
@@ -213,7 +208,6 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
         return ItemStack.EMPTY;
     }
 
-    @NotNull
     public ITrackKitInstance createInstance() {
         try {
             ITrackKitInstance trackInstance = instanceClass.newInstance();

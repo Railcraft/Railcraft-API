@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -8,8 +8,6 @@ package mods.railcraft.api.signals;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,8 +18,7 @@ public abstract class SignalController extends AbstractPair {
         super(locTag, tile, maxPairings);
     }
 
-    @Nullable
-    public SignalReceiver getReceiverAt(BlockPos coord) {
+    public @Nullable SignalReceiver getReceiverAt(BlockPos coord) {
         TileEntity recv = getPairAt(coord);
         if (recv != null) {
             return ((IReceiverTile) recv).getReceiver();
@@ -29,7 +26,6 @@ public abstract class SignalController extends AbstractPair {
         return null;
     }
 
-    @NotNull
     public abstract SignalAspect getAspectFor(BlockPos receiver);
 
     @Override

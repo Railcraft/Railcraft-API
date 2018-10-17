@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -55,8 +54,7 @@ public final class WorldCoordinate {
         return new WorldCoordinate(tile.getWorld().provider != null ? tile.getWorld().provider.getDimension() : 0, tile.getPos());
     }
 
-    @Nullable
-    public static WorldCoordinate readFromNBT(NBTTagCompound data, String key) {
+    public static @Nullable WorldCoordinate readFromNBT(NBTTagCompound data, String key) {
         if (data.hasKey(key, 10)) {
             NBTTagCompound nbt = data.getCompoundTag(key);
             int dim = nbt.getInteger("dim");
@@ -120,7 +118,6 @@ public final class WorldCoordinate {
         return result;
     }
 
-    @NotNull
     @Override
     public String toString() {
         return "WorldCoordinate{" + "dimension=" + dimension + ", x=" + getX() + ", y=" + getY() + ", z=" + getZ() + '}';

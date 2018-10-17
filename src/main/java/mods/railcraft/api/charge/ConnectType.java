@@ -1,9 +1,15 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.api.charge;
 
 import com.google.common.collect.ForwardingMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -104,7 +110,7 @@ public enum ConnectType {
      * @param pos The absolute position of the source type
      * @return The map described above
      */
-    @NotNull
+
     public abstract Map<BlockPos, EnumSet<ConnectType>> getPossibleConnectionLocations(BlockPos pos);
 
     class ConnectionMap extends ForwardingMap<BlockPos, EnumSet<ConnectType>> {
@@ -121,7 +127,7 @@ public enum ConnectType {
         }
 
         @Override
-        @NotNull
+
         public EnumSet<ConnectType> get(@Nullable Object key) {
             EnumSet<ConnectType> ret = super.get(key);
             return ret == null ? EnumSet.noneOf(ConnectType.class) : ret;

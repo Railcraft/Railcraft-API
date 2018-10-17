@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -10,8 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -29,7 +27,6 @@ public class TrackKitMissing extends TrackKitInstance {
         this.swapOut = swapOut;
     }
 
-    @NotNull
     @Override
     public TrackKit getTrackKit() {
         return TrackRegistry.getMissingTrackKit();

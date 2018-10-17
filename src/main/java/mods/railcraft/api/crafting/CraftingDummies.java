@@ -1,13 +1,18 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.api.crafting;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-
 import org.jetbrains.annotations.Nullable;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +23,6 @@ import java.util.List;
 final class CraftingDummies {
 
     static final ICokeOvenCraftingManager COKE_OVEN_CRAFTING_MANAGER = new ICokeOvenCraftingManager() {
-        final List<ICokeOvenRecipe> recipes = new ArrayList<>();
 
         @Override
         public ICokeOvenRecipe create(Ingredient input, ItemStack output, @Nullable FluidStack liquidOutput, int cookTime) {
@@ -29,15 +33,14 @@ final class CraftingDummies {
         public void addRecipe(ICokeOvenRecipe recipe) {
         }
 
-        @Nullable
         @Override
-        public ICokeOvenRecipe getRecipe(ItemStack stack) {
+        public @Nullable ICokeOvenRecipe getRecipe(ItemStack stack) {
             return null;
         }
 
         @Override
         public Collection<ICokeOvenRecipe> getRecipes() {
-            return this.recipes;
+            return Collections.emptyList();
         }
     };
 
@@ -48,7 +51,7 @@ final class CraftingDummies {
         }
 
         @Override
-        public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondoutput) {
+        public IBlastFurnaceRecipe createRecipe(Ingredient matcher, int cookTime, ItemStack output, ItemStack secondOutput) {
             return BLAST_FURNACE_RECIPE;
         }
 
@@ -61,7 +64,7 @@ final class CraftingDummies {
         }
 
         @Override
-        public List<@NotNull IBlastFurnaceFuel> getFuels() {
+        public List<IBlastFurnaceFuel> getFuels() {
             return Collections.emptyList();
         }
 
@@ -76,7 +79,7 @@ final class CraftingDummies {
         }
 
         @Override
-        public List<@NotNull IBlastFurnaceRecipe> getRecipes() {
+        public List<IBlastFurnaceRecipe> getRecipes() {
             return Collections.emptyList();
         }
     };
@@ -221,9 +224,8 @@ final class CraftingDummies {
         public void addShapelessRecipe(ItemStack output, Object... components) {
         }
 
-        @Nullable
         @Override
-        public IRollingMachineRecipe findMatching(InventoryCrafting inventoryCrafting) {
+        public @Nullable IRollingMachineRecipe findMatching(InventoryCrafting inventoryCrafting) {
             return null;
         }
 
@@ -244,9 +246,8 @@ final class CraftingDummies {
             return Ingredient.EMPTY;
         }
 
-        @Nullable
         @Override
-        public FluidStack getFluidOutput() {
+        public @Nullable FluidStack getFluidOutput() {
             return null;
         }
 
@@ -258,7 +259,7 @@ final class CraftingDummies {
 
     static final IRollingMachineRecipe ROLLING_MACHINE_RECIPE = new IRollingMachineRecipe() {
         @Override
-        public boolean test(@NotNull InventoryCrafting inv) {
+        public boolean test(InventoryCrafting inv) {
             return false;
         }
 
