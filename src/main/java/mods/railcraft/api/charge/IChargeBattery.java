@@ -9,6 +9,10 @@ package mods.railcraft.api.charge;
 
 /**
  * Base interface for charge batteries.
+ *
+ * Created by CovertJaguar on 5/13/2017 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IChargeBattery {
 
