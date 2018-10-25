@@ -13,7 +13,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 group = "com.headlamp-games"
-archivesBaseName = "Railcraft_" + project.version_minecraft + "-api"
+archivesBaseName = "railcraft-api"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
