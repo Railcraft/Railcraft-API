@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -15,13 +15,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -88,6 +88,14 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
         if (block == null)
             return (BlockRailBase) Blocks.RAIL;
         return block;
+    }
+
+    public ItemStack getFlexStack() {
+        return getFlexStack(1);
+    }
+
+    public ItemStack getFlexStack(int qty) {
+        return new ItemStack(getBaseBlock(), qty);
     }
 
     public final float getResistance() {
