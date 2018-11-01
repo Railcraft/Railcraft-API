@@ -14,7 +14,7 @@ package mods.railcraft.api.charge;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IChargeBattery {
+public interface IBattery {
 
     /**
      * Gets the charge in the battery.
@@ -33,6 +33,15 @@ public interface IChargeBattery {
     double getCapacity();
 
     /**
+     * True if and only if {@code getCharge()< getCapacity()}.
+     *
+     * @return {@code getCharge()< getCapacity()}
+     */
+    default boolean needsCharging() {
+        return getCharge() < getCapacity();
+    }
+
+    /**
      * Sets the charge in the battery.
      *
      * @param charge The target amount
@@ -44,8 +53,9 @@ public interface IChargeBattery {
      *
      * You are responsible for ensuring that you don't add charge to a full battery.
      *
-     * Batteries can have slightly more charge than the max capacity for performance reasons.
+     * Batteries can have more charge than the max capacity for performance reasons.
      *
+     * @see #needsCharging()
      * @param charge The charge intended to add
      */
     void addCharge(double charge);
@@ -57,4 +67,5 @@ public interface IChargeBattery {
      * @return The amount of charge removed
      */
     double removeCharge(double charge);
+
 }

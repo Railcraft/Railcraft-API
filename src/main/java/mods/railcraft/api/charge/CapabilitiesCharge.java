@@ -19,6 +19,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
  */
 public final class CapabilitiesCharge {
 
-    @CapabilityInject(ICartBattery.class)
-    public static Capability<ICartBattery> CART_BATTERY;
+    @CapabilityInject(IBatteryCart.class)
+    public static Capability<IBatteryCart> CART_BATTERY;
 }
