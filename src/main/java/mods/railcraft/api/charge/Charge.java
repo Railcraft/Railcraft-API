@@ -100,7 +100,7 @@ public enum Charge {
          *
          * @return return true if the network changed.
          */
-        default boolean addNode(IBlockState state, World world, BlockPos pos) {
+        default boolean addNode(BlockPos pos, IBlockState state) {
             return false;
         }
 
