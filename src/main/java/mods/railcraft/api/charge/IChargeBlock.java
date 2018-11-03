@@ -7,14 +7,13 @@
 
 package mods.railcraft.api.charge;
 
-import com.google.common.annotations.Beta;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Random;
 
 /**
@@ -48,13 +47,12 @@ public interface IChargeBlock {
     @Nullable IChargeBlock.ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos);
 
     /**
-     * The Charge Meter calls this to get a node for meter readings.
+     * The Charge Meter calls this to get access for meter readings.
      *
      * Most blocks don't need to touch this, but Multi-blocks may want to redirect to the master block.
      */
-    @Beta
-    default Charge.IAccess getMeterAccess(IBlockState state, World world, BlockPos pos) {
-        return Charge.distribution.network(world).access(pos);
+    default Charge.IAccess getMeterAccess(Charge network, IBlockState state, World world, BlockPos pos) {
+        return network.network(world).access(pos);
     }
 
     /**
@@ -67,7 +65,7 @@ public interface IChargeBlock {
      * The block must set {@link net.minecraft.block.Block#setTickRandomly(boolean)} to true in the constructor.
      */
     default void registerNode(IBlockState state, World world, BlockPos pos) {
-        Arrays.stream(Charge.values()).forEach(n -> n.network(world).addNode(pos, state));
+        EnumSet.allOf(Charge.class).forEach(n -> n.network(world).addNode(pos, state));
     }
 
     /**
@@ -77,13 +75,16 @@ public interface IChargeBlock {
      * {@link net.minecraft.block.Block#breakBlock(World, BlockPos, IBlockState)}
      */
     default void deregisterNode(World world, BlockPos pos) {
-        Arrays.stream(Charge.values()).forEach(n -> n.network(world).removeNode(pos));
+        EnumSet.allOf(Charge.class).forEach(n -> n.network(world).removeNode(pos));
     }
 
     enum ConnectType {
         BLOCK, SLAB, TRACK, WIRE
     }
 
+    /**
+     * A ChargeSpec defines the electrical properties of the block.
+     */
     final class ChargeSpec {
         private final ConnectType connectType;
         private final double losses;
@@ -96,7 +97,9 @@ public interface IChargeBlock {
         /**
          * @param connectType This controls how our block will connect to other blocks.
          *                    Many blocks can only connect in specific ways due to block shape.
-         * @param losses      The cost of connecting this block to charge network due to resistance losses, etc.
+         * @param losses      The cost of connecting this block to the charge network due to resistance losses, etc.
+         *                    Transformers are typically 0.5. Batteries 0.2-0.3. Wires 0.025. Tracks 0.01.
+         *                    Generators 0. Consumers 0.1.
          * @param batterySpec The battery specification for our block. Batteries are optional.
          */
         public ChargeSpec(ConnectType connectType, double losses, @Nullable IBatteryBlock.Spec batterySpec) {

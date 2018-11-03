@@ -53,6 +53,9 @@ interface IBatteryBlock extends IBattery {
          * They will be drained after rechargeable batteries.
          */
         DISPOSABLE,
+        /**
+         * Disabled batteries are ignored by the network. Use for redstone switching or multiblock logic, etc.
+         */
         DISABLED
     }
 
