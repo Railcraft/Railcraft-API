@@ -1,9 +1,9 @@
-/*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.carts;
 
@@ -34,8 +34,9 @@ public interface ILinkableCart {
      * @param cart The cart that we are attempting to link with.
      * @return True if we can link with this cart.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     default boolean canLink(EntityMinecart cart) {
-        return true;
+        return isLinkable();
     }
 
     /**
@@ -88,7 +89,7 @@ public interface ILinkableCart {
      * @return Whether the cart can have its velocity adjusted.
      */
     default boolean canBeAdjusted(EntityMinecart cart) {
-        return true;
+        return isLinkable();
     }
 
     /**
@@ -104,6 +105,7 @@ public interface ILinkableCart {
      *
      * @param cart The cart we were linked with.
      */
+    @SuppressWarnings("EmptyMethod")
     default void onLinkBroken(EntityMinecart cart) {
     }
 }

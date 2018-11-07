@@ -16,7 +16,7 @@ import java.util.Collections;
  * The LinkageManager contains all the functions needed to link and interact
  * with linked carts.
  * <p/>
- * To obtain an instance of this interface, call {@link CartToolsAPI#getLinkageManager()}.
+ * To obtain an instance of this interface, call {@link CartToolsAPI#linkageManager()}.
  * <p/>
  * Each cart can up to two links. They are called Link A and Link B. Some carts
  * will have only Link A, for example the Tunnel Bore.
@@ -109,20 +109,6 @@ public interface ILinkageManager {
      * Breaks all links the cart has.
      */
     default void breakLinks(EntityMinecart cart) {
-        breakLinkA(cart);
-        breakLinkB(cart);
-    }
-
-    /**
-     * Break only link A.
-     */
-    default void breakLinkA(EntityMinecart cart) {
-    }
-
-    /**
-     * Break only link B.
-     */
-    default void breakLinkB(EntityMinecart cart) {
     }
 
     /**

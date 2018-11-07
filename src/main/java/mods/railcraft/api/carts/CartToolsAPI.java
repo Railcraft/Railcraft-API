@@ -28,19 +28,19 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class CartToolsAPI {
-    static ILinkageManager linkageManager = new ILinkageManager() {
+    private static ILinkageManager linkageManager = new ILinkageManager() {
     };
-    static ITrainTransferHelper transferHelper = new ITrainTransferHelper() {
+    private static ITrainTransferHelper transferHelper = new ITrainTransferHelper() {
     };
 
-    public static ITrainTransferHelper getTransferHelper() {
+    public static ITrainTransferHelper transferHelper() {
         return transferHelper;
     }
 
@@ -51,7 +51,7 @@ public final class CartToolsAPI {
      *
      * @return an instance of ILinkageManager
      */
-    public static ILinkageManager getLinkageManager() {
+    public static ILinkageManager linkageManager() {
         return linkageManager;
     }
 
@@ -118,8 +118,8 @@ public final class CartToolsAPI {
     /**
      * Spawns a new cart entity using the provided item.
      * <p/>
-     * The backing item must implement <code>IMinecartItem</code> and/or extend
-     * <code>ItemMinecart</code>.
+     * The backing item must implement {@code IMinecartItem} and/or extend
+     * {@code ItemMinecart}.
      * <p/>
      * Generally Forge requires all cart items to extend ItemMinecart.
      *
@@ -130,8 +130,7 @@ public final class CartToolsAPI {
      * @return the cart placed or null if failed
      * @see IMinecartItem, ItemMinecart
      */
-    @Nullable
-    public static EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
+    public static @Nullable EntityMinecart placeCart(GameProfile owner, ItemStack cart, WorldServer world, BlockPos pos) {
         cart = cart.copy();
         if (cart.getItem() instanceof IMinecartItem) {
             IMinecartItem mi = (IMinecartItem) cart.getItem();
@@ -141,7 +140,7 @@ public final class CartToolsAPI {
                 EnumActionResult placed = cart.getItem().onItemUse(RailcraftFakePlayer.get(world, pos, cart, EnumHand.MAIN_HAND), world, pos, EnumHand.MAIN_HAND, EnumFacing.DOWN, 0, 0, 0);
                 if (placed == EnumActionResult.SUCCESS) {
                     List<EntityMinecart> carts = getMinecartsAt(world, pos, 0.3f);
-                    if (carts.size() > 0) {
+                    if (!carts.isEmpty()) {
                         setCartOwner(carts.get(0), owner);
                         return carts.get(0);
                     }
@@ -153,102 +152,64 @@ public final class CartToolsAPI {
         return null;
     }
 
+    // Most of these functions have been replaced internally by the EntitySearcher, but they remain here in the API
+    // for historic purposes and the fact that the EntitySearcher isn't part of the API.
+
     public static boolean isMinecartOnRailAt(World world, BlockPos pos, float sensitivity) {
-        return isMinecartOnRailAt(world, pos, sensitivity, null, true);
+        return isMinecartOnRailAt(world, pos, sensitivity, EntityMinecart.class);
     }
 
-    public static boolean isMinecartOnRailAt(World world, BlockPos pos, float sensitivity, @Nullable Class<? extends EntityMinecart> type, boolean subclass) {
-        return BlockRailBase.isRailBlock(world, pos) && isMinecartAt(world, pos, sensitivity, type, subclass);
+    public static boolean isMinecartOnRailAt(World world, BlockPos pos, float sensitivity, Class<? extends EntityMinecart> type) {
+        return BlockRailBase.isRailBlock(world, pos) && isMinecartAt(world, pos, sensitivity, type);
     }
 
     public static boolean isMinecartOnAnySide(World world, BlockPos pos, float sensitivity) {
-        return isMinecartOnAnySide(world, pos, sensitivity, null, true);
+        return isMinecartOnAnySide(world, pos, sensitivity, EntityMinecart.class);
     }
 
-    public static boolean isMinecartOnAnySide(World world, BlockPos pos, float sensitivity, @Nullable Class<? extends EntityMinecart> type, boolean subclass) {
-        List<EntityMinecart> list = new ArrayList<>();
-        for (EnumFacing side : EnumFacing.VALUES) {
-            list.addAll(getMinecartsOnSide(world, pos, sensitivity, side));
-        }
-
-        if (type == null)
-            return !list.isEmpty();
-        else
-            for (EntityMinecart cart : list) {
-                if ((subclass && type.isInstance(cart)) || cart.getClass() == type)
-                    return true;
-            }
-        return false;
+    public static boolean isMinecartOnAnySide(World world, BlockPos pos, float sensitivity, Class<? extends EntityMinecart> type) {
+        return Arrays.stream(EnumFacing.VALUES).anyMatch(side -> !getMinecartsOnSide(world, pos, sensitivity, side, type).isEmpty());
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isMinecartAt(World world, BlockPos pos, float sensitivity) {
-        return isMinecartAt(world, pos, sensitivity, null, true);
+        return isMinecartAt(world, pos, sensitivity, EntityMinecart.class);
     }
 
-    public static boolean isMinecartAt(World world, BlockPos pos, float sensitivity, @Nullable Class<? extends EntityMinecart> type, boolean subclass) {
-        List<EntityMinecart> list = getMinecartsAt(world, pos, sensitivity);
-
-        if (type == null)
-            return !list.isEmpty();
-        else
-            for (EntityMinecart cart : list) {
-                if ((subclass && type.isInstance(cart)) || cart.getClass() == type)
-                    return true;
-            }
-        return false;
+    public static boolean isMinecartAt(World world, BlockPos pos, float sensitivity, Class<? extends EntityMinecart> type) {
+        return !getMinecartsAt(world, pos, sensitivity, type).isEmpty();
     }
 
     public static List<EntityMinecart> getMinecartsOnAllSides(World world, BlockPos pos, float sensitivity) {
-        List<EntityMinecart> carts = new ArrayList<>();
-        for (EnumFacing side : EnumFacing.VALUES) {
-            carts.addAll(getMinecartsOnSide(world, pos, sensitivity, side));
-        }
-
-        return carts;
+        return getMinecartsOnAllSides(world, pos, sensitivity, EntityMinecart.class);
     }
 
-    public static List<EntityMinecart> getMinecartsOnAllSides(World world, BlockPos pos, float sensitivity, Class<? extends EntityMinecart> type, boolean subclass) {
-        List<EntityMinecart> list = new ArrayList<>();
-        List<EntityMinecart> carts = new ArrayList<>();
-        for (EnumFacing side : EnumFacing.VALUES) {
-            list.addAll(getMinecartsOnSide(world, pos, sensitivity, side));
-        }
-
-        for (EntityMinecart cart : list) {
-            if ((subclass && type.isInstance(cart)) || cart.getClass() == type)
-                carts.add(cart);
-        }
-        return carts;
-    }
-
-    public static List<EntityMinecart> getMinecartsOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side) {
-        return getMinecartsAt(world, pos.offset(side), sensitivity);
+    public static <T extends EntityMinecart> List<T> getMinecartsOnAllSides(World world, BlockPos pos, float sensitivity, Class<T> type) {
+        return Arrays.stream(EnumFacing.VALUES).flatMap(side -> getMinecartsOnSide(world, pos, sensitivity, side, type).stream()).collect(Collectors.toList());
     }
 
     public static boolean isMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side) {
         return getMinecartOnSide(world, pos, sensitivity, side) != null;
     }
 
-    @Nullable
-    public static EntityMinecart getMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side) {
-        List<EntityMinecart> carts = getMinecartsOnSide(world, pos, sensitivity, side);
-        if (!carts.isEmpty())
-            return carts.get(0);
-        return null;
+    public static boolean isMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side, Class<? extends EntityMinecart> type) {
+        return getMinecartOnSide(world, pos, sensitivity, side, type) != null;
     }
 
-    public static boolean isMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side, @Nullable Class<? extends EntityMinecart> type, boolean subclass) {
-        return getMinecartOnSide(world, pos, sensitivity, side, type, subclass) != null;
+    public static List<EntityMinecart> getMinecartsOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side) {
+        return getMinecartsOnSide(world, pos, sensitivity, side, EntityMinecart.class);
     }
 
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public static <T extends EntityMinecart> T getMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side, @Nullable Class<T> type, boolean subclass) {
-        for (EntityMinecart cart : getMinecartsOnSide(world, pos, sensitivity, side)) {
-            if (type == null || (subclass && type.isInstance(cart)) || cart.getClass() == type)
-                return (T) cart;
-        }
-        return null;
+    public static <T extends EntityMinecart> List<T> getMinecartsOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side, Class<T> type) {
+        return getMinecartsAt(world, pos.offset(side), sensitivity, type);
+    }
+
+    public static @Nullable EntityMinecart getMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side) {
+        return getMinecartOnSide(world, pos, sensitivity, side, EntityMinecart.class);
+    }
+
+    public static @Nullable <T extends EntityMinecart> T getMinecartOnSide(World world, BlockPos pos, float sensitivity, EnumFacing side, Class<T> type) {
+        return getMinecartsOnSide(world, pos, sensitivity, side, type).stream().findAny().orElse(null);
     }
 
     /**
@@ -256,13 +217,21 @@ public final class CartToolsAPI {
      *                    (-inf, 0.49].
      */
     public static List<EntityMinecart> getMinecartsAt(World world, BlockPos pos, float sensitivity) {
+        return getMinecartsAt(world, pos, sensitivity, EntityMinecart.class);
+    }
+
+    public static <T extends EntityMinecart> List<T> getMinecartsAt(World world, BlockPos pos, float sensitivity, Class<T> type) {
         sensitivity = Math.min(sensitivity, 0.49f);
-        return world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(pos.getX() + sensitivity, pos.getY(), pos.getZ() + sensitivity,
+        return world.getEntitiesWithinAABB(type, new AxisAlignedBB(pos.getX() + sensitivity, pos.getY(), pos.getZ() + sensitivity,
                 pos.getX() + 1 - sensitivity, pos.getY() + 1 - sensitivity, pos.getZ() + 1 - sensitivity), EntitySelectors.IS_ALIVE);
     }
 
     public static List<EntityMinecart> getMinecartsIn(World world, BlockPos p1, BlockPos p2) {
-        return world.getEntitiesWithinAABB(EntityMinecart.class, new AxisAlignedBB(p1.getX(), p1.getY(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ())).stream()
+        return getMinecartsIn(world, p1, p2, EntityMinecart.class);
+    }
+
+    public static <T extends EntityMinecart> List<T> getMinecartsIn(World world, BlockPos p1, BlockPos p2, Class<T> type) {
+        return world.getEntitiesWithinAABB(type, new AxisAlignedBB(p1.getX(), p1.getY(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ())).stream()
                 .filter(cart -> !cart.isDead).collect(Collectors.toList());
     }
 
