@@ -19,7 +19,7 @@ import java.util.Random;
 /**
  * The heart of the Charge system is here.
  *
- * And block that wants to interact with the Charge network should implement {@link IChargeBlock} and ensure that they
+ * Any block that wants to interact with the Charge network should implement {@link IChargeBlock} and ensure that they
  * call the proper add/remove functions.
  *
  * Everything else is done through {@link IAccess}.
@@ -74,7 +74,7 @@ import java.util.Random;
  * Entities for serialization.
  *
  * This brings us to another side effect of maintaining grids and batteries outside the world. The grid will continue to
- * operation unhindered even if large parts of it exist in chunks that are currently not loaded. At the moment to get
+ * operation unhindered even if large parts of it exist in chunks that are currently not loaded. At the moment, to get
  * this benefit the entire grid needs to be loaded at least once per restart, though not all at the same time. Research
  * is being done on how difficult it would be to persist nodes as well as batteries. But that is an enhancement for the
  * future.
