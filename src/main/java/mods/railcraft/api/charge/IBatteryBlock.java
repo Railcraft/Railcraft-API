@@ -7,6 +7,9 @@
 
 package mods.railcraft.api.charge;
 
+import com.google.common.base.Objects;
+import mods.railcraft.api.core.ILocalizedObject;
+
 /**
  * Batteries the heart of the Charge Network.
  *
@@ -34,11 +37,16 @@ package mods.railcraft.api.charge;
  */
 public
 interface IBatteryBlock extends IBattery {
-    enum State {
+    enum State implements ILocalizedObject {
         /**
          * Infinite Batteries will supply an infinite amount of power to the network.
          */
-        INFINITE,
+        INFINITE("tile.railcraft.battery.state.infinite"),
+        /**
+         * Source batteries are used in generators and transformers. The charge they hold will be used to charge
+         * the rechargeable batteries in the network, but they themselves will not be load balanced.
+         */
+        SOURCE("tile.railcraft.battery.state.source"),
         /**
          * Rechargeable batteries can be filled and drained indefinitely.
          * The charge network will balance the change level between all
@@ -47,16 +55,27 @@ interface IBatteryBlock extends IBattery {
          * Generators should posses a small rechargeable battery just large enough to hold
          * the generator's max per tick output with a similar draw level and 100% efficiency.
          */
-        RECHARGEABLE,
+        RECHARGEABLE("tile.railcraft.battery.state.rechargeable"),
         /**
          * Disposable batteries are excluded from the charge network's level balancing.
          * They will be drained after rechargeable batteries.
          */
-        DISPOSABLE,
+        DISPOSABLE("tile.railcraft.battery.state.disposable"),
         /**
          * Disabled batteries are ignored by the network. Use for redstone switching or multiblock logic, etc.
          */
-        DISABLED
+        DISABLED("tile.railcraft.battery.state.disabled");
+
+        private final String locTag;
+
+        State(String locTag) {
+            this.locTag = locTag;
+        }
+
+        @Override
+        public String getLocalizationTag() {
+            return locTag;
+        }
     }
 
     /**
@@ -89,14 +108,10 @@ interface IBatteryBlock extends IBattery {
          * @param initialState The initial state of the battery.
          * @param capacity     The capacity of the battery.
          * @param maxDraw      How much charge can be drawn from this battery per tick.
-         * @param efficiency   How efficient it is to draw from this battery. When you extract charge from the network,
-         *                     the network averages the efficiency of every "battery" on the grid and multiples the charge
-         *                     removed by that average. Large numbers of more efficient "batteries" make the grid more
-         *                     efficient.
+         * @param efficiency   How efficient it is to draw from this battery.
          *
-         *                     Generators should generally have this set to 1.0.
-         *                     Converters should have a low efficiency like 0.65.
-         *                     Battery blocks should be less than 1.0, but can go as low as you want.
+         *                     Generators/Converters should generally have this set to 1.0.
+         *                     Other types of blocks will vary.
          */
         public Spec(IBatteryBlock.State initialState, double capacity, double maxDraw, double efficiency) {
             this.initialState = initialState;
@@ -124,6 +139,22 @@ interface IBatteryBlock extends IBattery {
         @Override
         public String toString() {
             return String.format("Battery{Cap: %.2f, Draw: %.2f, Eff: %.2f}", capacity, maxDraw, efficiency);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Spec spec = (Spec) o;
+            return Double.compare(spec.capacity, capacity) == 0 &&
+                    Double.compare(spec.maxDraw, maxDraw) == 0 &&
+                    Double.compare(spec.efficiency, efficiency) == 0 &&
+                    initialState == spec.initialState;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(initialState, capacity, maxDraw, efficiency);
         }
     }
 }

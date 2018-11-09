@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.charge;
 
+import com.google.common.base.Objects;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -44,7 +45,7 @@ public interface IChargeBlock {
      * @param network The network type which is requesting a charge definition. Most blocks should only respond to one
      *                type of network.
      */
-    @Nullable IChargeBlock.ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos);
+    @Nullable IChargeBlock.ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos);
 
     /**
      * The Charge Meter calls this to get access for meter readings.
@@ -128,6 +129,20 @@ public interface IChargeBlock {
             return string;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChargeSpec that = (ChargeSpec) o;
+            return Double.compare(that.losses, losses) == 0 &&
+                    connectType == that.connectType &&
+                    Objects.equal(batterySpec, that.batterySpec);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(connectType, losses, batterySpec);
+        }
     }
 
 }

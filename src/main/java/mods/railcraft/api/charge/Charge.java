@@ -12,8 +12,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -57,15 +57,14 @@ import java.util.Random;
  * systems.
  *
  * When a consumer asks to remove Charge from the grid, it goes to the list of batteries and tries to remove from each
- * in turn. The batteries are sorted based on their {@link IBatteryBlock.State}. This means rechargeable batteries will
- * be drawn from before disposable ones. Each grid has an efficiency value associated with it. This efficiency value
- * defines how expensive it is to extract charge from the grid. Efficiency is calculated by averaging the efficiency
- * value of all the batteries on the grid. Generators have perfect efficiency and are more efficient than batteries
- * which are more efficient than transformers. To get a more efficient grid, add more generators or high efficiency
- * batteries.
+ * in turn. The batteries are sorted based on their {@link IBatteryBlock.State}. The order batteries are drawn from is
+ * as such: source->rechargeable->disposable. Additionally they are further sorted based on efficiency. Each battery has
+ * an efficiency value associated with it. This efficiency value defines how expensive it is to extract charge from the
+ * battery. Generators have perfect efficiency and are more efficient than batteries which are more efficient than
+ * transformers. To get a more efficient grid, add more generators or high efficiency batteries.
  *
- * Charge is added to the grid by grabbing a battery and adding Charge to the battery directly. Generally a block that
- * provides a rechargeable battery will use a Tile Entity to handle creating and adding Charge to its own battery. From
+ * Charge is added to the grid by grabbing a source battery and adding Charge to the battery directly. Generally a block
+ * that provides a source battery will use a Tile Entity to handle creating and adding Charge to its own battery. From
  * there the grid handles distribution.
  *
  * This is achieved by leveling the Charge in all the rechargeable batteries in the grid every tick. The benefit of this
@@ -224,8 +223,8 @@ public enum Charge {
          *
          * @return The battery object.
          */
-        default @Nullable IBatteryBlock getBattery() {
-            return null;
+        default Optional<? extends IBatteryBlock> getBattery() {
+            return Optional.empty();
         }
 
         /**
