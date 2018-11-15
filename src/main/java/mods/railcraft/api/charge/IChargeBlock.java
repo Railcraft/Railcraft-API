@@ -14,7 +14,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -28,24 +30,19 @@ import java.util.Random;
 public interface IChargeBlock {
 
     /**
-     * Asks the Block to provide a charge definition for the requesting network.
-     *
-     * This method can be called by any network, respond accordingly.
+     * Asks the Block to provide a map of ChargeSpecs for each network.
      *
      * It is generally to be considered an error to return the same charge definition to multiple networks.
      * Most blocks will probably be members of the {@link Charge#distribution} network only.
      *
      * Only "transformer" blocks that pass charge from one network to another should respond to multiple networks.
      *
-     * If there is any way to better enforce/indicate this requirement, I haven't discovered it.
-     * I expect this will be a frequent source of bugs caused by improper implementation.
-     *
-     * SO PAY ATTENTION!
-     *
-     * @param network The network type which is requesting a charge definition. Most blocks should only respond to one
-     *                type of network.
+     * @return A mapping of networks to ChargeSpecs. Most blocks should only respond to one
+     * type of network or an empty map. If an empty map is returned, the charge networks will ignore the block.
      */
-    @Nullable IChargeBlock.ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos);
+    default Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return Collections.emptyMap();
+    }
 
     /**
      * The Charge Meter calls this to get access for meter readings.
@@ -90,6 +87,20 @@ public interface IChargeBlock {
         private final ConnectType connectType;
         private final double losses;
         private final @Nullable IBatteryBlock.Spec batterySpec;
+
+        /**
+         * Helper method for ChargeSpec map construction.
+         */
+        public static Map<Charge, ChargeSpec> make(Charge network, ConnectType connectType, double losses) {
+            return Collections.singletonMap(network, new ChargeSpec(connectType, losses));
+        }
+
+        /**
+         * Helper method for ChargeSpec map construction.
+         */
+        public static Map<Charge, ChargeSpec> make(Charge network, ConnectType connectType, double losses, @Nullable IBatteryBlock.Spec batterySpec) {
+            return Collections.singletonMap(network, new ChargeSpec(connectType, losses, batterySpec));
+        }
 
         public ChargeSpec(ConnectType connectType, double losses) {
             this(connectType, losses, null);
