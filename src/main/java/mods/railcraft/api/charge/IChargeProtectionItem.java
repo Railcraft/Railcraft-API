@@ -39,21 +39,21 @@ public interface IChargeProtectionItem {
      * @param attackDamage damage to be done to the owner
      * @return A ZapResult object with the resulting stack and damage prevented.
      */
-    default ZepResult zap(ItemStack stack, EntityLivingBase owner, float attackDamage) {
+    default ZapResult zap(ItemStack stack, EntityLivingBase owner, float attackDamage) {
         ItemStack resultStack;
         if (owner.getRNG().nextInt(150) == 0
                 && stack.attemptDamageItem(1, owner.getRNG(), owner instanceof EntityPlayerMP ? (EntityPlayerMP) owner : null))
             resultStack = ItemStack.EMPTY;
         else
             resultStack = stack;
-        return new ZepResult(resultStack, attackDamage);
+        return new ZapResult(resultStack, attackDamage);
     }
 
-    class ZepResult {
+    class ZapResult {
         public final ItemStack stack;
         public final float damagePrevented;
 
-        public ZepResult(ItemStack stack, float damagePrevented) {
+        public ZapResult(ItemStack stack, float damagePrevented) {
             this.stack = stack;
             this.damagePrevented = damagePrevented;
         }

@@ -121,6 +121,8 @@ public enum Charge {
 
     /**
      * This is how you get access to the meat of the charge network.
+     *
+     * @throws mods.railcraft.api.core.ClientAccessException if you call it from the client thread.
      */
     public INetwork network(World world) {
         return manager.network(world);
