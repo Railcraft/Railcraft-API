@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -147,7 +147,7 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
 
     /**
      * Returns an object in the track registry, looking up by a {@link String} tag.
-     * Fallbacks to the default object if not available.
+     * Falls back to the default object if not available.
      *
      * @param tag The string to look up
      * @return The {@link IForgeRegistryEntry object}
@@ -162,7 +162,7 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
 
     /**
      * Returns an object in the track registry, looking up by its {@link ResourceLocation identifier}.
-     * Fallbacks to the default object if not available.
+     * Falls back to the default object if not available.
      *
      * @param name The identifier
      * @return The {@link IForgeRegistryEntry object}
@@ -173,7 +173,7 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
 
     /**
      * Returns an object in the track registry, looking up by the {@link String string} tag contained
-     * in the {@link NBTTagCompound nbt data}. Fallbacks to the default object if not available.
+     * in the {@link NBTTagCompound nbt data}. Falls back to the default object if not available.
      *
      * @param nbt The nbt data
      * @return The {@link IForgeRegistryEntry object}
@@ -184,7 +184,7 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
 
     /**
      * Returns an object in the track registry, looking up by info contained in the {@link NBTTagCompound nbt}
-     * data of the item stack. Fallbacks to the default object if not available.
+     * data of the item stack. Falls back to the default object if not available.
      *
      * <p>Use {@link TrackToolsAPI#getTrackType(ItemStack)} for track types instead! This method does not handle flex tracks.</p>
      *

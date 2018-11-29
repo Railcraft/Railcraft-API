@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.crafting;
 
@@ -14,8 +13,7 @@ import net.minecraft.item.crafting.Ingredient;
 /**
  * Represents a blast furnace recipe.
  *
- * <p>Call {@link IBlastFurnaceCraftingManager#createRecipe(
- *Ingredient, int, ItemStack)}</p>
+ * <p>Call {@link IBlastFurnaceCraftingManager#createRecipe(Ingredient, int, ItemStack, ItemStack)}</p>
  * to create one such recipe.
  */
 public interface IBlastFurnaceRecipe {

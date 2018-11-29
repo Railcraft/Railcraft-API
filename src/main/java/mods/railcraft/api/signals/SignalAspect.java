@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -191,12 +191,11 @@ public enum SignalAspect {
     @Override
     public String toString() {
         String[] sa = name().split("_");
-        String out = "";
+        StringBuilder out = new StringBuilder();
         for (String s : sa) {
-            out = out + s.substring(0, 1) + s.substring(1).toLowerCase(Locale.ENGLISH) + " ";
+            out.append(s, 0, 1).append(s.substring(1).toLowerCase(Locale.ENGLISH)).append(" ");
         }
-        out = out.trim();
-        return out;
+        return out.toString().trim();
     }
 
 }
