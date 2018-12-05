@@ -10,10 +10,11 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -68,13 +69,12 @@ public interface ITrainTransferHelper {
     }
 
     /**
-     * Returns an IItemHandler with represents the entire train.
+     * Returns an IItemHandlerModifiable with represents the entire train.
      *
      * @param cart a cart in the train
-     * @return IItemHandler
      */
-    default @Nullable IItemHandler getTrainItemHandler(EntityMinecart cart) {
-        return null;
+    default Optional<IItemHandlerModifiable> getTrainItemHandler(EntityMinecart cart) {
+        return Optional.empty();
     }
 
 
@@ -111,10 +111,8 @@ public interface ITrainTransferHelper {
      * Returns an IFluidHandler with represents the entire train.
      *
      * @param cart a cart in the train
-     * @return IFluidHandler
      */
-
-    default @Nullable IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
-        return null;
+    default Optional<IFluidHandler> getTrainFluidHandler(EntityMinecart cart) {
+        return Optional.empty();
     }
 }

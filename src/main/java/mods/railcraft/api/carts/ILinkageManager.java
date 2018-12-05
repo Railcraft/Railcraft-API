@@ -10,7 +10,7 @@ package mods.railcraft.api.carts;
 import net.minecraft.entity.item.EntityMinecart;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
+import java.util.stream.Stream;
 
 /**
  * The LinkageManager contains all the functions needed to link and interact
@@ -123,12 +123,15 @@ public interface ILinkageManager {
     }
 
     /**
-     * Returns an iterator which will iterate over every cart in the provided cart's train.
+     * Returns a Stream which will iterate over every cart in the provided cart's train.
      *
      * There is no guarantee of order.
+     *
+     * If called on the client, it will only contain the passed cart object.
+     * There is no linkage information on the client.
      */
-    default Iterable<EntityMinecart> trainIterator(EntityMinecart cart) {
-        return Collections.emptyList();
+    default Stream<EntityMinecart> streamTrain(EntityMinecart cart) {
+        return Stream.empty();
     }
 
 }
