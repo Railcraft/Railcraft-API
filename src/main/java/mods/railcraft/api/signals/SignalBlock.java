@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -8,6 +8,7 @@
 package mods.railcraft.api.signals;
 
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.api.tracks.TrackScanner;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 import static mods.railcraft.api.signals.TrackLocator.Status;
@@ -32,9 +34,9 @@ public abstract class SignalBlock extends AbstractPair {
     public static final int VALIDATION_CHECK_INTERVAL = 16384;
     private static final Level DEBUG_LEVEL = Level.INFO;
     //    private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
-    private final Map<BlockPos, BlockPos> trackCache = new HashMap<>();
-    private final Map<BlockPos, TrackScanner.ScanResult> trackScans = new HashMap<>();
-    private final Set<BlockPos> waitingForRetest = new HashSet<>();
+    private final Map<BlockPos, BlockPos> trackCache = CollectionToolsAPI.blockPosMap(HashMap::new);
+    private final Map<BlockPos, TrackScanner.ScanResult> trackScans = CollectionToolsAPI.blockPosMap(HashMap::new);
+    private final Set<BlockPos> waitingForRetest = CollectionToolsAPI.blockPosSet(HashSet::new);
     private final TrackLocator trackLocator;
     private int update = rand.nextInt();
     //    private UUID uuid = UUID.randomUUID();

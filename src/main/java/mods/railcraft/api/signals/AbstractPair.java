@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -7,6 +7,7 @@
 package mods.railcraft.api.signals;
 
 import com.google.common.collect.MapMaker;
+import mods.railcraft.api.core.CollectionToolsAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -15,8 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,12 +45,12 @@ public abstract class AbstractPair implements IPair {
     public final TileEntity tile;
     public final String locTag;
     public final int maxPairings;
-    protected final Deque<BlockPos> pairings = new LinkedList<>();
-    protected final Set<BlockPos> invalidPairings = new HashSet<>();
+    protected final Deque<BlockPos> pairings = CollectionToolsAPI.blockPosDeque(LinkedList::new);
+    protected final Set<BlockPos> invalidPairings = CollectionToolsAPI.blockPosSet(HashSet::new);
     private final Collection<BlockPos> safePairings = Collections.unmodifiableCollection(pairings);
-    private final Set<BlockPos> pairingsToTest = new HashSet<>();
-    private final Set<BlockPos> pairingsToTestNext = new HashSet<>();
-    private final Map<BlockPos, TileEntity> tileCache = new MapMaker().weakValues().makeMap();
+    private final Set<BlockPos> pairingsToTest = CollectionToolsAPI.blockPosSet(HashSet::new);
+    private final Set<BlockPos> pairingsToTestNext = CollectionToolsAPI.blockPosSet(HashSet::new);
+    private final Map<BlockPos, TileEntity> tileCache = CollectionToolsAPI.blockPosMap(new MapMaker().weakValues().makeMap());
     private BlockPos coords;
     private boolean isBeingPaired;
     private int update = rand.nextInt();
@@ -214,7 +215,7 @@ public abstract class AbstractPair implements IPair {
 
     public BlockPos getCoords() {
         if (coords == null)
-            coords = new BlockPos(tile.getPos());
+            coords = tile.getPos().toImmutable();
         return coords;
     }
 

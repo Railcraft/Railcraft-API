@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.signals;
 
+import mods.railcraft.api.core.CollectionToolsAPI;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 public class SignalBlockRelay extends SignalBlock {
 
-    private final Map<BlockPos, SignalAspect> aspects = new HashMap<>();
+    private final Map<BlockPos, SignalAspect> aspects = CollectionToolsAPI.blockPosMap(HashMap::new);
 
     public SignalBlockRelay(String locTag, TileEntity tile) {
         super(locTag, tile, 2);
