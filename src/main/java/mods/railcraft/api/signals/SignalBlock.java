@@ -34,8 +34,8 @@ public abstract class SignalBlock extends AbstractPair {
     public static final int VALIDATION_CHECK_INTERVAL = 16384;
     private static final Level DEBUG_LEVEL = Level.INFO;
     //    private static final Map<UUID, Deque<WorldCoordinate>> savedData = new HashMap<UUID, Deque<WorldCoordinate>>();
-    private final Map<BlockPos, BlockPos> trackCache = CollectionToolsAPI.blockPosMap(HashMap::new);
-    private final Map<BlockPos, TrackScanner.ScanResult> trackScans = CollectionToolsAPI.blockPosMap(HashMap::new);
+    private final Map<BlockPos, BlockPos> trackCache = CollectionToolsAPI.blockPosMap(new HashMap<>());
+    private final Map<BlockPos, TrackScanner.ScanResult> trackScans = CollectionToolsAPI.blockPosMap(new HashMap<>());
     private final Set<BlockPos> waitingForRetest = CollectionToolsAPI.blockPosSet(HashSet::new);
     private final TrackLocator trackLocator;
     private int update = rand.nextInt();

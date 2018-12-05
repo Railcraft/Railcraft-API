@@ -119,10 +119,6 @@ public class CollectionToolsAPI {
 
     }
 
-    public static <V> Map<BlockPos, V> blockPosMap(Supplier<Map<BlockPos, V>> delegate) {
-        return blockPosMap(delegate.get());
-    }
-
     public static <V> Map<BlockPos, V> blockPosMap(Map<BlockPos, V> delegate) {
         return new BlockPosMap<>(delegate);
     }

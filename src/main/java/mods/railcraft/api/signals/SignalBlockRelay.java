@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class SignalBlockRelay extends SignalBlock {
 
-    private final Map<BlockPos, SignalAspect> aspects = CollectionToolsAPI.blockPosMap(HashMap::new);
+    private final Map<BlockPos, SignalAspect> aspects = CollectionToolsAPI.blockPosMap(new HashMap<>());
 
     public SignalBlockRelay(String locTag, TileEntity tile) {
         super(locTag, tile, 2);
