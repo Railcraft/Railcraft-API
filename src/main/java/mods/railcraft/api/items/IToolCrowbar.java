@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -15,7 +15,8 @@ import net.minecraft.util.math.BlockPos;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IToolCrowbar extends IActivationBlockingItem {
+@ActivationBlockingItem
+public interface IToolCrowbar {
     String ORE_TAG = "toolCrowbar";
 
     /**

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@ActivationBlockingItem
 public interface ITrackItem {
 
     /**

@@ -1,14 +1,19 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.items;
 
+import java.lang.annotation.*;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IActivationBlockingItem {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Inherited
+public @interface ActivationBlockingItem {
 
 }
