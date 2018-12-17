@@ -122,7 +122,7 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         testPower(state);
     }
 
-    private void switchTrack(IBlockState state, boolean flag) {
+    private void switchTrack(IBlockState state, @SuppressWarnings("SameParameterValue") boolean flag) {
         World world = theWorldAsserted();
         BlockPos pos = getTile().getPos();
         BlockRailBase blockTrack = getBlock();
@@ -240,19 +240,6 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
             }
         }
         return false;
-    }
-
-    /**
-     * Be careful where you call this function from.
-     * Only call it if you have a reasonable assumption that the world can't be null,
-     * otherwise the game will crash.
-     */
-
-    public World theWorldAsserted() throws NullPointerException {
-        World world = theWorld();
-        assert world != null;
-//        if (world == null) throw new NullPointerException("World was null");
-        return world;
     }
 
     private class DummyTileEntity extends TileEntity implements IOutfittedTrackTile {
