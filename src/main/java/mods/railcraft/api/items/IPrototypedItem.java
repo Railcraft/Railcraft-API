@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -29,16 +29,12 @@ public interface IPrototypedItem {
         filter = filter.copy();
         NBTTagCompound nbt = new NBTTagCompound();
         prototype.writeToNBT(nbt);
-        InvToolsAPI.setItemDataRailcraft(filter, "prototype", nbt);
+        InvToolsAPI.setRailcraftDataSubtag(filter, "prototype", nbt);
         return filter;
     }
 
     default ItemStack getPrototype(ItemStack stack) {
-        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "prototype");
-        if (nbt != null) {
-            return new ItemStack(nbt);
-        }
-        return InvToolsAPI.emptyStack();
+        return InvToolsAPI.getRailcraftDataSubtag(stack, "prototype").map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
 }
