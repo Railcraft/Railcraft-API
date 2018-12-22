@@ -1,11 +1,13 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.core;
+
+import java.util.Arrays;
 
 import static mods.railcraft.api.core.RailcraftCore.InitStage.LOADING;
 
@@ -31,6 +33,17 @@ public final class RailcraftCore {
 
     public static void setInitStage(String stage) {
         initStage = InitStage.valueOf(stage);
+    }
+
+    public static void validateStage(InitStage... validStages) {
+        if (!Arrays.asList(validStages).contains(initStage))
+            throw new InvalidStageException(initStage);
+    }
+
+    public static class InvalidStageException extends RuntimeException {
+        public InvalidStageException(InitStage stage) {
+            super("This operation cannot be performed during the " + stage + " stage.");
+        }
     }
 
     private static InitStage initStage = LOADING;

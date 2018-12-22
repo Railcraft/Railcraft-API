@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.core;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +15,14 @@ import org.jetbrains.annotations.Nullable;
  * An interface for containers that can provide ingredients.
  */
 public interface IIngredientSource {
+
+    default ItemStack getStack(int qty) {
+        throw new UnsupportedOperationException();
+    }
+
+    default ItemStack getStack() {
+        return getStack(1);
+    }
 
     /**
      * Gets an ingredient for this container. If one is not available,
@@ -30,6 +39,6 @@ public interface IIngredientSource {
      * @return The ingredient
      */
     default Ingredient getIngredient(@Nullable IVariantEnum variant) {
-        return getIngredient();
+        throw new UnsupportedOperationException();
     }
 }

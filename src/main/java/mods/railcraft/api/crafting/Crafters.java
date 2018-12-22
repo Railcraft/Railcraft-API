@@ -7,18 +7,24 @@
 
 package mods.railcraft.api.crafting;
 
+import mods.railcraft.api.core.RailcraftCore;
+
 /**
  * These variables are defined during the pre-init phase.
  * Do not attempt to access them during pre-init.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class RailcraftCraftingManager {
-    static ICokeOvenCraftingManager cokeOven = CraftingDummies.COKE_OVEN_CRAFTING_MANAGER;
-    static IBlastFurnaceCraftingManager blastFurnace = CraftingDummies.BLAST_FURNACE_CRAFTING_MANAGER;
-    //TODO initialize
-    static ICrusherCraftingManager rockCrusher;
-    static IRollingMachineCraftingManager rollingMachine = CraftingDummies.ROLLING_MACHINE_CRAFTING_MANAGER;
+@SuppressWarnings("CanBeFinal")
+public final class Crafters {
+    static ICokeOvenCrafter cokeOven = new ICokeOvenCrafter() {};
+    private static IBlastFurnaceCrafter blastFurnace = new IBlastFurnaceCrafter() {};
+    static IRockCrusherCrafter rockCrusher;
+    static IRollingMachineCraftingManager rollingMachine;
+
+    private static void validateStage() {
+        RailcraftCore.validateStage(RailcraftCore.InitStage.PRE_INIT, RailcraftCore.InitStage.INIT, RailcraftCore.InitStage.POST_INIT, RailcraftCore.InitStage.FINISHED);
+    }
 
     /**
      * Returns the coke oven crafting manager.
@@ -27,7 +33,8 @@ public final class RailcraftCraftingManager {
      *
      * @return The coke oven crafting manager
      */
-    public static ICokeOvenCraftingManager getCokeOvenCraftings() {
+    public static ICokeOvenCrafter cokeOven() {
+        validateStage();
         return cokeOven;
     }
 
@@ -38,7 +45,8 @@ public final class RailcraftCraftingManager {
      *
      * @return The blast furnace crafting manager
      */
-    public static IBlastFurnaceCraftingManager getBlastFurnaceCraftings() {
+    public static IBlastFurnaceCrafter blastFurnace() {
+        validateStage();
         return blastFurnace;
     }
 
@@ -49,7 +57,8 @@ public final class RailcraftCraftingManager {
      *
      * @return The rock crusher crafting manager
      */
-    public static ICrusherCraftingManager getRockCrusherCraftings() {
+    public static IRockCrusherCrafter rockCrusher() {
+        validateStage();
         return rockCrusher;
     }
 
@@ -61,10 +70,11 @@ public final class RailcraftCraftingManager {
      * @return The rolling machine crafting manager
      */
     public static IRollingMachineCraftingManager rollingMachine() {
+        validateStage();
         return rollingMachine;
     }
 
-    private RailcraftCraftingManager() {
+    private Crafters() {
     }
 
 }

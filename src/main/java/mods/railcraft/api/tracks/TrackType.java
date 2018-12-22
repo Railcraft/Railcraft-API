@@ -7,8 +7,8 @@
 
 package mods.railcraft.api.tracks;
 
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.ILocalizedObject;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -33,9 +33,8 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
     public static final String NBT_TAG = "rail";
 
     private final ResourceLocation baseBlock;
-    private final IRailcraftRecipeIngredient rail;
-
-    private final IRailcraftRecipeIngredient railbed;
+    private final IIngredientSource rail;
+    private final IIngredientSource railbed;
     private final float resistance;
     private final boolean highSpeed;
     private final boolean electric;
@@ -43,7 +42,7 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
     private final EventHandler eventHandler;
 
     public TrackType(ResourceLocation registryName, ResourceLocation baseBlock,
-                     IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed,
+                     IIngredientSource rail, IIngredientSource railbed,
                      float resistance, boolean highSpeed, boolean electric, int maxSupportDistance,
                      EventHandler eventHandler) {
         setRegistryName(registryName);
@@ -57,11 +56,11 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
         this.eventHandler = eventHandler;
     }
 
-    public IRailcraftRecipeIngredient getRail() {
+    public IIngredientSource getRail() {
         return rail;
     }
 
-    public IRailcraftRecipeIngredient getRailbed() {
+    public IIngredientSource getRailbed() {
         return railbed;
     }
 
@@ -118,15 +117,15 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
     public static final class Builder {
         private final ResourceLocation registryName;
         private final ResourceLocation baseBlock;
-        private final IRailcraftRecipeIngredient rail;
-        private final IRailcraftRecipeIngredient railbed;
+        private final IIngredientSource rail;
+        private final IIngredientSource railbed;
         private float resistance = 3.5F;
         private boolean highSpeed;
         private boolean electric;
         private int maxSupportDistance;
         private EventHandler eventHandler;
 
-        public Builder(ResourceLocation registryName, ResourceLocation baseBlock, IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed) {
+        public Builder(ResourceLocation registryName, ResourceLocation baseBlock, IIngredientSource rail, IIngredientSource railbed) {
             this.registryName = registryName;
             this.baseBlock = baseBlock;
             this.rail = rail;
