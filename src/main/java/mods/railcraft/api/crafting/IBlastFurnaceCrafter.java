@@ -18,9 +18,28 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IBlastFurnaceCrafter {
+    /**
+     * The default number of ticks it takes to turn an ingot of iron into an ingot of steel.
+     */
+    int SMELT_TIME = 1280;
 
-    // TODO Add descriptor name
-    default void addRecipe(Ingredient input, int cookTime, ItemStack output, ItemStack secondOutput) { }
+    /**
+     * Adds a Blast Furnace recipe.
+     *
+     * @param name A resource location that describes the fuel source.
+     *             It is only used for logging, so it doesn't need to be exact or unique.
+     */
+    default void addRecipe(String name, Ingredient input, int cookTime, ItemStack output, int slagOutput) {
+        addRecipe(new ResourceLocation(name), input, cookTime, output, slagOutput);
+    }
+
+    /**
+     * Adds a Blast Furnace recipe.
+     *
+     * @param name A resource location that describes the fuel source.
+     *             It is only used for logging, so it doesn't need to be exact.
+     */
+    default void addRecipe(@Nullable ResourceLocation name, Ingredient input, int cookTime, ItemStack output, int slagOutput) { }
 
     /**
      * Add an ItemStack as a fuel source. It uses the standard Furnace cookTime for the heat value.
@@ -70,6 +89,10 @@ public interface IBlastFurnaceCrafter {
      * Represents a blast furnace fuel.
      */
     interface IFuel {
+        default ResourceLocation getName() {
+            return new ResourceLocation("invalid:dummy");
+        }
+
         /**
          * Gets the input for this fuel.
          *
@@ -94,6 +117,10 @@ public interface IBlastFurnaceCrafter {
      */
     interface IRecipe {
 
+        default ResourceLocation getName() {
+            return new ResourceLocation("invalid:dummy");
+        }
+
         /**
          * Gets the input for this recipe.
          *
@@ -116,10 +143,8 @@ public interface IBlastFurnaceCrafter {
         ItemStack getOutput();
 
         /**
-         * Gets the secondary output for this recipe.
-         *
-         * @return The secondary output, safe to modify
+         * Gets the slag output for this recipe.
          */
-        ItemStack getSecondOutput();
+        int getSlagOutput();
     }
 }
