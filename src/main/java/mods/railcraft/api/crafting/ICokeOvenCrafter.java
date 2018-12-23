@@ -9,6 +9,7 @@ package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,17 +23,31 @@ import java.util.Optional;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ICokeOvenCrafter {
-
     /**
      * Adds a coke oven recipe with the following arguments.
      *
+     * @param name        A resource location that describes the fuel source.
+     *                    It is only used for logging, so it doesn't need to be exact or unique.
      * @param input       The input ingredient, should not be empty
      * @param output      The output item stack, may be empty
      * @param fluidOutput The fluid output, may be {@code null}
      * @param cookTime    The cooking time
      */
-    // TODO Add descriptor name
-    default void addRecipe(Ingredient input, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
+    default void addRecipe(String name, Ingredient input, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
+        addRecipe(new ResourceLocation(name), input, output, fluidOutput, cookTime);
+    }
+
+    /**
+     * Adds a coke oven recipe with the following arguments.
+     *
+     * @param name        A resource location that describes the fuel source.
+     *                    It is only used for logging, so it doesn't need to be exact or unique.
+     * @param input       The input ingredient, should not be empty
+     * @param output      The output item stack, may be empty
+     * @param fluidOutput The fluid output, may be {@code null}
+     * @param cookTime    The cooking time
+     */
+    default void addRecipe(@Nullable ResourceLocation name, Ingredient input, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
     }
 
     /**
@@ -59,21 +74,7 @@ public interface ICokeOvenCrafter {
     /**
      * A coke oven recipe.
      */
-    interface IRecipe {
-
-        /**
-         * Gets the input matcher for this recipe.
-         *
-         * @return The input matcher
-         */
-        Ingredient getInput();
-
-        /**
-         * Gets the process time for this recipe.
-         *
-         * @return The process time
-         */
-        int getCookTime();
+    interface IRecipe extends ISimpleRecipe {
 
         /**
          * Gets the fluid output for this recipe.

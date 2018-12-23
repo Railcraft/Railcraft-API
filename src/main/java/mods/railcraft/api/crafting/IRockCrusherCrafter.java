@@ -7,9 +7,10 @@
 
 package mods.railcraft.api.crafting;
 
-import mods.railcraft.api.core.IIngredientSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,14 +22,20 @@ import java.util.stream.Collectors;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IRockCrusherCrafter {
-    // TODO Add descriptor name
-    default IRecipeBuilder makeRecipe(Ingredient input) {
-        return new IRecipeBuilder() {};
+    int PROCESS_TIME = 100;
+
+    /**
+     * Begins the definition of a Rock Crusher recipe.
+     *
+     * @param name A resource location that describes the recipe.
+     *             It is only used for logging, so it doesn't need to be exact or unique.
+     */
+    default IRecipeBuilder makeRecipe(String name, Ingredient input) {
+        return makeRecipe(new ResourceLocation(name), input);
     }
 
-    // TODO Add descriptor name
-    default IRecipeBuilder makeRecipe(IIngredientSource input) {
-        return makeRecipe(input.getIngredient());
+    default IRecipeBuilder makeRecipe(@Nullable ResourceLocation name, Ingredient input) {
+        return new IRecipeBuilder() {};
     }
 
     /**
@@ -46,6 +53,10 @@ public interface IRockCrusherCrafter {
     }
 
     interface IRecipeBuilder {
+        default IRecipeBuilder setProcessTime(int processTime) {
+            return this;
+        }
+
         default IRecipeBuilder addOutput(IOutputEntry entry) {
             return this;
         }
@@ -68,9 +79,7 @@ public interface IRockCrusherCrafter {
     /**
      * A Rock Crusher Recipe
      */
-    interface IRecipe {
-
-        Ingredient getInput();
+    interface IRecipe extends ISimpleRecipe {
 
         /**
          * Returns a list containing each output entry.

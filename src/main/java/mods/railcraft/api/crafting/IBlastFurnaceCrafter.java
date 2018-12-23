@@ -26,7 +26,7 @@ public interface IBlastFurnaceCrafter {
     /**
      * Adds a Blast Furnace recipe.
      *
-     * @param name A resource location that describes the fuel source.
+     * @param name A resource location that describes the recipe.
      *             It is only used for logging, so it doesn't need to be exact or unique.
      */
     default void addRecipe(String name, Ingredient input, int cookTime, ItemStack output, int slagOutput) {
@@ -36,7 +36,7 @@ public interface IBlastFurnaceCrafter {
     /**
      * Adds a Blast Furnace recipe.
      *
-     * @param name A resource location that describes the fuel source.
+     * @param name A resource location that describes the recipe.
      *             It is only used for logging, so it doesn't need to be exact.
      */
     default void addRecipe(@Nullable ResourceLocation name, Ingredient input, int cookTime, ItemStack output, int slagOutput) { }
@@ -66,7 +66,7 @@ public interface IBlastFurnaceCrafter {
     /**
      * You can remove fuels from this list, but do not add them, it will throw an UnsupportedOperationException.
      */
-    default List<@NotNull IFuel> getFuels() {
+    default List<@NotNull ISimpleRecipe> getFuels() {
         return Collections.emptyList();
     }
 
@@ -86,54 +86,9 @@ public interface IBlastFurnaceCrafter {
     }
 
     /**
-     * Represents a blast furnace fuel.
-     */
-    interface IFuel {
-        default ResourceLocation getName() {
-            return new ResourceLocation("invalid:dummy");
-        }
-
-        /**
-         * Gets the input for this fuel.
-         *
-         * @return The input matcher
-         */
-        default Ingredient getInput() {
-            return Ingredient.EMPTY;
-        }
-
-        /**
-         * Gets the cooking time for this fuel, in ticks.
-         *
-         * @return The cooking time
-         */
-        default int getCookTime() {
-            return 0;
-        }
-    }
-
-    /**
      * Represents a blast furnace recipe.
      */
-    interface IRecipe {
-
-        default ResourceLocation getName() {
-            return new ResourceLocation("invalid:dummy");
-        }
-
-        /**
-         * Gets the input for this recipe.
-         *
-         * @return The input for this recipe
-         */
-        Ingredient getInput();
-
-        /**
-         * Gets the cooking time for this recipe.
-         *
-         * @return The cooking time
-         */
-        int getCookTime();
+    interface IRecipe extends ISimpleRecipe {
 
         /**
          * Gets the output for this recipe.
