@@ -19,8 +19,8 @@ import mods.railcraft.api.core.RailcraftCore;
 public final class Crafters {
     static ICokeOvenCrafter cokeOven = new ICokeOvenCrafter() {};
     private static IBlastFurnaceCrafter blastFurnace = new IBlastFurnaceCrafter() {};
-    static IRockCrusherCrafter rockCrusher;
-    static IRollingMachineCraftingManager rollingMachine;
+    static IRockCrusherCrafter rockCrusher = new IRockCrusherCrafter() {};
+    static IRollingMachineCrafter rollingMachine = new IRollingMachineCrafter() {};
 
     private static void validateStage() {
         RailcraftCore.validateStage(RailcraftCore.InitStage.PRE_INIT, RailcraftCore.InitStage.INIT, RailcraftCore.InitStage.POST_INIT, RailcraftCore.InitStage.FINISHED);
@@ -69,7 +69,7 @@ public final class Crafters {
      *
      * @return The rolling machine crafting manager
      */
-    public static IRollingMachineCraftingManager rollingMachine() {
+    public static IRollingMachineCrafter rollingMachine() {
         validateStage();
         return rollingMachine;
     }
