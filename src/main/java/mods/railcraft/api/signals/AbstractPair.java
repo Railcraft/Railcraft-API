@@ -8,6 +8,7 @@ package mods.railcraft.api.signals;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.core.CollectionToolsAPI;
+import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -26,7 +27,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class AbstractPair implements IPair {
+public abstract class AbstractPair implements IPair, INetworkedObject<DataInputStream, DataOutputStream> {
     protected static final Random rand = new Random();
     private static final boolean IS_BUKKIT;
 
@@ -296,15 +297,27 @@ public abstract class AbstractPair implements IPair {
         }
     }
 
+    @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         data.writeUTF(name != null ? name : "");
     }
 
+    @Override
     public void readPacketData(DataInputStream data) throws IOException {
         this.name = data.readUTF();
         if (name.isEmpty()) {
             this.name = null;
         }
+    }
+
+    @Override
+    public void sendUpdateToClient() {
+        ((INetworkedObject) getTile()).sendUpdateToClient();
+    }
+
+    @Override
+    public @Nullable World theWorld() {
+        return getTile().getWorld();
     }
 
     @SideOnly(Side.CLIENT)

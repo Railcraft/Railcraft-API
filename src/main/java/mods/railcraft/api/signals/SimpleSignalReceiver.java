@@ -1,12 +1,11 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.INetworkedObject;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -33,7 +32,7 @@ public class SimpleSignalReceiver extends SignalReceiver {
             setAspect(SignalAspect.BLINK_RED);
         }
         if (prevAspect != getAspect()) {
-            ((INetworkedObject) getTile()).sendUpdateToClient();
+            sendUpdateToClient();
         }
     }
 
