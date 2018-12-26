@@ -5,7 +5,7 @@
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 @API(
-        apiVersion = "3.0.0",
+        apiVersion = "4.0.0",
         owner = RailcraftConstantsAPI.CORE_ID,
         provides = RailcraftConstantsAPI.API_PREFIX + "crafting"
 )

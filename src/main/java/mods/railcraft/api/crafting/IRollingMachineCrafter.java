@@ -55,26 +55,9 @@ public interface IRollingMachineCrafter {
         int getTickTime();
     }
 
-    interface IRecipeBuilder {
-        default IRecipeBuilder name(ResourceLocation name) {
-            return this;
-        }
-
-        default IRecipeBuilder name(String name) {
-            name(new ResourceLocation(name));
-            return this;
-        }
-
-        default IRecipeBuilder name(String namespace, String descriptor) {
-            name(new ResourceLocation(namespace, descriptor));
-            return this;
-        }
+    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
 
         default IRecipeBuilder group(ResourceLocation group) {
-            return this;
-        }
-
-        default IRecipeBuilder time(int time) {
             return this;
         }
 

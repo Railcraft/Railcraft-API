@@ -8,10 +8,7 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,44 +21,24 @@ public interface IBlastFurnaceCrafter {
     int SMELT_TIME = 1280;
 
     /**
-     * Adds a Blast Furnace recipe.
+     * Add a fuel source. It uses the standard Furnace cookTime for the heat value.
      *
-     * @param name A resource location that describes the recipe.
-     *             It is only used for logging, so it doesn't need to be exact or unique.
+     * @param input An object that can be converted into an Ingredient. This includes,
+     *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default void addRecipe(String name, Ingredient input, int cookTime, ItemStack output, int slagOutput) {
-        addRecipe(new ResourceLocation(name), input, cookTime, output, slagOutput);
+    default IFuelBuilder newFuel(Object input) {
+        return new IFuelBuilder() {};
     }
 
     /**
-     * Adds a Blast Furnace recipe.
+     * Begins the definition of a Blast Furnace recipe.
      *
-     * @param name A resource location that describes the recipe.
-     *             It is only used for logging, so it doesn't need to be exact.
+     * @param input An object that can be converted into an Ingredient. This includes,
+     *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default void addRecipe(@Nullable ResourceLocation name, Ingredient input, int cookTime, ItemStack output, int slagOutput) { }
-
-    /**
-     * Add an ItemStack as a fuel source. It uses the standard Furnace cookTime for the heat value.
-     *
-     * @param name A resource location that describes the fuel source.
-     *             It is only used for logging, so it doesn't need to be exact.
-     */
-    default void addFuel(@Nullable ResourceLocation name, ItemStack stack) { }
-
-    /**
-     * @param name A resource location that describes the fuel source.
-     *             It is only used for logging, so it doesn't need to be exact.
-     */
-    default void addFuel(@Nullable ResourceLocation name, ItemStack stack, int cookTime) {
-        addFuel(name, Ingredient.fromStacks(stack), cookTime);
+    default IRecipeBuilder newRecipe(Object input) {
+        return new IRecipeBuilder() {};
     }
-
-    /**
-     * @param name A resource location that describes the fuel source.
-     *             It is only used for logging, so it doesn't need to be exact.
-     */
-    default void addFuel(@Nullable ResourceLocation name, Ingredient input, int cookTime) { }
 
     /**
      * You can remove fuels from this list, but do not add them, it will throw an UnsupportedOperationException.
@@ -101,5 +78,35 @@ public interface IBlastFurnaceCrafter {
          * Gets the slag output for this recipe.
          */
         int getSlagOutput();
+    }
+
+    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
+        default IRecipeBuilder slagOutput(int num) {
+            return this;
+        }
+
+        default IRecipeBuilder output(ItemStack output) {
+            return this;
+        }
+
+        /**
+         * Finalize and commit the recipe.
+         */
+        default void register() {}
+    }
+
+    interface IFuelBuilder extends ISimpleRecipeBuilder<IFuelBuilder> {
+
+        /**
+         * Takes an ItemStack and looks up the standard Furnace heatValue for it.
+         */
+        default IFuelBuilder time(ItemStack fuel) {
+            return this;
+        }
+
+        /**
+         * Finalize and commit the recipe.
+         */
+        default void register() {}
     }
 }

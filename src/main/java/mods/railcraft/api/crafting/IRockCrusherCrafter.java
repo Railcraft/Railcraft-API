@@ -8,9 +8,6 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,14 +24,10 @@ public interface IRockCrusherCrafter {
     /**
      * Begins the definition of a Rock Crusher recipe.
      *
-     * @param name A resource location that describes the recipe.
-     *             It is only used for logging, so it doesn't need to be exact or unique.
+     * @param input An object that can be converted into an Ingredient. This includes,
+     *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default IRecipeBuilder makeRecipe(String name, Ingredient input) {
-        return makeRecipe(new ResourceLocation(name), input);
-    }
-
-    default IRecipeBuilder makeRecipe(@Nullable ResourceLocation name, Ingredient input) {
+    default IRecipeBuilder makeRecipe(Object input) {
         return new IRecipeBuilder() {};
     }
 
@@ -52,10 +45,7 @@ public interface IRockCrusherCrafter {
         return Collections.emptyList();
     }
 
-    interface IRecipeBuilder {
-        default IRecipeBuilder setProcessTime(int processTime) {
-            return this;
-        }
+    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
 
         default IRecipeBuilder addOutput(IOutputEntry entry) {
             return this;
@@ -73,7 +63,10 @@ public interface IRockCrusherCrafter {
             return addOutput(output, 1);
         }
 
-        default void register() throws IllegalArgumentException {}
+        /**
+         * Finalize and commit the recipe.
+         */
+        default void register() {}
     }
 
     /**

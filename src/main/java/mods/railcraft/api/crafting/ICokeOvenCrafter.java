@@ -8,8 +8,6 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,31 +21,14 @@ import java.util.Optional;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ICokeOvenCrafter {
-    /**
-     * Adds a coke oven recipe with the following arguments.
-     *
-     * @param name        A resource location that describes the fuel source.
-     *                    It is only used for logging, so it doesn't need to be exact or unique.
-     * @param input       The input ingredient, should not be empty
-     * @param output      The output item stack, may be empty
-     * @param fluidOutput The fluid output, may be {@code null}
-     * @param cookTime    The cooking time
-     */
-    default void addRecipe(String name, Ingredient input, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
-        addRecipe(new ResourceLocation(name), input, output, fluidOutput, cookTime);
-    }
+    int DEFAULT_COOK_TIME = 1800;
 
     /**
-     * Adds a coke oven recipe with the following arguments.
-     *
-     * @param name        A resource location that describes the fuel source.
-     *                    It is only used for logging, so it doesn't need to be exact or unique.
-     * @param input       The input ingredient, should not be empty
-     * @param output      The output item stack, may be empty
-     * @param fluidOutput The fluid output, may be {@code null}
-     * @param cookTime    The cooking time
+     * @param input An object that can be converted into an Ingredient. This includes,
+     *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default void addRecipe(@Nullable ResourceLocation name, Ingredient input, ItemStack output, @Nullable FluidStack fluidOutput, int cookTime) {
+    default IRecipeBuilder newRecipe(Object input) {
+        return new IRecipeBuilder() {};
     }
 
     /**
@@ -92,5 +73,20 @@ public interface ICokeOvenCrafter {
          * @return The output item stack
          */
         ItemStack getOutput();
+    }
+
+    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
+        default IRecipeBuilder output(ItemStack output) {
+            return this;
+        }
+
+        default IRecipeBuilder fluid(@Nullable FluidStack outputFluid) {
+            return this;
+        }
+
+        /**
+         * Finalize and commit the recipe.
+         */
+        default void register() {}
     }
 }
