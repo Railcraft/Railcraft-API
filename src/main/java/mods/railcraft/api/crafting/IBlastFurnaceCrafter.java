@@ -23,6 +23,8 @@ public interface IBlastFurnaceCrafter {
     /**
      * Add a fuel source. It uses the standard Furnace cookTime for the heat value.
      *
+     * By default, it will look up the heat value the vanilla Furnace uses.
+     *
      * @param input An object that can be converted into an Ingredient. This includes,
      *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
@@ -96,13 +98,6 @@ public interface IBlastFurnaceCrafter {
     }
 
     interface IFuelBuilder extends ISimpleRecipeBuilder<IFuelBuilder> {
-
-        /**
-         * Takes an ItemStack and looks up the standard Furnace heatValue for it.
-         */
-        default IFuelBuilder time(ItemStack fuel) {
-            return this;
-        }
 
         /**
          * Finalize and commit the recipe.

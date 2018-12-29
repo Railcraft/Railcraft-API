@@ -13,11 +13,9 @@ import java.io.IOException;
 
 public interface INetworkedObject<I extends DataInputStream, O extends DataOutputStream> extends IWorldSupplier {
 
-    default void readPacketData(I data) throws IOException {
-    }
+    default void readPacketData(I data) throws IOException { }
 
-    default void writePacketData(O data) throws IOException {
-    }
+    default void writePacketData(O data) throws IOException { }
 
     void sendUpdateToClient();
 

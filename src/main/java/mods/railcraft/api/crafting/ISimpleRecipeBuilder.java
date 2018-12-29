@@ -7,8 +7,11 @@
 
 package mods.railcraft.api.crafting;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 /**
  * Created by CovertJaguar on 12/25/2018 for Railcraft.
@@ -53,6 +56,13 @@ public interface ISimpleRecipeBuilder<B extends ISimpleRecipeBuilder> {
      * Sets the cooking time/heat value/process time for this recipe, in ticks.
      */
     default B time(int ticks) {
+        return time(stack -> ticks);
+    }
+
+    /**
+     * Sets the cooking time/heat value/process time for this recipe, in ticks.
+     */
+    default B time(Function<ItemStack, Integer> tickFunction) {
         return (B) this;
     }
 

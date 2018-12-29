@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.crafting;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
@@ -36,5 +37,5 @@ public interface ISimpleRecipe {
      *
      * @return The tick time
      */
-    int getTickTime();
+    int getTickTime(ItemStack input);
 }
