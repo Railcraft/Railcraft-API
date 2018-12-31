@@ -56,8 +56,8 @@ public interface IBlastFurnaceCrafter {
         return Collections.emptyList();
     }
 
-    default int getCookTime(ItemStack stack) {
-        return 0;
+    default Optional<ISimpleRecipe> getFuel(ItemStack stack) {
+        return Optional.empty();
     }
 
     default Optional<IRecipe> getRecipe(ItemStack stack) {
