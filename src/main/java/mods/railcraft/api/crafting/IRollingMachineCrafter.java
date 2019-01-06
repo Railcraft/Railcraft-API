@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -29,8 +29,8 @@ public interface IRollingMachineCrafter {
 
     int DEFAULT_PROCESS_TIME = 100;
 
-    default IRecipeBuilder newRecipe(ItemStack output) {
-        return new IRecipeBuilder() {};
+    default IRollingMachineRecipeBuilder newRecipe(ItemStack output) {
+        return new IRollingMachineRecipeBuilder() {};
     }
 
     /**
@@ -55,9 +55,12 @@ public interface IRollingMachineCrafter {
         int getTickTime();
     }
 
-    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
+    interface IRollingMachineRecipeBuilder extends
+            IRecipeBuilder<IRollingMachineRecipeBuilder>,
+            IRecipeBuilder.ISingleItemStackOutputFeature<IRollingMachineRecipeBuilder>,
+            IRecipeBuilder.ITimeFeature<IRollingMachineRecipeBuilder> {
 
-        default IRecipeBuilder group(ResourceLocation group) {
+        default IRollingMachineRecipeBuilder group(ResourceLocation group) {
             return this;
         }
 

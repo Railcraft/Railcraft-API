@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -27,8 +27,8 @@ public interface IRockCrusherCrafter {
      * @param input An object that can be converted into an Ingredient. This includes,
      *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default IRecipeBuilder makeRecipe(Object input) {
-        return new IRecipeBuilder() {};
+    default IRockCrusherRecipeBuilder makeRecipe(Object input) {
+        return new IRockCrusherRecipeBuilder() {};
     }
 
     /**
@@ -45,21 +45,24 @@ public interface IRockCrusherCrafter {
         return Collections.emptyList();
     }
 
-    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
+    interface IRockCrusherRecipeBuilder extends
+            IRecipeBuilder<IRockCrusherRecipeBuilder>,
+            IRecipeBuilder.ISingleInputFeature,
+            IRecipeBuilder.ITimeFeature<IRockCrusherRecipeBuilder> {
 
-        default IRecipeBuilder addOutput(IOutputEntry entry) {
+        default IRockCrusherRecipeBuilder addOutput(IOutputEntry entry) {
             return this;
         }
 
-        default IRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
+        default IRockCrusherRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
             return this;
         }
 
-        default IRecipeBuilder addOutput(ItemStack output, float chance) {
+        default IRockCrusherRecipeBuilder addOutput(ItemStack output, float chance) {
             return this;
         }
 
-        default IRecipeBuilder addOutput(ItemStack output) {
+        default IRockCrusherRecipeBuilder addOutput(ItemStack output) {
             return addOutput(output, 1);
         }
 

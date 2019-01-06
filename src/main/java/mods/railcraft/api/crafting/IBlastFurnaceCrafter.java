@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -9,6 +9,7 @@ package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,8 +39,8 @@ public interface IBlastFurnaceCrafter {
      * @param input An object that can be converted into an Ingredient. This includes,
      *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default IRecipeBuilder newRecipe(Object input) {
-        return new IRecipeBuilder() {};
+    default IBlastFurnaceRecipeBuilder newRecipe(Object input) {
+        return new IBlastFurnaceRecipeBuilder() {};
     }
 
     /**
@@ -82,12 +83,23 @@ public interface IBlastFurnaceCrafter {
         int getSlagOutput();
     }
 
-    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
-        default IRecipeBuilder slagOutput(int num) {
+    interface IBlastFurnaceRecipeBuilder extends
+            IRecipeBuilder<IBlastFurnaceRecipeBuilder>,
+            IRecipeBuilder.ISingleInputFeature,
+            IRecipeBuilder.ISingleItemStackOutputFeature<IBlastFurnaceRecipeBuilder>,
+            IRecipeBuilder.ITimeFeature<IBlastFurnaceRecipeBuilder> {
+        /**
+         * Sets the output of a single output recipe.
+         */
+        @Override
+        default IBlastFurnaceRecipeBuilder output(@Nullable ItemStack output) {
             return this;
         }
 
-        default IRecipeBuilder output(ItemStack output) {
+        /**
+         * Sets the slag output of a furnace recipe.
+         */
+        default IBlastFurnaceRecipeBuilder slagOutput(int num) {
             return this;
         }
 
@@ -97,7 +109,10 @@ public interface IBlastFurnaceCrafter {
         default void register() {}
     }
 
-    interface IFuelBuilder extends ISimpleRecipeBuilder<IFuelBuilder> {
+    interface IFuelBuilder extends
+            IRecipeBuilder<IFuelBuilder>,
+            IRecipeBuilder.ISingleInputFeature,
+            IRecipeBuilder.ITimeFeature<IFuelBuilder> {
 
         /**
          * Finalize and commit the recipe.

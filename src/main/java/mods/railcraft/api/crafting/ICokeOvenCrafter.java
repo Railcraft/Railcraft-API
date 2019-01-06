@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -27,8 +27,8 @@ public interface ICokeOvenCrafter {
      * @param input An object that can be converted into an Ingredient. This includes,
      *              but is not limited to Ingredients, ItemStacks, Items, Blocks, and OreTag Strings.
      */
-    default IRecipeBuilder newRecipe(Object input) {
-        return new IRecipeBuilder() {};
+    default ICokeOvenRecipeBuilder newRecipe(Object input) {
+        return new ICokeOvenRecipeBuilder() {};
     }
 
     /**
@@ -75,12 +75,13 @@ public interface ICokeOvenCrafter {
         ItemStack getOutput();
     }
 
-    interface IRecipeBuilder extends ISimpleRecipeBuilder<IRecipeBuilder> {
-        default IRecipeBuilder output(ItemStack output) {
-            return this;
-        }
+    interface ICokeOvenRecipeBuilder extends
+            IRecipeBuilder<ICokeOvenRecipeBuilder>,
+            IRecipeBuilder.ISingleInputFeature,
+            IRecipeBuilder.ISingleItemStackOutputFeature<ICokeOvenRecipeBuilder>,
+            IRecipeBuilder.ITimeFeature<ICokeOvenRecipeBuilder> {
 
-        default IRecipeBuilder fluid(@Nullable FluidStack outputFluid) {
+        default ICokeOvenRecipeBuilder fluid(@Nullable FluidStack outputFluid) {
             return this;
         }
 
