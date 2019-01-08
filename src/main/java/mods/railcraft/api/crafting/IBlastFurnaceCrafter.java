@@ -9,7 +9,6 @@ package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -88,13 +87,6 @@ public interface IBlastFurnaceCrafter {
             IRecipeBuilder.ISingleInputFeature,
             IRecipeBuilder.ISingleItemStackOutputFeature<IBlastFurnaceRecipeBuilder>,
             IRecipeBuilder.ITimeFeature<IBlastFurnaceRecipeBuilder> {
-        /**
-         * Sets the output of a single output recipe.
-         */
-        @Override
-        default IBlastFurnaceRecipeBuilder output(@Nullable ItemStack output) {
-            return this;
-        }
 
         /**
          * Sets the slag output of a furnace recipe.
