@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -201,7 +201,7 @@ public enum Charge {
 
         /**
          * Remove the requested amount of charge if possible and
-         * return whether sufficient charge was available to perform the operation.
+         * returns whether sufficient charge was available to perform the operation.
          *
          * @return true if charge could be removed in full
          */
