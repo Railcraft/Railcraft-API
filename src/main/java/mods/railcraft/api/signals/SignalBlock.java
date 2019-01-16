@@ -46,8 +46,7 @@ public abstract class SignalBlock extends AbstractPair {
         this.trackLocator = new TrackLocator(tile);
     }
 
-    @Nullable
-    private SignalBlock getSignalAt(BlockPos coord) {
+    private @Nullable SignalBlock getSignalAt(BlockPos coord) {
         TileEntity recv = getPairAt(coord);
         if (recv != null)
             return ((ISignalTileBlock) recv).getSignalBlock();
@@ -302,8 +301,7 @@ public abstract class SignalBlock extends AbstractPair {
         return newAspect;
     }
 
-    @Nullable
-    private TrackScanner.ScanResult getOrCreateTrackScan(BlockPos otherTrack) {
+    private @Nullable TrackScanner.ScanResult getOrCreateTrackScan(BlockPos otherTrack) {
         TrackScanner.ScanResult scan = trackScans.get(otherTrack);
         if (scan == null) {
             BlockPos myTrack = trackLocator.getTrackLocation();
@@ -315,8 +313,7 @@ public abstract class SignalBlock extends AbstractPair {
         return scan;
     }
 
-    @Nullable
-    private BlockPos getOtherTrackLocation(BlockPos otherCoord) {
+    private @Nullable BlockPos getOtherTrackLocation(BlockPos otherCoord) {
         SignalBlock other = getSignalAt(otherCoord);
         if (other != null) {
             BlockPos track = other.trackLocator.getTrackLocation();

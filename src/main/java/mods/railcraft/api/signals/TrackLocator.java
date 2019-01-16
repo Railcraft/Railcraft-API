@@ -20,15 +20,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TrackLocator {
     private final TileEntity signalTile;
-    @Nullable
-    private BlockPos trackLocation;
+    private @Nullable BlockPos trackLocation;
 
     public TrackLocator(TileEntity signalTile) {
         this.signalTile = signalTile;
     }
 
-    @Nullable
-    public BlockPos getTrackLocation() {
+    public @Nullable BlockPos getTrackLocation() {
         if (trackLocation == null)
             locateTrack();
         return trackLocation;

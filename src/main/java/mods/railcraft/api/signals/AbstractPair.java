@@ -65,8 +65,7 @@ public abstract class AbstractPair implements IPair, INetworkedObject<DataInputS
         this.locTag = locTag;
     }
 
-    @Nullable
-    public String getName() {
+    public @Nullable String getName() {
         return name;
     }
 
@@ -159,8 +158,7 @@ public abstract class AbstractPair implements IPair, INetworkedObject<DataInputS
             SignalTools.packetBuilder.sendPairPacketUpdate(this);
     }
 
-    @Nullable
-    protected TileEntity getPairAt(BlockPos coord) {
+    protected @Nullable TileEntity getPairAt(BlockPos coord) {
         if (!pairings.contains(coord))
             return null;
 

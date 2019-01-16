@@ -113,9 +113,8 @@ public interface ITrackKitInstance extends INetworkedObject<DataInputStream, Dat
         return getTile().getPos();
     }
 
-    @Nullable
     @Override
-    default World theWorld() {
+    default @Nullable World theWorld() {
         return getTile().getWorld();
     }
 

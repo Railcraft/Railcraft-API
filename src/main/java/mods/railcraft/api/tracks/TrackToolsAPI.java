@@ -154,8 +154,7 @@ public final class TrackToolsAPI {
         return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
 
-    @Nullable
-    public static TrackKit getTrackKit(World world, BlockPos pos) {
+    public static @Nullable TrackKit getTrackKit(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IOutfittedTrackTile) {
             return ((IOutfittedTrackTile) te).getTrackKitInstance().getTrackKit();

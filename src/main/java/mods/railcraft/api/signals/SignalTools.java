@@ -26,8 +26,7 @@ public abstract class SignalTools {
         data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
     }
 
-    @Nullable
-    public static BlockPos readFromNBT(NBTTagCompound data, String key) {
+    public static @Nullable BlockPos readFromNBT(NBTTagCompound data, String key) {
         if (data.hasKey(key)) {
             int[] c = data.getIntArray(key);
             return new BlockPos(c[0], c[1], c[2]);

@@ -23,8 +23,7 @@ public interface IVariantEnum extends IStringSerializable {
         return getName().replace(".", "_");
     }
 
-    @Nullable
-    default String getOreTag() {
+    default @Nullable String getOreTag() {
         return null;
     }
 
