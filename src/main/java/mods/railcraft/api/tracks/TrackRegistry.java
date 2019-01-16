@@ -206,7 +206,6 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
      * @param id The integer identifier
      * @return The {@link IForgeRegistryEntry registry entry}
      */
-    @SuppressWarnings("unchecked")
     public T get(int id) {
         return ((ForgeRegistry<T>) registry).getValue(id);
     }
@@ -227,7 +226,6 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
      * @param variant The {@link IForgeRegistryEntry registry entry}
      * @return The int id
      */
-    @SuppressWarnings("unchecked")
     public int getId(T variant) {
         return ((ForgeRegistry<T>) registry).getID(variant);
     }
