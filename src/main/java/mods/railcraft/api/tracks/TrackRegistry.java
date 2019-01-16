@@ -64,7 +64,7 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
     public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "missing", TrackKit.class);
     private static final TrackKit missingKit;
     private static ImmutableSet<Tuple<TrackType, TrackKit>> combinations = ImmutableSet.of();
-    private static int pass = 0;
+    private static int pass;
 
     static {
         missingKit =

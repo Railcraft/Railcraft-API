@@ -135,8 +135,7 @@ public final class TrackToolsAPI {
         if (tile instanceof IOutfittedTrackTile) {
             ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
             return track instanceof ITrackKitLockdown && ((ITrackKitLockdown) track).isCartLockedDown(cart);
-        } else if (tile instanceof ITrackKitLockdown)
-            return ((ITrackKitLockdown) tile).isCartLockedDown(cart);
+        }
         return false;
     }
 
