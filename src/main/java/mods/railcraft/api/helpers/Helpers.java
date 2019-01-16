@@ -13,5 +13,5 @@ package mods.railcraft.api.helpers;
  */
 public class Helpers {
 
-    public static StructureHelper structures;
+    public static IStructureHelper structures;
 }

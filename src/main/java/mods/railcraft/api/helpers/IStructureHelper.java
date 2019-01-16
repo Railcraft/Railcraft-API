@@ -19,7 +19,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 @SuppressWarnings("unused")
-public interface StructureHelper {
+public interface IStructureHelper {
 
     void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel);
 

@@ -26,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 /**
  * A number of utility functions related to rails.
  *
@@ -140,14 +142,7 @@ public final class TrackToolsAPI {
     }
 
     public static int countAdjacentTracks(World world, BlockPos pos) {
-        int i = 0;
-
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (isTrackFuzzyAt(world, pos.offset(side)))
-                ++i;
-        }
-
-        return i;
+        return (int) Arrays.stream(EnumFacing.HORIZONTALS).filter(side -> isTrackFuzzyAt(world, pos.offset(side))).count();
     }
 
     public static boolean isTrackFuzzyAt(World world, BlockPos pos) {

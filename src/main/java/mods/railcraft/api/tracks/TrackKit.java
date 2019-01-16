@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -146,7 +147,7 @@ public final class TrackKit extends IForgeRegistryEntry.Impl<TrackKit> implement
 
     @Override
     public String getName() {
-        return getRegistryName().toString().replaceAll("[.:]", "_");
+        return Objects.requireNonNull(getRegistryName()).toString().replaceAll("[.:]", "_");
     }
 
     @Override

@@ -57,7 +57,7 @@ public abstract class AbstractPair implements IPair, INetworkedObject<DataInputS
     private int update = rand.nextInt();
     private int ticksExisted;
     private boolean needsInit = true;
-    private String name;
+    private @Nullable String name;
 
     protected AbstractPair(String locTag, TileEntity tile, int maxPairings) {
         this.tile = tile;
@@ -80,7 +80,7 @@ public abstract class AbstractPair implements IPair, INetworkedObject<DataInputS
     }
 
     @SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-    public void onPairNameChange(BlockPos coords, String name) {
+    public void onPairNameChange(BlockPos coords, @Nullable String name) {
     }
 
     protected boolean isLoaded() {

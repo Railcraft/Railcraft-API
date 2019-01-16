@@ -67,6 +67,7 @@ public final class TrackScanner {
 //                if (world.blockExists(xx, yy, z1))
                 BlockPos p = new BlockPos(xx, yy, z1);
                 if (TrackToolsAPI.isRailBlockAt(world, p)) {
+                    // NOOP
                 } else if (TrackToolsAPI.isRailBlockAt(world, p.down())) {
                     yy--;
                     if (yy < minY)
@@ -97,6 +98,7 @@ public final class TrackScanner {
 //                if (world.blockExists(x1, yy, zz))
                 BlockPos p = new BlockPos(x1, yy, zz);
                 if (TrackToolsAPI.isRailBlockAt(world, p)) {
+                    // NOOP
                 } else if (TrackToolsAPI.isRailBlockAt(world, p.down())) {
                     yy--;
                     if (yy < minY)
