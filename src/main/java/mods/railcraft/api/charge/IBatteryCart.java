@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -8,7 +8,6 @@
 package mods.railcraft.api.charge;
 
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -76,26 +75,4 @@ public interface IBatteryCart extends IBattery {
      * @param pos The position of the track
      */
     void tickOnTrack(EntityMinecart owner, BlockPos pos);
-
-    /**
-     * Reads the charge information from the minecart.
-     *
-     * @param compound The tag that stores the information
-     * @return The tag provided
-     */
-    default NBTTagCompound readFromNBT(NBTTagCompound compound) {
-        setCharge(compound.getDouble("charge"));
-        return compound;
-    }
-
-    /**
-     * Saves the charge information to the minecart.
-     *
-     * @param compound The tag that saves the information
-     * @return The tag provided
-     */
-    default NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setDouble("charge", getCharge());
-        return compound;
-    }
 }

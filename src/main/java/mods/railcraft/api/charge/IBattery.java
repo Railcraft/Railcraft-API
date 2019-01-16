@@ -1,11 +1,13 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
  -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.charge;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Base interface for charge batteries.
@@ -19,11 +21,23 @@ public interface IBattery {
     /**
      * Gets the charge in the battery.
      *
-     * <p>It does not exceed {@link #getCapacity()}.</p>
+     * This value can potentially exceed the capacity on occasion.
+     * Batteries can have more charge than the max capacity for performance reasons.
      *
      * @return The charge
      */
     double getCharge();
+
+    /**
+     * The amount of charge that can be drawn from this battery right now.
+     *
+     * Some implementations limit this by how much can be drawn from a battery per tick.
+     *
+     * @return The charge amount
+     */
+    default double getAvailableCharge() {
+        return getCharge();
+    }
 
     /**
      * Gets the maximum charge the battery can have.
@@ -41,6 +55,10 @@ public interface IBattery {
         return getCharge() < getCapacity();
     }
 
+    default double room() {
+        return Math.max(0.0, getCapacity() - getCharge());
+    }
+
     /**
      * Sets the charge in the battery.
      *
@@ -55,8 +73,8 @@ public interface IBattery {
      *
      * Batteries can have more charge than the max capacity for performance reasons.
      *
-     * @see #needsCharging()
      * @param charge The charge intended to add
+     * @see #needsCharging()
      */
     void addCharge(double charge);
 
@@ -67,5 +85,34 @@ public interface IBattery {
      * @return The amount of charge removed
      */
     double removeCharge(double charge);
+
+    /**
+     * The efficiency refers to how much of the power put into a battery can be drawn back out of it.
+     */
+    default double getEfficiency() {
+        return 1.0;
+    }
+
+    /**
+     * Reads the charge information from the minecart.
+     *
+     * @param data The tag that stores the information
+     * @return The tag provided
+     */
+    default NBTTagCompound readFromNBT(NBTTagCompound data) {
+        setCharge(data.getDouble("charge"));
+        return data;
+    }
+
+    /**
+     * Saves the charge information to the minecart.
+     *
+     * @param data The tag that saves the information
+     * @return The tag provided
+     */
+    default NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data.setDouble("charge", getCharge());
+        return data;
+    }
 
 }
