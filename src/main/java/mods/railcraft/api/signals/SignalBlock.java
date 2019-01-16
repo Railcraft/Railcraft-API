@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -20,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.MessageFormatMessage;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
