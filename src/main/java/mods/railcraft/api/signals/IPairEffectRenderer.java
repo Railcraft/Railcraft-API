@@ -8,11 +8,14 @@
 package mods.railcraft.api.signals;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@SideOnly(Side.CLIENT)
 public interface IPairEffectRenderer {
 
     boolean isTuningAuraActive();

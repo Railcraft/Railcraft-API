@@ -12,6 +12,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Optional;
 import java.util.Random;
@@ -131,6 +133,7 @@ public enum Charge {
     /**
      * Entry point for rendering charge related effects.
      */
+    @SideOnly(Side.CLIENT)
     public static IZapEffectRenderer effects() {
         return effects;
     }
@@ -250,6 +253,7 @@ public enum Charge {
         BLOCK, TRACK
     }
 
+    @SideOnly(Side.CLIENT)
     public interface IZapEffectRenderer {
         /**
          * Helper method that most blocks can use for spark effects. It has a chance of calling

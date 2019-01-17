@@ -9,7 +9,8 @@ package mods.railcraft.api.signals;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,6 +21,7 @@ public abstract class SignalTools {
     public static boolean printSignalDebug;
     public static int signalUpdateInterval = 4;
 
+    @SideOnly(Side.CLIENT)
     public static IPairEffectRenderer effectManager;
     public static ISignalPacketBuilder packetBuilder;
 
@@ -27,8 +29,7 @@ public abstract class SignalTools {
         data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
     }
 
-    @Nullable
-    public static BlockPos readFromNBT(NBTTagCompound data, String key) {
+    public static @Nullable BlockPos readFromNBT(NBTTagCompound data, String key) {
         if (data.hasKey(key)) {
             int[] c = data.getIntArray(key);
             return new BlockPos(c[0], c[1], c[2]);
