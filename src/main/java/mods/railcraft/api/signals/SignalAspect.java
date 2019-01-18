@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -8,6 +8,7 @@
 package mods.railcraft.api.signals;
 
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -172,7 +173,7 @@ public enum SignalAspect {
      * @param second aspect two
      * @return The most restrictive Aspect
      */
-    public static SignalAspect mostRestrictive(SignalAspect first, SignalAspect second) {
+    public static SignalAspect mostRestrictive(@Nullable SignalAspect first, @Nullable SignalAspect second) {
         if (first == null && second == null)
             return RED;
         if (first == null)

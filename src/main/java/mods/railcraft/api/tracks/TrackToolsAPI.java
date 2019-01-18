@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -24,8 +24,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 /**
  * A number of utility functions related to rails.
@@ -136,28 +137,19 @@ public final class TrackToolsAPI {
         if (tile instanceof IOutfittedTrackTile) {
             ITrackKitInstance track = ((IOutfittedTrackTile) tile).getTrackKitInstance();
             return track instanceof ITrackKitLockdown && ((ITrackKitLockdown) track).isCartLockedDown(cart);
-        } else if (tile instanceof ITrackKitLockdown)
-            return ((ITrackKitLockdown) tile).isCartLockedDown(cart);
+        }
         return false;
     }
 
     public static int countAdjacentTracks(World world, BlockPos pos) {
-        int i = 0;
-
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (isTrackFuzzyAt(world, pos.offset(side)))
-                ++i;
-        }
-
-        return i;
+        return (int) Arrays.stream(EnumFacing.HORIZONTALS).filter(side -> isTrackFuzzyAt(world, pos.offset(side))).count();
     }
 
     public static boolean isTrackFuzzyAt(World world, BlockPos pos) {
         return BlockRailBase.isRailBlock(world, pos) || (BlockRailBase.isRailBlock(world, pos.up()) || BlockRailBase.isRailBlock(world, pos.down()));
     }
 
-    @Nullable
-    public static TrackKit getTrackKit(World world, BlockPos pos) {
+    public static @Nullable TrackKit getTrackKit(World world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IOutfittedTrackTile) {
             return ((IOutfittedTrackTile) te).getTrackKitInstance().getTrackKit();

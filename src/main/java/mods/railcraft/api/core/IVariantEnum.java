@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -23,8 +23,7 @@ public interface IVariantEnum extends IStringSerializable {
         return getName().replace(".", "_");
     }
 
-    @Nullable
-    default String getOreTag() {
+    default @Nullable String getOreTag() {
         return null;
     }
 

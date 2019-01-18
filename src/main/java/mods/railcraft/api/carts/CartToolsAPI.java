@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -72,7 +72,7 @@ public final class CartToolsAPI {
     public static void setCartOwner(EntityMinecart cart, GameProfile owner) {
         if (!cart.getEntityWorld().isRemote) {
             NBTTagCompound data = cart.getEntityData();
-            data.setTag("owner", NBTUtil.writeGameProfile(new NBTTagCompound(), owner));
+            data.setTag("owner", NBTUtil.writeGameProfile(new NBTTagCompound(), new GameProfile(owner.getId(), owner.getName())));
 //            if (owner.getName() != null)
 //                data.setString("owner", owner.getName());
 //            if (owner.getId() != null)

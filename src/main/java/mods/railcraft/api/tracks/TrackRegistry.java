@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
 
  This work (the API) is licensed under the "MIT" License,
  see LICENSE.md for details.
@@ -64,7 +64,7 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
     public static final TrackRegistry<TrackKit> TRACK_KIT = new TrackRegistry<>(TrackKit.NBT_TAG, "missing", TrackKit.class);
     private static final TrackKit missingKit;
     private static ImmutableSet<Tuple<TrackType, TrackKit>> combinations = ImmutableSet.of();
-    private static int pass = 0;
+    private static int pass;
 
     static {
         missingKit =
@@ -206,7 +206,6 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
      * @param id The integer identifier
      * @return The {@link IForgeRegistryEntry registry entry}
      */
-    @SuppressWarnings("unchecked")
     public T get(int id) {
         return ((ForgeRegistry<T>) registry).getValue(id);
     }
@@ -227,7 +226,6 @@ public final class TrackRegistry<T extends IStringSerializable & IForgeRegistryE
      * @param variant The {@link IForgeRegistryEntry registry entry}
      * @return The int id
      */
-    @SuppressWarnings("unchecked")
     public int getId(T variant) {
         return ((ForgeRegistry<T>) registry).getID(variant);
     }
