@@ -138,6 +138,13 @@ public enum Charge {
         return effects;
     }
 
+    /**
+     * Entry point for charge related effects sent from the server thread.
+     */
+    public static IHostZapEffect hostEffects() {
+        return hostEffects;
+    }
+
     public interface IManager {
 
         /**
@@ -253,6 +260,17 @@ public enum Charge {
         BLOCK, TRACK
     }
 
+    public interface IHostZapEffect {
+        /**
+         * Spawns a lot of sparks from a point source.
+         *
+         * @param source Can be a TileEntity, Entity, BlockPos, or Vec3d
+         * @throws IllegalArgumentException If source is of an unexpected type.
+         */
+        default void zapEffectDeath(World world, Object source) {
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     public interface IZapEffectRenderer {
         /**
@@ -304,6 +322,9 @@ public enum Charge {
      */
     @SuppressWarnings("CanBeFinal")
     private static IZapEffectRenderer effects = new IZapEffectRenderer() {
+    };
+
+    private static IHostZapEffect hostEffects = new IHostZapEffect() {
     };
 
 }
