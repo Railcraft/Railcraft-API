@@ -9,6 +9,8 @@ package mods.railcraft.api.signals;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,6 +21,7 @@ public abstract class SignalTools {
     public static boolean printSignalDebug;
     public static int signalUpdateInterval = 4;
 
+    @SideOnly(Side.CLIENT)
     public static IPairEffectRenderer effectManager;
     public static ISignalPacketBuilder packetBuilder;
 
