@@ -133,7 +133,7 @@ public enum Charge {
     /**
      * Entry point for rendering charge related effects.
      */
-    @SideOnly(Side.CLIENT)
+ //   @SideOnly(Side.CLIENT)
     public static IZapEffectRenderer effects() {
         return effects;
     }
@@ -271,7 +271,7 @@ public enum Charge {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+ //   @SideOnly(Side.CLIENT)
     public interface IZapEffectRenderer {
         /**
          * Helper method that most blocks can use for spark effects. It has a chance of calling
