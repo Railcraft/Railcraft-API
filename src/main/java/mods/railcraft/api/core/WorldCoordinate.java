@@ -147,6 +147,7 @@ public final class WorldCoordinate {
         return new Vec3d(getPos());
     }
 
+    @Deprecated // cubic chunks
     public boolean isBelowWorld() {
         return getY() < 0;
     }
