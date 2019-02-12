@@ -133,7 +133,6 @@ public enum Charge {
     /**
      * Entry point for rendering charge related effects.
      */
- //   @SideOnly(Side.CLIENT)
     public static IZapEffectRenderer effects() {
         return effects;
     }
@@ -271,7 +270,6 @@ public enum Charge {
         }
     }
 
- //   @SideOnly(Side.CLIENT)
     public interface IZapEffectRenderer {
         /**
          * Helper method that most blocks can use for spark effects. It has a chance of calling
@@ -282,6 +280,7 @@ public enum Charge {
          * @param chance Integer value such that chance of sparking is defined by {@code rand.nextInt(chance) == 0}
          *               Most blocks use 50, tracks use 75. Lower numbers means more frequent sparks.
          */
+        @SideOnly(Side.CLIENT)
         default void throwSparks(IBlockState state, World world, BlockPos pos, Random rand, int chance) {
         }
 
@@ -291,6 +290,7 @@ public enum Charge {
          * @param source Can be a TileEntity, Entity, BlockPos, or Vec3d
          * @throws IllegalArgumentException If source is of an unexpected type.
          */
+        @SideOnly(Side.CLIENT)
         default void zapEffectPoint(World world, Object source) {
         }
 
@@ -300,12 +300,14 @@ public enum Charge {
          * @param source Can be a TileEntity, Entity, BlockPos, or Vec3d
          * @throws IllegalArgumentException If source is of an unexpected type.
          */
+        @SideOnly(Side.CLIENT)
         default void zapEffectDeath(World world, Object source) {
         }
 
         /**
          * Spawns a spark from the surface of each rendered side of a block.
          */
+        @SideOnly(Side.CLIENT)
         default void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
         }
     }
