@@ -6,7 +6,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
+import mods.railcraft.api.signal.IColorLightAspect;
+import mods.railcraft.api.signal.IRule;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 /**
  *
@@ -18,6 +21,11 @@ public interface IReceiverTile {
 
     SignalReceiver getReceiver();
 
+    @Deprecated
     void onControllerAspectChange(SignalController con, SignalAspect aspect);
+
+    default void onControllerRuleChange(SignalController con, @Nullable IRule<IColorLightAspect> rule) {
+        onControllerAspectChange(con, SignalAspect.fromRule(rule));
+    }
 
 }

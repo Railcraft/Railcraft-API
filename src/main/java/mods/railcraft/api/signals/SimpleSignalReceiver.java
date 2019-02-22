@@ -6,8 +6,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
+import mods.railcraft.api.signal.IColorLightAspect;
+import mods.railcraft.api.signal.IRule;
+import mods.railcraft.api.signal.SignalRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -18,7 +23,7 @@ import java.io.IOException;
  */
 public class SimpleSignalReceiver extends SignalReceiver {
 
-    private SignalAspect aspect = SignalAspect.BLINK_RED;
+    private @Nullable IRule<IColorLightAspect> rule;
 
     public SimpleSignalReceiver(String locTag, TileEntity tile) {
         super(locTag, tile, 1);
@@ -36,18 +41,28 @@ public class SimpleSignalReceiver extends SignalReceiver {
         }
     }
 
+    @Deprecated
     public SignalAspect getAspect() {
-        return aspect;
+        return SignalAspect.fromRule(rule);
     }
 
+    @Deprecated
     public void setAspect(SignalAspect aspect) {
-        this.aspect = aspect;
+        this.rule = aspect.getRule();
+    }
+
+    public @Nullable IRule<IColorLightAspect> getRule() {
+        return rule;
+    }
+
+    public void setRule(@Nullable IRule<IColorLightAspect> rule) {
+        this.rule = rule;
     }
 
     @Override
     public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
-        if (this.aspect != aspect) {
-            this.aspect = aspect;
+        if (this.rule != aspect.getRule()) {
+            this.rule = aspect.getRule();
             super.onControllerAspectChange(con, aspect);
         }
     }
@@ -55,29 +70,32 @@ public class SimpleSignalReceiver extends SignalReceiver {
     @Override
     protected void saveNBT(NBTTagCompound data) {
         super.saveNBT(data);
-        data.setByte("aspect", (byte) aspect.ordinal());
+        data.setString("rule", SignalRegistry.INSTANCE.saveRule(rule));
     }
 
     @Override
     protected void loadNBT(NBTTagCompound data) {
         super.loadNBT(data);
-        aspect = SignalAspect.VALUES[data.getByte("aspect")];
+        if (data.hasKey("aspect", Constants.NBT.TAG_BYTE))
+            rule = SignalAspect.VALUES[data.getByte("aspect")].getRule();
+        if (data.hasKey("rule", Constants.NBT.TAG_STRING))
+            rule = SignalRegistry.INSTANCE.readRule(data.getString("rule"));
     }
 
     @Override
     public void writePacketData(DataOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeByte(aspect.ordinal());
+        data.writeUTF(SignalRegistry.INSTANCE.saveRule(rule));
     }
 
     @Override
     public void readPacketData(DataInputStream data) throws IOException {
         super.readPacketData(data);
-        aspect = SignalAspect.VALUES[data.readByte()];
+        rule = SignalRegistry.INSTANCE.readRule(data.readUTF());
     }
 
     @Override
     public String toString() {
-        return String.format("Receiver:%s (%s)", aspect, super.toString());
+        return String.format("Receiver:%s (%s)", SignalRegistry.INSTANCE.saveRule(rule), super.toString());
     }
 }

@@ -9,6 +9,8 @@ package mods.railcraft.api.signals;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.CollectionToolsAPI;
+import mods.railcraft.api.signal.IColorLightAspect;
+import mods.railcraft.api.signal.IRule;
 import mods.railcraft.api.tracks.TrackScanner;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -53,7 +55,12 @@ public abstract class SignalBlock extends AbstractPair {
         return null;
     }
 
+    @Deprecated
     public abstract SignalAspect getSignalAspect();
+
+    public @Nullable IRule<IColorLightAspect> getRule() {
+        return getSignalAspect().getRule();
+    }
 
     public TrackLocator getTrackLocator() {
         return trackLocator;
@@ -236,8 +243,14 @@ public abstract class SignalBlock extends AbstractPair {
 
     protected abstract void updateSignalAspect();
 
+    @Deprecated
     protected abstract SignalAspect getSignalAspectForPair(BlockPos otherCoord);
 
+    protected @Nullable IRule<IColorLightAspect> getRuleForPair(BlockPos otherCoord) {
+        return getSignalAspectForPair(otherCoord).getRule();
+    }
+
+    @Deprecated
     public SignalAspect determineAspect(BlockPos otherCoord) {
         if (isWaitingForRetest() || isBeingPaired())
             return SignalAspect.BLINK_YELLOW;
@@ -251,6 +264,7 @@ public abstract class SignalBlock extends AbstractPair {
         return SignalAspect.mostRestrictive(myAspect, otherAspect);
     }
 
+    @Deprecated
     private SignalAspect determineMyAspect(BlockPos otherCoord) {
         BlockPos myTrack = trackLocator.getTrackLocation();
         if (myTrack == null)

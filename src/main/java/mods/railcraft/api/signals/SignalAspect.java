@@ -7,6 +7,9 @@
 
 package mods.railcraft.api.signals;
 
+import mods.railcraft.api.signal.BuiltInSignals;
+import mods.railcraft.api.signal.IColorLightAspect;
+import mods.railcraft.api.signal.IRule;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,44 +20,54 @@ import java.util.Locale;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
+@Deprecated
 public enum SignalAspect {
 
     /**
      * The All Clear.
      */
-    GREEN(0, 5, "gui.railcraft.aspect.green.name"),
+    GREEN(0, 5, "gui.railcraft.aspect.green.name", BuiltInSignals.SINGLE_GREEN_RULE),
     /**
      * Typically means pairing in progress.
      */
-    BLINK_YELLOW(1, 3, "gui.railcraft.aspect.blink.yellow.name"),
+    BLINK_YELLOW(1, 3, "gui.railcraft.aspect.blink.yellow.name", BuiltInSignals.SINGLE_BLINK_YELLOW_RULE),
     /**
      * Caution, cart heading away.
      */
-    YELLOW(1, 5, "gui.railcraft.aspect.yellow.name"),
+    YELLOW(1, 5, "gui.railcraft.aspect.yellow.name", BuiltInSignals.SINGLE_YELLOW_RULE),
     /**
      * Maintenance warning, the signal is malfunctioning.
      */
-    BLINK_RED(2, 3, "gui.railcraft.aspect.blink.red.name"),
+    BLINK_RED(2, 3, "gui.railcraft.aspect.blink.red.name", BuiltInSignals.SINGLE_BLINK_RED_RULE),
     /**
      * Stop!
      */
-    RED(2, 5, "gui.railcraft.aspect.red.name"),
+    RED(2, 5, "gui.railcraft.aspect.red.name", BuiltInSignals.SINGLE_RED_RULE),
     /**
      * Can't happen, really it can't (or shouldn't). Only used when rendering
      * blink states (for the texture offset).
      */
-    OFF(3, 0, "gui.railcraft.aspect.off.name");
+    OFF(3, 0, "gui.railcraft.aspect.off.name", null);
     private final int textureIndex;
     private final int lightValue;
     private final String localizationTag;
     private static boolean blinkState;
     private static final int SIGNAL_BRIGHTNESS = 210;
+    private final @Nullable IRule<IColorLightAspect> rule;
     public static final SignalAspect[] VALUES = values();
 
-    SignalAspect(int textureIndex, int lightValue, String localizationTag) {
+    SignalAspect(int textureIndex, int lightValue, String localizationTag, @Nullable IRule<IColorLightAspect> rule) {
         this.textureIndex = textureIndex;
         this.lightValue = lightValue;
         this.localizationTag = localizationTag;
+        this.rule = rule;
+    }
+
+    public static SignalAspect fromRule(@Nullable IRule<IColorLightAspect> rule) {
+        for (SignalAspect aspect : VALUES)
+            if (rule == aspect.rule)
+                return aspect;
+        return SignalAspect.OFF;
     }
 
     /**
@@ -197,6 +210,10 @@ public enum SignalAspect {
             out.append(s, 0, 1).append(s.substring(1).toLowerCase(Locale.ENGLISH)).append(" ");
         }
         return out.toString().trim();
+    }
+
+    public @Nullable IRule<IColorLightAspect> getRule() {
+        return rule;
     }
 
 }
