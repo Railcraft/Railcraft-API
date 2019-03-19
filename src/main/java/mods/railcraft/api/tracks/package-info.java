@@ -6,7 +6,7 @@
  -----------------------------------------------------------------------------*/
 
 @API(
-        apiVersion = "5.1.1",
+        apiVersion = "5.1.2",
         owner = RailcraftConstantsAPI.CORE_ID,
         provides = RailcraftConstantsAPI.API_PREFIX + "tracks"
 )
