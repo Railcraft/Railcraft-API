@@ -3,8 +3,5 @@ parent.sourceSets {
         java {
             srcDir project.projectDir.path + "/src/main/java"
         }
-        resources {
-            srcDir project.projectDir.path + "/src/main/resources"
-        }
     }
 }
