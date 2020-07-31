@@ -1,7 +1,0 @@
-parent.sourceSets {
-    api {
-        java {
-            srcDir project.projectDir.path + "/src/api/java"
-        }
-    }
-}
