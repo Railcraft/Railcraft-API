@@ -49,7 +49,7 @@ public interface IChargeBlock {
      *
      * Most blocks don't need to touch this, but Multi-blocks may want to redirect to the master block.
      */
-    default Charge.IAccess getMeterAccess(Charge network, IBlockState state, World world, BlockPos pos) {
+    default @Nullable Charge.IAccess getMeterAccess(Charge network, IBlockState state, World world, BlockPos pos) {
         return network.network(world).access(pos);
     }
 
