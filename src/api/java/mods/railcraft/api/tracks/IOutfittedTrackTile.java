@@ -7,6 +7,8 @@
 
 package mods.railcraft.api.tracks;
 
+import com.mojang.authlib.GameProfile;
+
 /**
  * Don't use this, its an interface that allows other API code
  * access to internal functions of the code.
@@ -20,4 +22,6 @@ public interface IOutfittedTrackTile {
     ITrackKitInstance getTrackKitInstance();
 
     void sendUpdateToClient();
+
+    GameProfile getOwner();
 }

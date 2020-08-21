@@ -7,6 +7,8 @@
 
 package mods.railcraft.api.tracks;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IToolCrowbar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -256,6 +258,11 @@ public abstract class TrackKitInstance implements ITrackKitInstance {
         @Override
         public void sendUpdateToClient() {
             throw new RuntimeException();
+        }
+
+        @Override
+        public GameProfile getOwner() {
+            return RailcraftFakePlayer.RAILCRAFT_USER_PROFILE;
         }
     }
 }
