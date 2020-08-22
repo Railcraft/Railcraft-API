@@ -7,6 +7,8 @@
 
 package mods.railcraft.api.core;
 
+import net.minecraftforge.common.config.Configuration;
+
 /**
  * Defines a Railcraft module. Any class implementing this interface and annotated by {@link RailcraftModule}
  * will be loaded as a Module by Railcraft during its initialization phase.
@@ -14,8 +16,11 @@ package mods.railcraft.api.core;
  * Created by CovertJaguar on 4/5/2016.
  */
 public interface IRailcraftModule {
+    String CAT_CONFIG = "module.config";
 
-    void checkPrerequisites() throws MissingPrerequisiteException;
+    default void checkPrerequisites() throws MissingPrerequisiteException {}
+
+    default void loadConfig(Configuration config) {}
 
     ModuleEventHandler getModuleEventHandler(boolean enabled);
 
