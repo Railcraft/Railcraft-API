@@ -72,6 +72,7 @@ public interface IChargeBlock {
      * This function must be called from the following function:
      * {@link net.minecraft.block.Block#breakBlock(World, BlockPos, IBlockState)}
      */
+    //FLATTENING make sure this not called during state changes
     default void deregisterNode(World world, BlockPos pos) {
         EnumSet.allOf(Charge.class).forEach(n -> n.network(world).removeNode(pos));
     }
