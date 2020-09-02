@@ -7,6 +7,8 @@
 
 package mods.railcraft.api.crafting;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -108,6 +110,22 @@ public interface IRecipeBuilder<B extends IRecipeBuilder> {
         default B output(@Nullable ItemStack output) {
             getFeature(ISingleItemStackOutputFeature.class).ifPresent(impl -> impl.output(output));
             return (B) this;
+        }
+
+        default B output(@Nullable Item output) {
+            return output(output, 1);
+        }
+
+        default B output(@Nullable Item output, int amount) {
+            return output(new ItemStack(output, amount));
+        }
+
+        default B output(@Nullable Block output) {
+            return output(output, 1);
+        }
+
+        default B output(@Nullable Block output, int amount) {
+            return output(new ItemStack(output, amount));
         }
 
         default ItemStack getOutput() {
